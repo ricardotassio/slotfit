@@ -212,3 +212,15 @@
   outcome, not incomplete implementation.
 - Reopening rule: require a new hypothesis and fresh development/calibration
   registries; V4 may not be relabeled or tuned against the same evidence.
+
+## 2026-10-25 — SF-008 hardening and communication
+
+- Decision: use lockfile-based setup without Docker and add least-privilege CI
+  with no secrets or external services.
+- Decision: license the repository under MIT and document the local-only security
+  boundary and combined technical/evidence-integrity risk review.
+- Decision: keep English and Portuguese video/post materials numerically aligned
+  and automatically require synthetic-data, no-go and no-external-action language.
+- Verification: frozen dependency sync/install succeeded; `make verify` passed 84
+  Python tests, API smoke, production web build and five Playwright tests.
+- External state: no Git remote exists; nothing was pushed, deployed or published.

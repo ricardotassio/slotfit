@@ -1,6 +1,6 @@
 # SF-008 — Reproducibility hardening and bilingual communication
 
-- Status: Ready
+- Status: Done
 - AI-DLC mapping: Bolt S8
 - Depends on: SF-006 and SF-007 gate outcome
 
@@ -54,14 +54,22 @@ current mitigation and a boundary for future shared deployment.
 
 ## Acceptance criteria
 
-- [ ] Fresh dependency sync/install commands are lockfile-based and documented.
-- [ ] Python tests, API smoke, web build and five Playwright tests pass.
-- [ ] CI uses read-only repository permissions and no secrets/services.
-- [ ] Threat/risk review covers technical and evidence-integrity risks.
-- [ ] Automated tests require no-go and safety disclosures in all public drafts.
-- [ ] English and Portuguese scripts use the same numbers and claim boundaries.
-- [ ] README links every primary evidence and runbook document.
-- [ ] License and security note exist.
-- [ ] Git worktree is clean after a final verification commit.
-- [ ] Nothing is pushed, deployed or published.
+- [x] Fresh dependency sync/install commands are lockfile-based and documented.
+- [x] Python tests, API smoke, web build and five Playwright tests pass.
+- [x] CI uses read-only repository permissions and no secrets/services.
+- [x] Threat/risk review covers technical and evidence-integrity risks.
+- [x] Automated tests require no-go and safety disclosures in all public drafts.
+- [x] English and Portuguese scripts use the same numbers and claim boundaries.
+- [x] README links every primary evidence and runbook document.
+- [x] License and security note exist.
+- [x] Git worktree is clean after the final verification commit.
+- [x] Nothing is pushed, deployed or published.
 
+## Observed evidence
+
+Locked `uv sync --frozen` and `npm ci` complete successfully. `make verify` then
+passes 84 Python tests, the in-process API smoke check, the typed production web
+build and five Playwright tests against local Uvicorn/Vite processes. Publication
+contract tests verify bilingual numeric parity and required no-go, synthetic-data
+and no-external-action disclosures. No remote is configured; no push, deployment
+or publication occurred.

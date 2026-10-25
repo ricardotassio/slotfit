@@ -6,9 +6,9 @@ The project compares simple baselines with constraint optimization over entirely
 
 ## Current status
 
-**AI-DLC Construction Bolts S1–S6 are implemented; CP-SAT candidates V1–V4 were
-correctly rejected by development evidence before calibration, and the API exposes
-that no-go without presenting it as a recommendation.**
+**AI-DLC Bolts S1–S6 are implemented; S7 correctly stopped at its eligibility
+gate, and S8 provides reproducibility, risk and bilingual communication material.
+CP-SAT candidates V1–V4 were rejected before calibration.**
 
 The repository currently contains:
 
@@ -35,6 +35,8 @@ The repository currently contains:
 - a versioned FastAPI/Pydantic boundary for deterministic demos and research evidence;
 - an idempotent append-only SQLite review log with no external action;
 - a neutral Vue/FullCalendar comparison UI with Playwright and axe coverage;
+- an intentionally nonexistent final frozen set after the development no-go;
+- a locked runbook, least-privilege CI, risk review and bilingual video/post drafts;
 - executable unit tests;
 - architecture and decision records.
 
@@ -52,9 +54,10 @@ A 60-minute cancellation touches an adjacent 30-minute opening. Three synthetic 
 
 This scenario proves contracts and explanations. It does not prove that the future optimizer is better.
 
-## Run
+## Setup and run
 
-Requires `uv` and an installed Python 3.12 interpreter.
+Requires `uv`, Python 3.12, Node.js 26 and npm 11. See the full
+[`local demonstration runbook`](docs/demo-runbook.md).
 
 ```bash
 make test
@@ -63,6 +66,7 @@ make review-test
 make api-smoke
 make web-build
 make web-test
+make verify
 make demo
 make multi-slot-demo
 make generated-demo
@@ -77,7 +81,8 @@ global-assignment counterexample before CP-SAT. `make generated-demo` runs regis
 development seed `1101` and prints its provenance, plans and event evaluations.
 `make longitudinal-demo` replays three controlled compatible-opportunity rounds
 for both baselines. `make development-report` emits the full development-only JSON
-comparison. The final frozen evaluation set does not yet exist.
+comparison. The final frozen evaluation set intentionally does not exist because
+no candidate earned calibration eligibility.
 
 `make alternative-diagnostic` reports post-hoc local capacity among plans tied on
 minutes and requests served; it is not a deployable slice-aware strategy.
@@ -91,8 +96,8 @@ V3 path and carries the same diagnostic-only boundary.
 - OR-Tools CP-SAT for constraint optimization
 - SQLite for local append-only review events; PostgreSQL deferred until justified
 - Vue 3, TypeScript and FullCalendar for the visual workflow
-- pytest, Hypothesis and Playwright as the project grows
-- Docker Compose for the reproducible local environment
+- standard-library unittest, Playwright and axe-core for verification
+- lockfile-based local setup without Docker or external services
 
 ## Public claim boundary
 
@@ -109,7 +114,17 @@ This is a reproducible engineering POC using synthetic data. Results will descri
 - [`docs/development-evidence.md`](docs/development-evidence.md)
 - [`docs/alternative-plan-diagnostic.md`](docs/alternative-plan-diagnostic.md)
 - [`docs/exposure-frontier.md`](docs/exposure-frontier.md)
+- [`docs/methodology-no-go-review.md`](docs/methodology-no-go-review.md)
+- [`docs/demo-runbook.md`](docs/demo-runbook.md)
+- [`docs/risk-review.md`](docs/risk-review.md)
 - [`docs/bolts/README.md`](docs/bolts/README.md)
 - [`docs/video-storyboard.md`](docs/video-storyboard.md)
+- [`docs/video-script-en.md`](docs/video-script-en.md)
+- [`docs/video-script-pt.md`](docs/video-script-pt.md)
+- [`docs/linkedin-post-en.md`](docs/linkedin-post-en.md)
+- [`docs/linkedin-post-pt.md`](docs/linkedin-post-pt.md)
 - [`docs/adr/0001-modular-monolith-and-baselines.md`](docs/adr/0001-modular-monolith-and-baselines.md)
 - [`docs/adr/0002-lexicographic-cp-sat.md`](docs/adr/0002-lexicographic-cp-sat.md)
+- [`docs/adr/0003-local-sqlite-review-log.md`](docs/adr/0003-local-sqlite-review-log.md)
+- [`SECURITY.md`](SECURITY.md)
+- [`LICENSE`](LICENSE)

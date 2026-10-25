@@ -4,20 +4,21 @@
 
 Demonstrate Senior Software Engineer judgment through a concrete scheduling problem: recover useful time after a cancellation without allowing a locally efficient rule to repeatedly overlook harder-to-place requests.
 
-The target length is 90–110 seconds. The demo uses synthetic data and never names or imitates a specific company.
+The target length is 100–115 seconds. The demo uses synthetic data and never names
+or imitates a specific company. Final narration is maintained in
+[`video-script-en.md`](video-script-en.md) and
+[`video-script-pt.md`](video-script-pt.md).
 
 ## Storyboard
 
 | Time | Screen | English narration | Evidence shown |
 |---|---|---|---|
-| 0–8s | Calendar: a cancellation creates a 60-minute gap beside a 30-minute opening | “A cancellation looks like an empty slot. Operationally, it is a small constraint problem.” | Concrete problem before architecture |
-| 8–20s | Three synthetic wait requests appear with availability, duration and resource needs | “The first eligible person is not always the plan that recovers the most usable time. But maximizing minutes alone can repeatedly leave harder requests behind.” | Feasibility is distinct from optimization and fairness |
-| 20–38s | Run FIFO and local best-fit on the same scenario | “FIFO recovers 30 minutes. Local best-fit recovers 75 here. Both are understandable baselines, and both encode a policy.” | Actual measured values from `make demo` |
-| 38–55s | Architecture flow: scenario → eligibility → strategies → explanations → human review | “I kept the core deterministic and framework-independent, with stable reason codes and a human decision boundary.” | Engineering structure and restraint |
-| 55–73s | Fairness dashboard mock or implemented view: utilization, exposure, wait and worst slice | “The next candidate only qualifies if it improves utilization without crossing predeclared starvation and worst-slice guardrails.” | Separate metrics; do not show a composite magic score |
-| 73–88s | A counterfactual test passes; one stress scenario or rejected strategy fails | “Changing an opaque ID must never change the plan. And if a strategy wins on utilization but fails the fairness gate, I reject it.” | Invariance plus an honest failure |
-| 88–101s | Reviewer compares plans and chooses or rejects one | “This is decision support, not automatic booking. No patient contact, urgency inference or schedule mutation is part of the POC.” | Human control and safety boundary |
-| 101–110s | Repository structure, test command and evaluation artifact | “The repository contains the assumptions, tests, versioned scenarios and trade-offs—not just a polished demo.” | Reproducible GitHub artifact |
+| 0–12s | Implemented UI: two openings and two requests | Frame the global conflict and healthcare-software experience | Concrete problem before architecture |
+| 12–30s | Select FIFO, then local best-fit | Both recover 60 of 120 minutes | Understandable baselines and local limitation |
+| 30–46s | Select CP-SAT | The controlled plan recovers 120 minutes with three optimal phases | Constraint programming is justified by global assignment, not hype |
+| 46–72s | Scroll to the no-go panel | Four development candidates were tested; V4 reached 10.80 p.p. against a fixed 10 p.p. limit and was rejected | Attractive fixture result is separated from longitudinal acceptance |
+| 72–92s | Show architecture, table fallback and tests | Explain framework boundaries, counterfactuals and accessibility | Senior engineering judgment and restraint |
+| 92–110s | Record a simulated reject; show repository | No external action, synthetic-only evidence and no clinical/access/revenue claim | Human control and reproducibility |
 
 ## Portuguese adaptation
 
@@ -29,16 +30,22 @@ The Portuguese version should preserve the same evidence and change only the nar
 
 - Show the real-life problem in the first frame.
 - Use only values produced by a committed command or evaluation artifact.
-- Label future UI frames as mockups until they are implemented.
+- Record the implemented UI; do not substitute an unlabelled mockup.
 - Include one failed or rejected case; do not present a perfect system.
 - Keep identifiers and data visibly synthetic.
 - Put the architecture after the viewer understands the problem.
 - End with the claim boundary and the repository, not a marketing promise.
 
-## Claims allowed before the frozen evaluation
+## Claims allowed after the S7 gate closed
 
-- “The current fixture demonstrates deterministic eligibility and two baselines.”
-- “In this fixture, FIFO recovers 30 minutes and local best-fit recovers 75 minutes.”
-- “The fairness evaluation is specified but not yet executed.”
+- “In the global-conflict fixture, both greedy baselines recover 60 minutes and the
+  controlled CP-SAT plan recovers 120 minutes.”
+- “Four candidates were evaluated on 40 synthetic development seeds and rejected
+  under the fixed guardrail.”
+- “V4 reached 10.80 p.p. against the predeclared 10 p.p. maximum.”
+- “Calibration and the final frozen evaluation were not run because no candidate
+  was eligible.”
 
-Do not yet claim that SlotFit is fairer, increases clinic revenue, reduces wait time or improves access. Those statements would require evidence the current project does not have.
+Do not claim that SlotFit is fairer, increases clinic revenue, reduces wait time,
+improves access or benefits patients. Those statements require evidence the
+project does not have.

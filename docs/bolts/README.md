@@ -15,7 +15,7 @@ possa ser usada no desenvolvimento, no vídeo e em entrevistas técnicas.
 | S5 | Persistência e revisão humana idempotente | Concluído | [S5](s5-persistence-and-review.md) |
 | S6 | Interface visual para comparar planos | Concluído | [S6](s6-review-ui.md) |
 | S7 | Avaliação congelada e análise final | Não executado; gate falhou corretamente | [S7](s7-frozen-evaluation.md) |
-| S8 | Hardening, vídeo e publicação baseada em evidências | Planejado | [S8](s8-hardening-and-publication.md) |
+| S8 | Hardening, vídeo e publicação baseada em evidências | Concluído; não publicado | [S8](s8-hardening-and-publication.md) |
 
 ## Contrato de um card
 

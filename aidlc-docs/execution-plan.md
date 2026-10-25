@@ -39,14 +39,15 @@ Cards pedagógicos e operacionais de todos os Bolts:
 - Consequence: the 400-seed final set remains intentionally nonexistent and no
   final-effect claim is allowed.
 
-## Later Bolts
+## Application and hardening Bolts
 
-- S4: FastAPI and Pydantic boundary.
-- S5: PostgreSQL, runs and idempotent review events.
-- S6: Vue/FullCalendar UI.
+- S4: FastAPI and Pydantic boundary — complete.
+- S5: SQLite append-only idempotent review events — complete; PostgreSQL deferred
+  by ADR-0003.
+- S6: Vue/FullCalendar UI — complete.
 - S7: frozen simulation gate closed without execution; no candidate was eligible.
-- S8: hardening, documentation, evidence-backed video and post.
+- S8: hardening, documentation, evidence-backed bilingual video and post —
+  complete; not published.
 
-Os itens S4–S8 são contratos de roadmap. Seus cards descrevem Definition of Ready,
-Definition of Done, riscos e alternativas, mas não constituem evidência de
-implementação.
+Os cards S4–S8 registram Definition of Ready/Done, riscos, alternativas e evidência
+observada. S7 preserva a ausência do teste final como resultado correto do gate.

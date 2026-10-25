@@ -1,6 +1,6 @@
 # Card S8 — Hardening e publicação
 
-**Estado:** especificado; implementação não iniciada.
+**Estado:** concluído e verificado; publicação não executada.
 **Dependência:** gate S7 encerrado e resultado negativo revisado.
 **Saída:** repositório reproduzível, vídeo e publicação com claims limitados.
 
@@ -37,7 +37,9 @@ contra evidência no
 Done: clone limpo
 reproduzível; testes/artefatos verificáveis; nenhum segredo; vídeo e texto revisados
 em inglês principal e português; links válidos; limitações visíveis; nenhuma ação
-publicada automaticamente. Publicar exige autorização explícita.
+publicada automaticamente. Os links externos permanecem placeholders explícitos
+porque ainda não há remote ou vídeo publicado. Publicar continua exigindo
+autorização explícita.
 
 ## 🎯 Entrevista
 

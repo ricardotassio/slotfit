@@ -1,4 +1,4 @@
-# Proposed architecture
+# Architecture
 
 Current evidence-backed flow:
 
@@ -44,7 +44,7 @@ multi-slot scenario
   -> structured plan + phase evidence
 ```
 
-Planned interactive application flow:
+Current interactive application flow:
 
 ```text
 Vue calendar

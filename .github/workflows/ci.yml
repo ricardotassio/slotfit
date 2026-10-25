@@ -1,0 +1,45 @@
+name: verify
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Install Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10.3.2
+        with:
+          version: latest-known
+          enable-cache: false
+
+      - name: Sync locked Python environment
+        run: uv sync --frozen --python 3.12
+
+      - name: Install Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '26'
+          package-manager-cache: false
+
+      - name: Install locked web dependencies
+        run: npm ci --prefix web
+
+      - name: Install Chromium
+        run: cd web && npx playwright install --with-deps chromium
+
+      - name: Verify repository
+        run: make verify
