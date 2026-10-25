@@ -1,5 +1,8 @@
 # Execution plan
 
+Cards pedagógicos e operacionais de todos os Bolts:
+[`../docs/bolts/README.md`](../docs/bolts/README.md).
+
 ## Bolt S1 — deterministic domain and baselines
 
 - Intent: make the first scenario executable without external dependencies.
@@ -35,3 +38,7 @@
 - S6: Vue/FullCalendar UI.
 - S7: frozen simulation, slice analysis, counterfactual tests and evaluation.
 - S8: hardening, documentation, evidence-backed video and post.
+
+Os itens S4–S8 são contratos de roadmap. Seus cards descrevem Definition of Ready,
+Definition of Done, riscos e alternativas, mas não constituem evidência de
+implementação.

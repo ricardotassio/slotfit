@@ -81,6 +81,7 @@ This is a reproducible engineering POC using synthetic data. Results will descri
 - [`docs/architecture.md`](docs/architecture.md)
 - [`docs/fairness-and-bias-plan.md`](docs/fairness-and-bias-plan.md)
 - [`docs/development-evidence.md`](docs/development-evidence.md)
+- [`docs/bolts/README.md`](docs/bolts/README.md)
 - [`docs/video-storyboard.md`](docs/video-storyboard.md)
 - [`docs/adr/0001-modular-monolith-and-baselines.md`](docs/adr/0001-modular-monolith-and-baselines.md)
 - [`docs/adr/0002-lexicographic-cp-sat.md`](docs/adr/0002-lexicographic-cp-sat.md)

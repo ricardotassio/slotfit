@@ -94,3 +94,14 @@
 - Decision: do not enter calibration, freeze configuration or mint final seeds.
 - Next hypothesis: use per-request compatible-opportunity debt, never audit-only
   slice labels, to make the longitudinal policy exposure-aware.
+
+## 2026-10-25 — Bolt card catalog
+
+- Decision: document S1–S8 with a common learning-card contract covering purpose,
+  mechanics, critical complexity assessment, evidence/DoD and interview defense.
+- Decision: distinguish implemented evidence (S1–S3) from roadmap contracts
+  (S4–S8); a future card never implies existing functionality.
+- Decision: keep the cards under `docs/bolts/` and link the catalog from the README
+  and the canonical execution plan.
+- Verification: all relative links resolve, `git diff --check` passes and the
+  unchanged implementation suite remains at 46 passing tests.
