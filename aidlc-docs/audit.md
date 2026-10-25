@@ -129,3 +129,13 @@
   allowing any efficiency trade-off.
 - Verification: 57 tests passed and the standalone diagnostic JSON was generated
   and parsed successfully.
+
+## 2026-10-25 — Placement-scarcity V3 decision
+
+- Decision: compute scarcity from current eligible interval counts, never from an
+  audit slice label.
+- Observation: V3 changes 17 of 200 rounds and improves the worst degradation by
+  0.23 percentage point while preserving primary efficiency.
+- Decision: reject V3 because 12.35 p.p. remains above the 10 p.p. guardrail.
+- Next gate: measure an explicit development-only efficiency/exposure frontier;
+  do not add another residual heuristic without evidence.

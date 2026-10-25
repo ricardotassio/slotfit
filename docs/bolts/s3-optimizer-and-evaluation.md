@@ -1,6 +1,6 @@
 # Card S3 — Otimizador e avaliação controlada
 
-**Estado:** em andamento; candidatos V1 e V2 rejeitados no desenvolvimento.
+**Estado:** em andamento; candidatos V1–V3 rejeitados no desenvolvimento.
 **Spec:** [`SF-003`](../../specs/003-optimizer-and-evaluation.md).  
 **ADR:** [`ADR-0002`](../adr/0002-lexicographic-cp-sat.md).
 
@@ -37,6 +37,10 @@ nenhuma alternativa relevante.
 O diagnóstico seguinte refinou essa conclusão: 34 de 200 rodadas tinham alternativas
 primárias equivalentes, e 8 poderiam melhorar localmente o slice moderado sem perda
 de eficiência. Portanto, há alternativas; V2 simplesmente não as distingue.
+
+V3 priorizou requests compatíveis com menos intervalos e mudou 17 decisões. O pior
+desvio caiu de 12,58 para 12,35 p.p., insuficiente para o limite de 10 p.p. O próximo
+passo é mostrar a fronteira eficiência/exposição, não acumular heurísticas.
 
 ## ✅ Evidência e Definition of Done
 

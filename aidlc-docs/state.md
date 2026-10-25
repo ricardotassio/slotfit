@@ -5,14 +5,14 @@
 - Phase: Construction
 - Active Bolt: S3 — multi-slot optimizer and development evaluation
 - Active spec: `SF-003` — In progress
-- Last completed gate: primary-optimal alternative diagnostic completed
+- Last completed gate: placement-scarcity V3 tested and rejected
 - External integrations: none
 - Real data: prohibited
 
 ## Current objective
 
-Specify a label-free placement-scarcity V3 tie-break using only decision-derived
-compatibility counts. Do not change the guardrail or use audit-only slices.
+Specify a development-only efficiency/exposure frontier with explicit assumptions.
+Do not change the guardrail or use audit-only slices in a deployable strategy.
 
 ## Exit criteria for S1
 
@@ -37,9 +37,8 @@ compatibility counts. Do not change the guardrail or use audit-only slices.
 
 ## Next gate
 
-Test V3 first on a focused residual-choice counterexample, then rerun the unchanged
-40-seed development report. Calibration remains closed and the final frozen set
-remains nonexistent.
+Measure how much primary efficiency must change, if at all, to satisfy the exposure
+guardrail. Calibration remains closed and the final frozen set remains nonexistent.
 
 The S1 machine-verifiable criteria passed on 2026-10-25. Ricardo explicitly
 authorized progression. His teach-back self-assessment remains a non-blocking

@@ -274,6 +274,56 @@ exposures of capacity. The immediate next hypothesis is therefore a label-free
 placement-scarcity tie-break, not an efficiency sacrifice. See
 [`../docs/alternative-plan-diagnostic.md`](../docs/alternative-plan-diagnostic.md).
 
+## Candidate V3 — placement scarcity
+
+V3 preserves V2 and adds a label-free residual phase derived from the current
+decision scenario. For each active request, `compatible_interval_count` is the
+number of intervals for which the shared eligibility function returns eligible.
+The placement-scarcity coefficient is:
+
+`active_interval_count + 1 - compatible_interval_count`
+
+Only requests with at least one eligible pair can receive objective credit. A
+request compatible with fewer current intervals therefore receives more residual
+credit, but only after recovered minutes, requests served and prior exposure debt
+are fixed. Wait age remains the final tie-break.
+
+The five V3 phases are:
+
+1. maximize recovered minutes;
+2. maximize requests served at the phase-1 optimum;
+3. maximize prior exposure debt served at phases 1–2;
+4. maximize placement-scarcity score at phases 1–3;
+5. maximize wait-age score at phases 1–4.
+
+Placement scarcity uses no audit label and cannot make an ineligible pair feasible.
+It is recomputed for the active scenario in each controlled round.
+
+### V3 acceptance criteria
+
+- [x] A focused residual-choice fixture selects two constrained requests over one
+  flexible request without losing minutes or requests served.
+- [x] V1 and V2 behavior remain reproducible and separately identified.
+- [x] V3 preserves hard constraints, deterministic replay and counterfactual
+  invariance.
+- [x] The unchanged 40-seed development report explicitly accepts or rejects V3.
+- [x] Calibration and final frozen generation remain closed until V3 passes every
+  development guardrail.
+
+### V3 development decision
+
+V3 is rejected before calibration. It changed selections in 8 of 40 seeds and 17
+of 200 controlled rounds while preserving the same 96.81% mean utilization, 2.700
+mean requests served, zero K=3 starvation, zero hard violations and zero
+counterfactual flips. The worst supported exposure-shortfall degradation improved
+from V2's 12.58 to 12.35 percentage points, but still exceeded the unchanged
+10-point limit. The binding slice changed from `notice_band=moderate` to
+`duration_band=short`.
+
+Placement scarcity therefore uses some residual capacity but is insufficient. Per
+the predeclared diagnostic decision, the next development gate is an explicit
+efficiency-versus-exposure frontier, not another ungrounded tie-break.
+
 ## Red, green, refactor
 
 - Red: add the multi-slot counterexample and duplicate-assignment tests before

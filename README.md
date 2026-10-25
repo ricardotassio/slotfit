@@ -6,7 +6,7 @@ The project compares simple baselines with constraint optimization over entirely
 
 ## Current status
 
-**AI-DLC Construction Bolt S3 is in progress; CP-SAT candidates V1 and V2 were
+**AI-DLC Construction Bolt S3 is in progress; CP-SAT candidates V1–V3 were
 correctly rejected by development evidence before calibration.**
 
 The repository currently contains:
@@ -26,6 +26,8 @@ The repository currently contains:
   selections, preserving the negative result;
 - a bounded alternative-plan diagnostic showing where primary-optimal residual
   choices still exist;
+- a placement-scarcity V3 that changes real development decisions but remains below
+  the fixed exposure guardrail;
 - executable unit tests;
 - architecture and decision records.
 

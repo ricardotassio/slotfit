@@ -98,6 +98,19 @@ Before proposing V3:
 3. if not, produce an explicit efficiency-versus-exposure frontier on development;
 4. do not enter calibration or mint final seeds.
 
+## Candidate V3 — tested and rejected
+
+V3 added decision-derived placement scarcity after exposure debt and before wait
+age. It changed 17 round-level selections across 8 seeds without changing recovered
+utilization or requests served. The worst supported degradation fell from 12.58 to
+12.35 p.p., while the binding slice moved from moderate notice to short duration.
+
+The improvement is real but below the fixed requirement. V3 remains rejected, and
+calibration remains closed. Because the diagnostic had already established
+residual alternatives and V3 used only part of that capacity, the next analysis
+will construct an explicit development-only efficiency/exposure frontier rather
+than adding another heuristic tie-break.
+
 ## Reproduction
 
 ```bash

@@ -19,7 +19,7 @@ class DevelopmentComparisonTests(unittest.TestCase):
             {
                 "fifo-eligible@0.2.0",
                 "local-best-fit@0.2.0",
-                "cp-sat-exposure-debt@0.2.0",
+                "cp-sat-placement-scarcity@0.3.0",
             },
         )
 
@@ -34,7 +34,7 @@ class DevelopmentComparisonTests(unittest.TestCase):
 
     def test_optimizer_is_optimal_and_not_less_efficient_than_baselines(self) -> None:
         summaries = {item.strategy: item for item in self.report.strategies}
-        optimized = summaries["cp-sat-exposure-debt@0.2.0"]
+        optimized = summaries["cp-sat-placement-scarcity@0.3.0"]
 
         self.assertEqual(optimized.optimized_runs, 40)
         self.assertGreaterEqual(
@@ -46,17 +46,18 @@ class DevelopmentComparisonTests(unittest.TestCase):
             summaries["local-best-fit@0.2.0"].mean_recovered_utilization,
         )
 
-    def test_candidate_records_the_exposure_debt_phase(self) -> None:
+    def test_candidate_records_the_exposure_debt_and_scarcity_phases(self) -> None:
         candidate_records = [
             item
             for item in self.report.scenarios
-            if item.strategy == "cp-sat-exposure-debt@0.2.0"
+            if item.strategy == "cp-sat-placement-scarcity@0.3.0"
         ]
 
         self.assertEqual(len(candidate_records), 40)
         self.assertTrue(
             all(
-                item.phase_statuses == ("OPTIMAL", "OPTIMAL", "OPTIMAL", "OPTIMAL")
+                item.phase_statuses
+                == ("OPTIMAL", "OPTIMAL", "OPTIMAL", "OPTIMAL", "OPTIMAL")
                 for item in candidate_records
             )
         )
@@ -83,6 +84,14 @@ class DevelopmentComparisonTests(unittest.TestCase):
         self.assertGreater(
             checks["worst-supported-slice-gap-degradation"].observed_value,
             checks["worst-supported-slice-gap-degradation"].limit,
+        )
+        self.assertAlmostEqual(
+            checks["worst-supported-slice-gap-degradation"].observed_value,
+            0.12345266046859138,
+        )
+        self.assertIn(
+            "duration_band=short",
+            checks["worst-supported-slice-gap-degradation"].detail,
         )
 
     def test_report_is_deterministic(self) -> None:

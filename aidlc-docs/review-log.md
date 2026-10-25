@@ -124,3 +124,18 @@ Ricardo should be able to answer:
   that sacrifices efficiency.
 - Final verification: 57 tests passed; the diagnostic JSON parsed successfully;
   compile and whitespace checks passed.
+
+## 2026-10-25 — SF-003 placement-scarcity V3
+
+- Added a separate `cp-sat-placement-scarcity@0.3.0` candidate while preserving V1
+  and V2.
+- Placement scarcity is derived only from eligible interval counts and acts after
+  minutes, requests served and exposure debt.
+- V3 changed 17 rounds across 8 development seeds without changing utilization or
+  requests served.
+- Worst supported degradation improved from 12.58 to 12.35 p.p. but still failed
+  the unchanged 10 p.p. guardrail; the binding slice became `duration_band=short`.
+- Decision: reject V3 and construct the development-only efficiency/exposure
+  frontier. Calibration remains closed.
+- Final verification: 58 tests passed; the V3 development JSON parsed and reported
+  the expected rejected decision.

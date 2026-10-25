@@ -35,15 +35,18 @@ the observed V2 cohort path.
 
 ## Decision
 
-The evidence does not yet require sacrificing recovered minutes or request count.
-There is residual choice, but exposure debt did not discriminate it. V3 may test a
-label-free, decision-derived placement-scarcity signal: requests compatible with
-fewer intervals receive residual priority after minutes and count. This hypothesis
-must be specified and tested on development only.
+The evidence did not yet require sacrificing recovered minutes or request count.
+There was residual choice, but exposure debt did not discriminate it. This result
+authorized one label-free, decision-derived placement-scarcity V3 test on
+development only.
 
-If placement scarcity cannot use the observed residual capacity, the project will
-measure an explicit efficiency-versus-exposure frontier instead of adding more
-unjustified tie-breakers.
+## V3 follow-up
+
+Placement scarcity changed 17 decisions across 8 seeds and reduced the worst
+supported degradation from 12.58 to 12.35 p.p. without losing primary efficiency.
+It used some residual capacity but did not pass the fixed 10 p.p. guardrail.
+Therefore the next gate is an explicit efficiency-versus-exposure frontier instead
+of another tie-breaker.
 
 ## Reproduction
 

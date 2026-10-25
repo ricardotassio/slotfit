@@ -8,6 +8,7 @@ from slotfit.optimizer import (
     SolverStatus,
     optimize_plan,
     optimize_plan_with_exposure_debt,
+    optimize_plan_with_placement_scarcity,
 )
 from slotfit.scenarios import multi_slot_counterexample
 
@@ -197,6 +198,42 @@ class CpSatOptimizerTests(unittest.TestCase):
         self.assertEqual(
             [(phase.name, phase.status, phase.objective_value) for phase in first.phases],
             [(phase.name, phase.status, phase.objective_value) for phase in second.phases],
+        )
+
+    def test_placement_scarcity_prefers_two_constrained_residual_choices(self) -> None:
+        scenario = multi_slot_counterexample()
+        constrained_b = replace(
+            scenario.wait_requests[1],
+            request_id="WR-CONSTRAINED-B",
+            joined_order=3,
+            availability_windows=(scenario.open_intervals[1].window,),
+        )
+        three_requests = replace(
+            scenario,
+            scenario_id="placement-scarcity-residual-choice",
+            wait_requests=scenario.wait_requests + (constrained_b,),
+        )
+
+        result = optimize_plan_with_placement_scarcity(
+            three_requests,
+            exposure_debt_by_request_id={},
+        )
+
+        self.assertEqual(result.plan.recovered_minutes, 120)
+        self.assertEqual(len(result.plan.assignments), 2)
+        self.assertEqual(
+            {assignment.request_id for assignment in result.plan.assignments},
+            {"WR-CONSTRAINED", "WR-CONSTRAINED-B"},
+        )
+        self.assertEqual(
+            [(phase.name, phase.objective_value) for phase in result.phases],
+            [
+                ("recovered-minutes", 120),
+                ("requests-served", 2),
+                ("exposure-debt-score", 0),
+                ("placement-scarcity-score", 4),
+                ("wait-age-score", 3),
+            ],
         )
 
 

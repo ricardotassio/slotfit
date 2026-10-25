@@ -83,6 +83,7 @@ def optimize_plan(
         scenario,
         config=config,
         exposure_debt_by_request_id=None,
+        use_placement_scarcity=False,
         strategy="cp-sat-lexicographic@0.1.0",
     )
 
@@ -95,6 +96,39 @@ def optimize_plan_with_exposure_debt(
 ) -> OptimizationResult:
     """Solve with prior compatible misses as a residual lexicographic objective."""
 
+    _validate_exposure_debt(scenario, exposure_debt_by_request_id)
+
+    return _optimize_plan(
+        scenario,
+        config=config,
+        exposure_debt_by_request_id=exposure_debt_by_request_id,
+        use_placement_scarcity=False,
+        strategy="cp-sat-exposure-debt@0.2.0",
+    )
+
+
+def optimize_plan_with_placement_scarcity(
+    scenario: Scenario,
+    *,
+    exposure_debt_by_request_id: Mapping[str, int],
+    config: SolverConfig = DEFAULT_SOLVER_CONFIG,
+) -> OptimizationResult:
+    """Solve with exposure debt and current eligible-interval scarcity."""
+
+    _validate_exposure_debt(scenario, exposure_debt_by_request_id)
+    return _optimize_plan(
+        scenario,
+        config=config,
+        exposure_debt_by_request_id=exposure_debt_by_request_id,
+        use_placement_scarcity=True,
+        strategy="cp-sat-placement-scarcity@0.3.0",
+    )
+
+
+def _validate_exposure_debt(
+    scenario: Scenario,
+    exposure_debt_by_request_id: Mapping[str, int],
+) -> None:
     request_ids = {request.request_id for request in scenario.wait_requests}
     unknown_ids = set(exposure_debt_by_request_id) - request_ids
     if unknown_ids:
@@ -105,19 +139,13 @@ def optimize_plan_with_exposure_debt(
     ):
         raise ValueError("exposure debt values must be non-negative integers")
 
-    return _optimize_plan(
-        scenario,
-        config=config,
-        exposure_debt_by_request_id=exposure_debt_by_request_id,
-        strategy="cp-sat-exposure-debt@0.2.0",
-    )
-
 
 def _optimize_plan(
     scenario: Scenario,
     *,
     config: SolverConfig,
     exposure_debt_by_request_id: Mapping[str, int] | None,
+    use_placement_scarcity: bool,
     strategy: str,
 ) -> OptimizationResult:
 
@@ -193,6 +221,24 @@ def _optimize_plan(
             for (request_id, _interval_id), variable in variables.items()
         )
         phase_contract.append(("exposure-debt-score", exposure_debt_score))
+    if use_placement_scarcity:
+        compatible_interval_counts = {
+            request.request_id: sum(
+                request_id == request.request_id
+                for request_id, _interval_id in variables
+            )
+            for request in requests
+        }
+        placement_scarcity_score = sum(
+            (
+                len(intervals)
+                + 1
+                - compatible_interval_counts[request_id]
+            )
+            * variable
+            for (request_id, _interval_id), variable in variables.items()
+        )
+        phase_contract.append(("placement-scarcity-score", placement_scarcity_score))
     phase_contract.append(("wait-age-score", wait_age_score))
 
     phase_results: list[SolverPhase] = []
