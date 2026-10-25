@@ -3,16 +3,16 @@
 - Project: SlotFit
 - Repository type: greenfield
 - Phase: Construction
-- Active Bolt: none — S5 closed; S6 specification is next
-- Active spec: none
+- Active Bolt: S6 — comparison and simulated-review UI
+- Active spec: `SF-006` — Ready
 - Last completed gate: SF-005 append-only simulated review verified
 - External integrations: none
 - Real data: prohibited
 
 ## Current objective
 
-Specify the S6 local comparison UI with neutral ordering, accessible fallback and
-an explicit rejected-candidate disclosure.
+Implement the S6 local comparison UI with neutral ordering, accessible fallback
+and an explicit rejected-candidate disclosure.
 
 ## Exit criteria for S1
 
@@ -37,9 +37,9 @@ an explicit rejected-candidate disclosure.
 
 ## Next gate
 
-Open SF-006 only after the visual hierarchy, accessibility contract, UI states and
-review flow are explicit. Calibration remains closed and the final frozen set
-remains nonexistent.
+Close SF-006 only after build, real local integration, browser-state,
+idempotency and automated accessibility checks pass. Calibration remains closed
+and the final frozen set remains nonexistent.
 
 The S1 machine-verifiable criteria passed on 2026-10-25. Ricardo explicitly
 authorized progression. His teach-back self-assessment remains a non-blocking
