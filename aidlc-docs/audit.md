@@ -105,3 +105,14 @@
   and the canonical execution plan.
 - Verification: all relative links resolve, `git diff --check` passes and the
   unchanged implementation suite remains at 46 passing tests.
+
+## 2026-10-25 — Exposure-debt V2 decision
+
+- Decision: preserve V1 and identify V2 separately rather than rewriting historical
+  evidence.
+- Decision: exposure debt is request-level compatible misses only; no audit slice
+  may enter the optimizer.
+- Observation: V2 changed zero selections across 40 development seeds and did not
+  improve the failed slice guardrail.
+- Decision: reject V2 and diagnose the efficiency/exposure feasible frontier before
+  adding another objective or changing its priority.

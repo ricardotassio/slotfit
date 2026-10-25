@@ -96,3 +96,17 @@ Ricardo should be able to answer:
 - Focused comparison tests: 7 passed. Final `make test`: 46 tests passed.
 - The development JSON report was generated and parsed successfully; compile and
   whitespace checks passed.
+
+## 2026-10-25 — SF-003 exposure-debt V2
+
+- Preserved V1 and added a separate `cp-sat-exposure-debt@0.2.0` candidate.
+- V2 adds a non-negative per-request compatible-miss debt after recovered minutes
+  and requests served, before wait age; audit-only slices are not accepted.
+- A focused counterexample proves debt can change a residual choice without losing
+  minutes or requests served.
+- Across the same 40 development seeds, V2 changed zero longitudinal selections
+  relative to V1 and reproduced the same aggregate metrics.
+- V2 therefore remains rejected at 12.58 p.p. exposure-shortfall degradation vs
+  the unchanged 10 p.p. guardrail. Calibration remains closed.
+- Final verification: 52 tests passed; compile, JSON parsing and whitespace checks
+  passed.

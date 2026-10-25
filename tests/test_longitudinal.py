@@ -1,9 +1,14 @@
 from __future__ import annotations
 
 import unittest
+from collections.abc import Mapping
 
 from slotfit.generation import generate_scenario
-from slotfit.longitudinal import simulate_opportunity_rounds
+from slotfit.longitudinal import (
+    simulate_exposure_debt_rounds,
+    simulate_opportunity_rounds,
+)
+from slotfit.optimizer import optimize_plan_with_exposure_debt
 from slotfit.strategies import best_fit_plan, fifo_plan
 
 
@@ -53,6 +58,26 @@ class LongitudinalSimulationTests(unittest.TestCase):
                 fifo_plan,
                 rounds=0,
             )
+
+    def test_debt_aware_rounds_pass_prior_compatible_misses_to_planner(self) -> None:
+        observed_debts: list[dict[str, int]] = []
+
+        def debt_planner(scenario, debt: Mapping[str, int]):
+            observed_debts.append(dict(debt))
+            return optimize_plan_with_exposure_debt(
+                scenario,
+                exposure_debt_by_request_id=debt,
+            ).plan
+
+        result = simulate_exposure_debt_rounds(
+            generate_scenario(1400),
+            debt_planner,
+            rounds=3,
+        )
+
+        self.assertEqual(set(observed_debts[0].values()), {0})
+        self.assertTrue(any(value > 0 for value in observed_debts[1].values()))
+        self.assertEqual(result.strategy, "cp-sat-exposure-debt@0.2.0")
 
 
 if __name__ == "__main__":

@@ -3,20 +3,25 @@ from __future__ import annotations
 import hashlib
 import json
 import math
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field, fields, replace
 from statistics import mean, median
 
 from slotfit.domain import CandidatePlan, Scenario
 from slotfit.evaluation import evaluate_generated_plan
 from slotfit.generation import EvaluationSplit, RequestAuditSlice
-from slotfit.longitudinal import LongitudinalRequestRecord, simulate_opportunity_rounds
+from slotfit.longitudinal import (
+    DebtAwareStrategy,
+    LongitudinalRequestRecord,
+    simulate_exposure_debt_rounds,
+    simulate_opportunity_rounds,
+)
 from slotfit.multi_generation import (
     DEFAULT_MULTI_SLOT_CONFIG,
     MULTI_SLOT_SEEDS,
     generate_multi_slot_scenario,
 )
-from slotfit.optimizer import OptimizationResult, optimize_plan
+from slotfit.optimizer import OptimizationResult, optimize_plan_with_exposure_debt
 from slotfit.strategies import best_fit_plan, fifo_plan
 
 
@@ -303,7 +308,7 @@ def _guardrail_checks(
     strategies: tuple[StrategyComparison, ...],
 ) -> tuple[GuardrailCheck, ...]:
     summaries = {item.strategy: item for item in strategies}
-    candidate = summaries["cp-sat-lexicographic@0.1.0"]
+    candidate = summaries["cp-sat-exposure-debt@0.2.0"]
     baselines = (
         summaries["fifo-eligible@0.2.0"],
         summaries["local-best-fit@0.2.0"],
@@ -393,20 +398,39 @@ def compare_engineering_split(
     scenario_results: list[ScenarioComparison] = []
 
     def optimizer_planner(scenario: Scenario) -> CandidatePlan:
-        return optimize_plan(scenario).plan
+        return optimize_plan_with_exposure_debt(
+            scenario,
+            exposure_debt_by_request_id={},
+        ).plan
 
-    planners: tuple[tuple[str, Planner], ...] = (
-        ("fifo-eligible@0.2.0", fifo_plan),
-        ("local-best-fit@0.2.0", best_fit_plan),
-        ("cp-sat-lexicographic@0.1.0", optimizer_planner),
+    def debt_aware_optimizer_planner(
+        scenario: Scenario,
+        exposure_debt_by_request_id: Mapping[str, int],
+    ) -> CandidatePlan:
+        return optimize_plan_with_exposure_debt(
+            scenario,
+            exposure_debt_by_request_id=exposure_debt_by_request_id,
+        ).plan
+
+    planners: tuple[tuple[str, Planner, DebtAwareStrategy | None], ...] = (
+        ("fifo-eligible@0.2.0", fifo_plan, None),
+        ("local-best-fit@0.2.0", best_fit_plan, None),
+        (
+            "cp-sat-exposure-debt@0.2.0",
+            optimizer_planner,
+            debt_aware_optimizer_planner,
+        ),
     )
 
     for seed in seeds:
         generated = generate_multi_slot_scenario(seed, split=split)
-        for strategy_name, planner in planners:
+        for strategy_name, planner, debt_aware_planner in planners:
             optimization: OptimizationResult | None = None
-            if strategy_name.startswith("cp-sat"):
-                optimization = optimize_plan(generated.scenario)
+            if debt_aware_planner is not None:
+                optimization = optimize_plan_with_exposure_debt(
+                    generated.scenario,
+                    exposure_debt_by_request_id={},
+                )
                 plan = optimization.plan
             else:
                 plan = planner(generated.scenario)
@@ -447,11 +471,18 @@ def compare_engineering_split(
             scenario_results.append(scenario_result)
             strategy_scenarios.setdefault(strategy_name, []).append(scenario_result)
 
-            longitudinal = simulate_opportunity_rounds(
-                generated,
-                planner,
-                rounds=opportunity_rounds,
-            )
+            if debt_aware_planner is not None:
+                longitudinal = simulate_exposure_debt_rounds(
+                    generated,
+                    debt_aware_planner,
+                    rounds=opportunity_rounds,
+                )
+            else:
+                longitudinal = simulate_opportunity_rounds(
+                    generated,
+                    planner,
+                    rounds=opportunity_rounds,
+                )
             strategy_histories.setdefault(strategy_name, []).extend(
                 longitudinal.requests
             )
@@ -462,7 +493,7 @@ def compare_engineering_split(
             strategy_scenarios[strategy_name],
             strategy_histories[strategy_name],
         )
-        for strategy_name, _planner in planners
+        for strategy_name, _planner, _debt_aware_planner in planners
     )
     seed_payload = json.dumps(
         {"split": split.value, "seeds": seeds},

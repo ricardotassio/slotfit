@@ -1,6 +1,6 @@
 # Card S3 — Otimizador e avaliação controlada
 
-**Estado:** em andamento; primeiro candidato rejeitado no desenvolvimento.  
+**Estado:** em andamento; candidatos V1 e V2 rejeitados no desenvolvimento.
 **Spec:** [`SF-003`](../../specs/003-optimizer-and-evaluation.md).  
 **ADR:** [`ADR-0002`](../adr/0002-lexicographic-cp-sat.md).
 
@@ -28,6 +28,11 @@ equidade.
 O solver recuperou 96,81% em média, mas o candidato ultrapassou o guardrail de
 déficit de exposição. LangGraph, LLM e deep learning seriam excessivos: o problema
 é de atribuição com regras explícitas, não de geração ou predição.
+
+V2 adicionou dívida por oportunidades compatíveis perdidas como desempate residual.
+O teste unitário funcionou, mas a política mudou zero decisões nos 40 seeds. Isso
+mostrou que um sinal correto pode ser ineficaz quando objetivos anteriores deixam
+nenhuma alternativa relevante.
 
 ## ✅ Evidência e Definition of Done
 

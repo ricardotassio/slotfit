@@ -19,7 +19,7 @@ class DevelopmentComparisonTests(unittest.TestCase):
             {
                 "fifo-eligible@0.2.0",
                 "local-best-fit@0.2.0",
-                "cp-sat-lexicographic@0.1.0",
+                "cp-sat-exposure-debt@0.2.0",
             },
         )
 
@@ -34,7 +34,7 @@ class DevelopmentComparisonTests(unittest.TestCase):
 
     def test_optimizer_is_optimal_and_not_less_efficient_than_baselines(self) -> None:
         summaries = {item.strategy: item for item in self.report.strategies}
-        optimized = summaries["cp-sat-lexicographic@0.1.0"]
+        optimized = summaries["cp-sat-exposure-debt@0.2.0"]
 
         self.assertEqual(optimized.optimized_runs, 40)
         self.assertGreaterEqual(
@@ -44,6 +44,21 @@ class DevelopmentComparisonTests(unittest.TestCase):
         self.assertGreaterEqual(
             optimized.mean_recovered_utilization,
             summaries["local-best-fit@0.2.0"].mean_recovered_utilization,
+        )
+
+    def test_candidate_records_the_exposure_debt_phase(self) -> None:
+        candidate_records = [
+            item
+            for item in self.report.scenarios
+            if item.strategy == "cp-sat-exposure-debt@0.2.0"
+        ]
+
+        self.assertEqual(len(candidate_records), 40)
+        self.assertTrue(
+            all(
+                item.phase_statuses == ("OPTIMAL", "OPTIMAL", "OPTIMAL", "OPTIMAL")
+                for item in candidate_records
+            )
         )
 
     def test_report_keeps_efficiency_and_exclusion_metrics_separate(self) -> None:

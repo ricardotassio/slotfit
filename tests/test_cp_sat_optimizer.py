@@ -3,7 +3,12 @@ from __future__ import annotations
 import unittest
 from dataclasses import replace
 
-from slotfit.optimizer import SolverConfig, SolverStatus, optimize_plan
+from slotfit.optimizer import (
+    SolverConfig,
+    SolverStatus,
+    optimize_plan,
+    optimize_plan_with_exposure_debt,
+)
 from slotfit.scenarios import multi_slot_counterexample
 
 
@@ -120,6 +125,79 @@ class CpSatOptimizerTests(unittest.TestCase):
         self.assertEqual(result.phases[0].status, SolverStatus.UNKNOWN)
         self.assertEqual(result.plan.strategy, "cp-sat-lexicographic@0.1.0")
         self.assertEqual(result.plan.assignments, ())
+
+    def test_exposure_debt_changes_only_the_residual_choice(self) -> None:
+        scenario = multi_slot_counterexample()
+        one_interval = replace(
+            scenario,
+            scenario_id="exposure-debt-residual-choice",
+            open_intervals=(scenario.open_intervals[0],),
+        )
+
+        result = optimize_plan_with_exposure_debt(
+            one_interval,
+            exposure_debt_by_request_id={"WR-CONSTRAINED": 2},
+        )
+
+        self.assertEqual(result.plan.recovered_minutes, 60)
+        self.assertEqual(len(result.plan.assignments), 1)
+        self.assertEqual(result.plan.assignments[0].request_id, "WR-CONSTRAINED")
+        self.assertEqual(
+            [(phase.name, phase.objective_value) for phase in result.phases],
+            [
+                ("recovered-minutes", 60),
+                ("requests-served", 1),
+                ("exposure-debt-score", 2),
+                ("wait-age-score", 1),
+            ],
+        )
+
+    def test_exposure_debt_defaults_missing_active_requests_to_zero(self) -> None:
+        result = optimize_plan_with_exposure_debt(
+            multi_slot_counterexample(),
+            exposure_debt_by_request_id={},
+        )
+
+        self.assertTrue(result.optimized)
+        self.assertEqual(result.phases[2].objective_value, 0)
+
+    def test_exposure_debt_rejects_negative_and_unknown_values(self) -> None:
+        scenario = multi_slot_counterexample()
+
+        with self.assertRaisesRegex(ValueError, "non-negative"):
+            optimize_plan_with_exposure_debt(
+                scenario,
+                exposure_debt_by_request_id={"WR-FLEXIBLE": -1},
+            )
+        with self.assertRaisesRegex(ValueError, "unknown request"):
+            optimize_plan_with_exposure_debt(
+                scenario,
+                exposure_debt_by_request_id={"NOT-IN-SCENARIO": 1},
+            )
+        with self.assertRaisesRegex(ValueError, "non-negative integers"):
+            optimize_plan_with_exposure_debt(
+                scenario,
+                exposure_debt_by_request_id={"WR-FLEXIBLE": 1.5},
+            )
+
+    def test_exposure_debt_replays_the_same_decision_and_objectives(self) -> None:
+        scenario = multi_slot_counterexample()
+        debt = {"WR-FLEXIBLE": 1, "WR-CONSTRAINED": 2}
+
+        first = optimize_plan_with_exposure_debt(
+            scenario,
+            exposure_debt_by_request_id=debt,
+        )
+        second = optimize_plan_with_exposure_debt(
+            scenario,
+            exposure_debt_by_request_id=debt,
+        )
+
+        self.assertEqual(first.plan, second.plan)
+        self.assertEqual(
+            [(phase.name, phase.status, phase.objective_value) for phase in first.phases],
+            [(phase.name, phase.status, phase.objective_value) for phase in second.phases],
+        )
 
 
 if __name__ == "__main__":

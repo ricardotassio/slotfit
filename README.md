@@ -6,8 +6,8 @@ The project compares simple baselines with constraint optimization over entirely
 
 ## Current status
 
-**AI-DLC Construction Bolt S3 is in progress; the first CP-SAT candidate was
-correctly rejected by its development guardrails.**
+**AI-DLC Construction Bolt S3 is in progress; CP-SAT candidates V1 and V2 were
+correctly rejected by development evidence before calibration.**
 
 The repository currently contains:
 
@@ -22,6 +22,8 @@ The repository currently contains:
 - metamorphic tests for opaque identifiers, input order and ineligible records;
 - a multi-slot global-conflict fixture and lexicographic CP-SAT adapter;
 - a 40-seed development comparison with per-slice guardrail decisions;
+- an exposure-debt V2 whose focused behavior works but changes zero development
+  selections, preserving the negative result;
 - executable unit tests;
 - architecture and decision records.
 

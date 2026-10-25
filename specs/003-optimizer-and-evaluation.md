@@ -191,6 +191,54 @@ observations with at least 30 eligible opportunities may serve as references.
 Unsupported results remain reported. Full evidence and the next hypothesis are in
 [`../docs/development-evidence.md`](../docs/development-evidence.md).
 
+## Candidate V2 — exposure-debt iteration
+
+The rejected V1 optimizer remains unchanged and reproducible. V2 adds a
+request-level signal derived only from the number of prior compatible opportunities
+in which that request was not exposed. Audit-only slice labels remain structurally
+unavailable to the optimizer.
+
+V2 uses four integer lexicographic phases:
+
+1. maximize recovered minutes;
+2. while fixing phase 1, maximize requests served;
+3. while fixing phases 1 and 2, maximize total prior exposure debt served;
+4. while fixing phases 1–3, maximize the declared wait-age score.
+
+Debt is a non-negative integer keyed by an active request ID. Missing active IDs
+mean zero debt. Unknown IDs and negative values are invalid input. Debt never makes
+an ineligible request eligible, never changes a hard constraint and cannot trade
+away recovered minutes or requests served. After each controlled round, an
+eligible but unexposed request gains one debt unit; an exposed request leaves the
+subsequent-round cohort as before.
+
+V2 must pass a focused counterexample in which debt changes only a residual choice,
+then run against the same 40 development seeds and unchanged guardrails. V2 cannot
+enter calibration unless every development guardrail passes.
+
+### V2 acceptance criteria
+
+- [x] A repeatedly compatible unexposed request gains residual priority without
+  reducing recovered minutes or requests served.
+- [x] Missing, negative and unknown debt inputs have explicit behavior and tests.
+- [x] Audit-only slices remain absent from the optimizer input.
+- [x] The same debt state and scenario replay identically.
+- [x] The unchanged 40-seed development report accepts or rejects V2 explicitly.
+
+### V2 development decision
+
+V2 is rejected before calibration. Its focused residual-choice test passes, but it
+changes zero round-level selections relative to V1 across the 40 registered
+development seeds. Consequently its aggregate results equal V1: 96.81% mean
+recovered utilization, zero K=3 starvation and a 12.58 percentage-point worst
+supported exposure-shortfall degradation, which still fails the 10-point limit.
+
+The next gate is diagnostic, not another objective change: determine whether any
+plan with the same recovered minutes and requests served can improve the failing
+exposure outcome. If no such plan exists, the project must expose an explicit
+efficiency-versus-exposure frontier rather than pretend a residual tie-break can
+solve the conflict.
+
 ## Red, green, refactor
 
 - Red: add the multi-slot counterexample and duplicate-assignment tests before

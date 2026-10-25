@@ -5,14 +5,14 @@
 - Phase: Construction
 - Active Bolt: S3 — multi-slot optimizer and development evaluation
 - Active spec: `SF-003` — In progress
-- Last completed gate: 40-seed development evidence reviewed; first candidate rejected
+- Last completed gate: exposure-debt V2 tested on 40 seeds and rejected as ineffective
 - External integrations: none
 - Real data: prohibited
 
 ## Current objective
 
-Revise the candidate policy to address the failed supported-slice exposure
-guardrail without changing the threshold or using audit-only slices as inputs.
+Diagnose whether efficiency-equivalent plans can improve exposure before proposing
+another candidate objective. Do not change the guardrail or use audit-only slices.
 
 ## Exit criteria for S1
 
@@ -37,9 +37,9 @@ guardrail without changing the threshold or using audit-only slices as inputs.
 
 ## Next gate
 
-Specify and test a minimal per-request exposure-debt signal, then rerun the same
-40 development seeds. Calibration remains closed until all development guardrails
-pass. The final frozen set remains nonexistent.
+Build a development-only alternative-plan/frontier diagnostic. Calibration remains
+closed until all development guardrails pass. The final frozen set remains
+nonexistent.
 
 The S1 machine-verifiable criteria passed on 2026-10-25. Ricardo explicitly
 authorized progression. His teach-back self-assessment remains a non-blocking

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass, replace
 
 from slotfit.domain import CandidatePlan, Scenario
@@ -14,6 +14,7 @@ from slotfit.generation import (
 
 
 Strategy = Callable[[Scenario], CandidatePlan]
+DebtAwareStrategy = Callable[[Scenario, Mapping[str, int]], CandidatePlan]
 
 
 @dataclass(slots=True)
@@ -90,6 +91,30 @@ def simulate_opportunity_rounds(
     does not choose that rule or label a request as starved.
     """
 
+    return _simulate_opportunity_rounds(
+        generated,
+        lambda scenario, _debt: strategy(scenario),
+        rounds=rounds,
+    )
+
+
+def simulate_exposure_debt_rounds(
+    generated: GeneratedScenario,
+    strategy: DebtAwareStrategy,
+    *,
+    rounds: int,
+) -> LongitudinalEvaluation:
+    """Replay rounds while passing prior compatible misses to the strategy."""
+
+    return _simulate_opportunity_rounds(generated, strategy, rounds=rounds)
+
+
+def _simulate_opportunity_rounds(
+    generated: GeneratedScenario,
+    strategy: DebtAwareStrategy,
+    *,
+    rounds: int,
+) -> LongitudinalEvaluation:
     if rounds <= 0:
         raise ValueError("rounds must be positive")
 
@@ -113,7 +138,11 @@ def simulate_opportunity_rounds(
             active_request_ids,
             round_number,
         )
-        plan = strategy(round_generated.scenario)
+        exposure_debt = {
+            request_id: history[request_id].unselected_compatible_opportunities
+            for request_id in active_request_ids
+        }
+        plan = strategy(round_generated.scenario, exposure_debt)
         evaluation = evaluate_generated_plan(round_generated, plan)
         if strategy_name is None:
             strategy_name = plan.strategy

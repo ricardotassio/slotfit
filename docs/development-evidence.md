@@ -71,21 +71,32 @@ age but do not directly control exposure shortfall across repeated compatible
 opportunities. A globally efficient static plan can therefore be insufficient as
 a longitudinal policy.
 
-## Next development hypothesis
+## Candidate V2 hypothesis — tested and rejected
 
-Test a minimal, auditable exposure-debt signal derived only from prior compatible
-opportunities missed by each request. The signal must not use audit-only slice
-labels. It should enter after recovered minutes and requests served, preserving all
-hard constraints, and before or together with the existing wait-age tie-break.
+V2 tested a minimal, auditable exposure-debt signal derived only from prior compatible
+opportunities missed by each request. The signal does not use audit-only slice
+labels. It enters after recovered minutes and requests served, preserving all hard
+constraints, and before the existing wait-age tie-break.
 
-The next iteration must:
+The focused counterexample passed: when efficiency and count tie, a request with
+two prior misses gains priority. However, V2 changed **zero** round-level selections
+relative to V1 across the 40 development seeds. Aggregate metrics therefore did
+not change, and V2 was rejected by the same 12.58 p.p. slice degradation.
 
-1. add the history input and objective contract to `SF-003` before implementation;
-2. create a red test where a repeatedly compatible, unexposed request gains
-   priority without reducing recovered minutes or requests served;
-3. rerun the same 40 development seeds and unchanged guardrails;
-4. proceed to calibration only if every development guardrail passes;
-5. keep the final frozen set nonexistent until configuration freeze.
+This negative result indicates that exposure debt is ineffective when placed only
+as a residual objective on the current distribution: the higher-priority phases
+often leave no relevant alternative, or remaining requests carry equal debt.
+
+## Next diagnostic gate
+
+Before proposing V3:
+
+1. enumerate or constrain alternative plans at the same recovered minutes and
+   requests served;
+2. measure whether those alternatives can improve exposure without using audit
+   labels in the decision;
+3. if not, produce an explicit efficiency-versus-exposure frontier on development;
+4. do not enter calibration or mint final seeds.
 
 ## Reproduction
 
