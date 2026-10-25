@@ -139,3 +139,14 @@
 - Decision: reject V3 because 12.35 p.p. remains above the 10 p.p. guardrail.
 - Next gate: measure an explicit development-only efficiency/exposure frontier;
   do not add another residual heuristic without evidence.
+
+## 2026-10-25 — Local frontier decision
+
+- Decision: predeclare 100%, 95%, 90% and 80% local floors before observing the
+  frontier.
+- Observation: the highest passing target-slice floor is 90%; its realized
+  aggregate recovery is 99.43%, with a 45-minute cost and three added exposures.
+- Limitation: audit labels select oracle plans post hoc and the subsequent cohort
+  remains V3's path.
+- Decision: use the result only to specify a label-free 90%-floor V4 candidate on
+  development; do not enter calibration.

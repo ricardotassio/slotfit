@@ -324,6 +324,43 @@ Placement scarcity therefore uses some residual capacity but is insufficient. Pe
 the predeclared diagnostic decision, the next development gate is an explicit
 efficiency-versus-exposure frontier, not another ungrounded tie-break.
 
+## Local oracle frontier contract
+
+The first frontier is diagnostic and follows the observed V3 cohort path. At each
+round, it enumerates all feasible plans from decision data, then post hoc selects
+the plan with the most exposure for V3's binding `duration_band=short` slice under
+recovered-minute floors of 100%, 95%, 90% and 80% of that round's optimum.
+
+The oracle may inspect audit labels only after enumeration and cannot become a
+deployable strategy. Each frontier point reports recovered minutes, requests
+served, overall exposure, target exposure, target shortfall and degradation from
+the supported better baseline.
+
+Because counterfactual plans do not change the subsequent V3 cohort path, the
+frontier measures local capacity and cost; it is not a globally consistent
+longitudinal policy or proof that the full guardrail suite would pass.
+
+### Frontier acceptance criteria
+
+- [x] Feasible-plan enumeration consumes `Scenario` only and is bounded.
+- [x] Every frontier plan satisfies hard constraints and its declared floor.
+- [x] Floors and the target slice are fixed before observing frontier results.
+- [x] Output is deterministic and separates local oracle capacity from policy
+  evidence.
+- [x] The result states the highest observed local efficiency floor at which the
+  target-slice degradation meets 10 p.p., or reports that none does.
+
+### Frontier decision
+
+The 100% and 95% floors reproduce V3's 12.35 p.p. failure. At the 90% local floor,
+the oracle recovers 7,905 of 7,950 aggregate optimal minutes (99.43%), preserves
+168 requests served and reduces target degradation to 8.24 p.p. The 45-minute cost
+buys three additional short-duration exposures on the fixed V3 path.
+
+This authorizes a label-free V4 hypothesis with a 90% per-round recovered-minute
+floor; it does not authorize calibration or a slice-aware strategy. Full method and
+limitations: [`../docs/exposure-frontier.md`](../docs/exposure-frontier.md).
+
 ## Red, green, refactor
 
 - Red: add the multi-slot counterexample and duplicate-assignment tests before

@@ -41,12 +41,12 @@ class _MutableSliceDiagnostic:
     additional_exposure_capacity: int = 0
 
 
-def enumerate_primary_optimal_plans(
+def enumerate_feasible_plans(
     scenario: Scenario,
     *,
     max_combinations: int = 100_000,
 ) -> tuple[CandidatePlan, ...]:
-    """Enumerate plans tied on recovered minutes and requests served.
+    """Enumerate every feasible plan for a bounded synthetic scenario.
 
     This diagnostic consumes decision data only. Its bounded exhaustive search is
     intentionally limited to small synthetic POC scenarios.
@@ -89,21 +89,12 @@ def enumerate_primary_optimal_plans(
             f"diagnostic combination limit exceeded: {combination_count} > {max_combinations}"
         )
 
-    best_score = (-1, -1)
-    best_choices: list[tuple[str | None, ...]] = []
+    feasible_choices: list[tuple[str | None, ...]] = []
     for choices in product(*option_sets):
         selected_ids = tuple(request_id for request_id in choices if request_id is not None)
         if len(selected_ids) != len(set(selected_ids)):
             continue
-        score = (
-            sum(request_by_id[request_id].duration_minutes for request_id in selected_ids),
-            len(selected_ids),
-        )
-        if score > best_score:
-            best_score = score
-            best_choices = [choices]
-        elif score == best_score:
-            best_choices.append(choices)
+        feasible_choices.append(choices)
 
     open_minutes = sum(interval.window.duration_minutes for interval in intervals)
     return tuple(
@@ -121,11 +112,40 @@ def enumerate_primary_optimal_plans(
                 for interval, request_id in zip(intervals, choices, strict=True)
                 if request_id is not None
             ),
-            recovered_minutes=best_score[0],
-            remaining_gap_minutes=open_minutes - best_score[0],
+            recovered_minutes=sum(
+                request_by_id[request_id].duration_minutes
+                for request_id in choices
+                if request_id is not None
+            ),
+            remaining_gap_minutes=(
+                open_minutes
+                - sum(
+                    request_by_id[request_id].duration_minutes
+                    for request_id in choices
+                    if request_id is not None
+                )
+            ),
             evaluations=evaluations,
         )
-        for choices in best_choices
+        for choices in feasible_choices
+    )
+
+
+def enumerate_primary_optimal_plans(
+    scenario: Scenario,
+    *,
+    max_combinations: int = 100_000,
+) -> tuple[CandidatePlan, ...]:
+    """Enumerate plans tied on recovered minutes and requests served."""
+
+    plans = enumerate_feasible_plans(scenario, max_combinations=max_combinations)
+    best_score = max(
+        (plan.recovered_minutes, len(plan.assignments)) for plan in plans
+    )
+    return tuple(
+        plan
+        for plan in plans
+        if (plan.recovered_minutes, len(plan.assignments)) == best_score
     )
 
 

@@ -28,6 +28,8 @@ The repository currently contains:
   choices still exist;
 - a placement-scarcity V3 that changes real development decisions but remains below
   the fixed exposure guardrail;
+- a local oracle frontier that quantifies the observed efficiency/exposure trade-off
+  without presenting the oracle as a deployable policy;
 - executable unit tests;
 - architecture and decision records.
 
@@ -56,6 +58,7 @@ make generated-demo
 make longitudinal-demo
 make development-report
 make alternative-diagnostic
+make exposure-frontier
 ```
 
 `make demo` runs the fixed teaching fixture. `make multi-slot-demo` shows the
@@ -67,6 +70,8 @@ comparison. The final frozen evaluation set does not yet exist.
 
 `make alternative-diagnostic` reports post-hoc local capacity among plans tied on
 minutes and requests served; it is not a deployable slice-aware strategy.
+`make exposure-frontier` measures predeclared local efficiency floors on the fixed
+V3 path and carries the same diagnostic-only boundary.
 
 ## Planned stack
 
@@ -92,6 +97,7 @@ This is a reproducible engineering POC using synthetic data. Results will descri
 - [`docs/fairness-and-bias-plan.md`](docs/fairness-and-bias-plan.md)
 - [`docs/development-evidence.md`](docs/development-evidence.md)
 - [`docs/alternative-plan-diagnostic.md`](docs/alternative-plan-diagnostic.md)
+- [`docs/exposure-frontier.md`](docs/exposure-frontier.md)
 - [`docs/bolts/README.md`](docs/bolts/README.md)
 - [`docs/video-storyboard.md`](docs/video-storyboard.md)
 - [`docs/adr/0001-modular-monolith-and-baselines.md`](docs/adr/0001-modular-monolith-and-baselines.md)

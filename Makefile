@@ -1,6 +1,6 @@
 PYTHON := uv run --python 3.12 python
 
-.PHONY: test demo multi-slot-demo generated-demo longitudinal-demo development-report alternative-diagnostic
+.PHONY: test demo multi-slot-demo generated-demo longitudinal-demo development-report alternative-diagnostic exposure-frontier
 
 test:
 	PYTHONPATH=src $(PYTHON) -m unittest discover -s tests -v
@@ -22,3 +22,6 @@ development-report:
 
 alternative-diagnostic:
 	PYTHONPATH=src $(PYTHON) -m slotfit.diagnostic_cli
+
+exposure-frontier:
+	PYTHONPATH=src $(PYTHON) -m slotfit.frontier_cli

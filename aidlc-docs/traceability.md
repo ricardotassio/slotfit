@@ -11,7 +11,7 @@ Implementation contracts: SF-FR-001 through SF-FR-003 map to [`../specs/001-doma
 | SF-FR-005 | future web app | Playwright demo flow | Planned |
 | SF-FR-006 | future review service | integration/idempotency tests | Planned |
 | SF-FR-007 | `slotfit.evaluation`, `slotfit.comparison` | event records, aggregate comparison and violation tests | Implemented for development split |
-| SF-FR-008 | `slotfit.longitudinal`, `slotfit.comparison`, `slotfit.alternative_diagnostic` | compatible misses, K sensitivity, slice exposure, guardrail and alternative-capacity diagnosis | Implemented for development; V1/V2 rejected |
+| SF-FR-008 | `slotfit.longitudinal`, `slotfit.comparison`, `slotfit.alternative_diagnostic`, `slotfit.exposure_frontier` | compatible misses, K sensitivity, slice exposure, guardrail, alternative capacity and local frontier | Implemented for development; V1–V3 rejected |
 | SF-FR-009 | future web app and evaluation report | worst-slice and guardrail display | Planned |
 | SF-NFR-001 | scenario generator | equality under same seed | Implemented |
 | SF-NFR-002 | strategies and event evaluator | all registered generated seeds | Implemented for baselines |

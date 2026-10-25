@@ -42,6 +42,10 @@ V3 priorizou requests compatíveis com menos intervalos e mudou 17 decisões. O 
 desvio caiu de 12,58 para 12,35 p.p., insuficiente para o limite de 10 p.p. O próximo
 passo é mostrar a fronteira eficiência/exposição, não acumular heurísticas.
 
+A fronteira local mostrou que um piso de 90% por rodada realiza 99,43% dos minutos
+ótimos no agregado e leva o slice curto a 8,24 p.p. O resultado fundamenta um V4
+label-free, mas não valida o oracle pós-hoc nem abre calibração.
+
 ## ✅ Evidência e Definition of Done
 
 - 40/40 execuções com três fases `OPTIMAL`;

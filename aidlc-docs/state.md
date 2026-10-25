@@ -5,14 +5,14 @@
 - Phase: Construction
 - Active Bolt: S3 — multi-slot optimizer and development evaluation
 - Active spec: `SF-003` — In progress
-- Last completed gate: placement-scarcity V3 tested and rejected
+- Last completed gate: local efficiency/exposure frontier completed
 - External integrations: none
 - Real data: prohibited
 
 ## Current objective
 
-Specify a development-only efficiency/exposure frontier with explicit assumptions.
-Do not change the guardrail or use audit-only slices in a deployable strategy.
+Specify V4 with a 90% per-round recovered-minute floor and label-free residual
+objectives. Do not change the guardrail or use audit-only slices.
 
 ## Exit criteria for S1
 
@@ -37,8 +37,8 @@ Do not change the guardrail or use audit-only slices in a deployable strategy.
 
 ## Next gate
 
-Measure how much primary efficiency must change, if at all, to satisfy the exposure
-guardrail. Calibration remains closed and the final frozen set remains nonexistent.
+Test V4 end-to-end on the unchanged 40-seed development set. Calibration remains
+closed and the final frozen set remains nonexistent.
 
 The S1 machine-verifiable criteria passed on 2026-10-25. Ricardo explicitly
 authorized progression. His teach-back self-assessment remains a non-blocking

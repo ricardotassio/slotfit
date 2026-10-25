@@ -139,3 +139,17 @@ Ricardo should be able to answer:
   frontier. Calibration remains closed.
 - Final verification: 58 tests passed; the V3 development JSON parsed and reported
   the expected rejected decision.
+
+## 2026-10-25 — SF-003 local efficiency/exposure frontier
+
+- Predeclared local recovered-minute floors: 100%, 95%, 90% and 80%; target fixed
+  to V3's binding `duration_band=short` slice.
+- 100% and 95% reproduced the 12.35 p.p. failure.
+- The 90% local floor selected 7,905 of 7,950 optimal aggregate minutes (99.43%),
+  preserved 168 requests served and reduced target degradation to 8.24 p.p.
+- Limitation: oracle choices use the audit slice post hoc and do not change later
+  V3 cohorts; this is local capacity, not policy evidence.
+- Decision: authorize only a label-free V4 development hypothesis with a 90%
+  per-round recovered-minute floor. Calibration remains closed.
+- Final verification: 61 tests passed; the frontier JSON parsed successfully;
+  compile and whitespace checks passed.
