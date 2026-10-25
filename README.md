@@ -6,7 +6,7 @@ The project compares simple baselines with constraint optimization over entirely
 
 ## Current status
 
-**AI-DLC Inception complete; Construction Bolt S1 started.**
+**AI-DLC Construction Bolt S2 is complete; the S3 optimizer spec is still Draft.**
 
 The repository currently contains:
 
@@ -14,7 +14,11 @@ The repository currently contains:
 - AI-DLC state, audit and execution plan;
 - a small deterministic domain model;
 - the first synthetic scenario;
+- a versioned deterministic scenario generator with disjoint evaluation splits;
 - FIFO and local best-fit baselines;
+- evaluator-only operational slices and event-level evidence;
+- deterministic opportunity rounds for repeated-exclusion analysis;
+- metamorphic tests for opaque identifiers, input order and ineligible records;
 - executable unit tests;
 - architecture and decision records.
 
@@ -37,9 +41,14 @@ Requires `uv` and an installed Python 3.12 interpreter.
 ```bash
 make test
 make demo
+make generated-demo
+make longitudinal-demo
 ```
 
-The current Bolt uses no third-party runtime dependency.
+`make demo` runs the fixed teaching fixture. `make generated-demo` runs registered
+development seed `1101` and prints its provenance, plans and event evaluations.
+`make longitudinal-demo` replays three controlled compatible-opportunity rounds
+for both baselines. The current Bolt uses no third-party runtime dependency.
 
 ## Planned stack
 

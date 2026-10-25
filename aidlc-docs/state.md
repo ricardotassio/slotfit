@@ -3,15 +3,17 @@
 - Project: SlotFit
 - Repository type: greenfield
 - Phase: Construction
-- Active Bolt: S1 — deterministic domain and first synthetic scenario
-- Active spec: `SF-001` — Verification
-- Last completed gate: problem contract and baseline definition
+- Active Bolt: none — preparing the S3 decision gate
+- Active spec: none; `SF-003` remains Draft
+- Last completed gate: S2 generated scenarios and fairness-control evidence
 - External integrations: none
 - Real data: prohibited
 
 ## Current objective
 
-Prove that the same synthetic scenario can be represented, replayed and evaluated by two simple strategies before adding an optimizer.
+Resolve the bounded optimizer experiment before adding OR-Tools: choose a
+development-only threshold method, solver runtime, objective units and output
+artifact contract without inspecting frozen-test outcomes.
 
 ## Exit criteria for S1
 
@@ -24,8 +26,21 @@ Prove that the same synthetic scenario can be represented, replayed and evaluate
 - tests run without third-party services;
 - Ricardo can explain the model, invariants and baseline trade-off.
 
+## Completed S2 evidence
+
+- versioned deterministic generator and decision checksum;
+- disjoint development, calibration, frozen-test and challenge seed registries;
+- audit-only operational slices excluded from strategy inputs;
+- metamorphic checks for opaque IDs, input order and irrelevant ineligible records;
+- event-level evaluation with hard-constraint violation detection;
+- deterministic controlled opportunity rounds that produce waiting and
+  starvation-threshold inputs without inventing a threshold.
+
 ## Next gate
 
-Review S1 and perform the teach-back before Bolt S2 expands eligibility rules.
+Move `SF-003` from `Draft` to `Ready` only after its five unresolved acceptance
+criteria are explicit. Do not add OR-Tools before that spec gate closes.
 
-The machine-verifiable S1 criteria passed on 2026-10-25. The remaining gate is the human teach-back and review-log closure; `SF-002` is specified but not active.
+The S1 machine-verifiable criteria passed on 2026-10-25. Ricardo explicitly
+authorized progression. His teach-back self-assessment remains a non-blocking
+learning follow-up, so SF-001 is `Accepted with follow-up`, not `Done`.

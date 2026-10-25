@@ -12,11 +12,13 @@
 
 ## Bolt S2 — complete eligibility vocabulary
 
-- Add provider, duration, room, availability, notice and consent reason codes.
-- Add property-oriented invariant tests.
-- Separate decision attributes from audit-only operational slice labels.
-- Implement identifier and input-order metamorphic tests.
-- Do not add optimization yet.
+- Status: complete on 2026-10-25.
+- Added provider, duration, room, availability, notice and consent reason codes.
+- Added property-oriented invariant and mutation-sentinel tests.
+- Separated decision attributes from audit-only operational slice labels.
+- Implemented identifier and input-order metamorphic tests.
+- Added event and controlled longitudinal evaluation inputs without adding an
+  optimizer or inventing a starvation threshold.
 
 ## Bolt S3 — OR-Tools spike
 

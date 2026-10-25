@@ -67,6 +67,15 @@ class Scenario:
 
     def __post_init__(self) -> None:
         _require_aware(self.now, "now")
+        interval_ids = [interval.interval_id for interval in self.open_intervals]
+        request_ids = [request.request_id for request in self.wait_requests]
+        joined_orders = [request.joined_order for request in self.wait_requests]
+        if len(interval_ids) != len(set(interval_ids)):
+            raise ValueError("interval_id values must be unique")
+        if len(request_ids) != len(set(request_ids)):
+            raise ValueError("request_id values must be unique")
+        if len(joined_orders) != len(set(joined_orders)):
+            raise ValueError("joined_order values must be unique")
 
 
 @dataclass(frozen=True, slots=True)
@@ -91,4 +100,3 @@ class CandidatePlan:
     recovered_minutes: int
     remaining_gap_minutes: int
     evaluations: tuple[CandidateEvaluation, ...]
-

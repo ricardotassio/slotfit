@@ -14,7 +14,13 @@ The experiment does not infer urgency or decide who deserves care. It ranks feas
 
 ## Current limitations
 
-The first scenario is a fixed fixture. Its `seed` changes the scenario identifier but not the generated population. It is useful for validating contracts, not for making aggregate performance or fairness claims.
+The first scenario remains a fixed teaching fixture. A separate versioned generator
+now produces deterministic operational variation across disjoint seed registries.
+That generator supports replay and invariance testing. A controlled longitudinal
+runner can repeat compatible-opportunity rounds for the same synthetic cohort, but
+those counts are not elapsed patient wait or a real clinic calendar. No request is
+labelled starved until a development-only threshold is proposed, reviewed and
+frozen, so no aggregate fairness conclusion is supported.
 
 The current baselines also encode preferences:
 

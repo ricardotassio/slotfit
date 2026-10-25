@@ -1,6 +1,6 @@
 # SF-001 — Deterministic domain and baselines
 
-- Status: Verification
+- Status: Accepted with follow-up
 - AI-DLC mapping: Bolt S1
 - Owner: repository maintainer
 - Depends on: accepted problem contract
@@ -45,7 +45,7 @@ The fixture demonstrates contracts only. A different seed currently changes only
 - [x] `make test` passes without a network service.
 - [x] `make demo` emits the expected plan values and `automatic_action: none`.
 - [ ] Ricardo can explain why FIFO and best-fit encode different policies.
-- [ ] Spec, traceability and AI-DLC review log agree that no fairness conclusion is supported yet.
+- [x] Spec, traceability and AI-DLC review log agree that no fairness conclusion is supported yet.
 
 ## Required evidence
 
@@ -62,4 +62,7 @@ The fixture demonstrates contracts only. A different seed currently changes only
 
 ## Exit and handoff
 
-Close SF-001 only after the human teach-back and documentation alignment. Then activate SF-002; do not jump directly to OR-Tools.
+Machine evidence and documentation alignment passed. Ricardo explicitly authorized
+progression on 2026-10-25; SF-002 was subsequently completed. The personal
+teach-back remains a learning follow-up and SF-001 is not labelled `Done`. Do not
+jump directly to OR-Tools.

@@ -8,14 +8,16 @@ Specifications are the implementation contract between product intent, code and 
 - `Ready`: bounded, traceable and eligible for implementation.
 - `In progress`: implementation has started.
 - `Verification`: code exists; required evidence or review remains.
+- `Accepted with follow-up`: progression was explicitly authorized after machine
+  evidence passed, while a non-safety learning exercise remains open.
 - `Done`: every acceptance criterion and gate has observed evidence.
 
 ## Order
 
 | Spec | Status | Purpose |
 |---|---|---|
-| [`SF-001`](001-domain-and-baselines.md) | Verification | Validate the deterministic domain and first baselines already implemented |
-| [`SF-002`](002-scenarios-and-fairness-controls.md) | Ready after SF-001 | Add real seeded variation, audit-only slices and invariance controls |
+| [`SF-001`](001-domain-and-baselines.md) | Accepted with follow-up | Validate the deterministic domain and first baselines already implemented |
+| [`SF-002`](002-scenarios-and-fairness-controls.md) | Done | Add real seeded variation, audit-only slices and invariance controls |
 | [`SF-003`](003-optimizer-and-evaluation.md) | Draft | Compare an optimizer with baselines under frozen efficiency and fairness gates |
 
 ## Working rule

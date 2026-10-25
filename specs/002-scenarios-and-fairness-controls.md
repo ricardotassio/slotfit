@@ -1,6 +1,6 @@
 # SF-002 — Scenario generation and fairness controls
 
-- Status: Ready after SF-001
+- Status: Done
 - AI-DLC mapping: Bolt S2 and the evaluation foundation for S7
 - Depends on: SF-001
 
@@ -52,13 +52,13 @@ Audit-only labels must not be accepted by an eligibility or strategy function.
 
 ## Acceptance criteria
 
-- [ ] Generation configuration has an explicit schema and version.
-- [ ] Development, calibration, frozen-test and challenge manifests are distinct.
-- [ ] Slice metadata is structurally unavailable to strategy scoring.
-- [ ] Required invariants have tests that fail against a deliberately broken implementation.
-- [ ] FIFO and best-fit run on all generated scenarios without hard-constraint violations.
-- [ ] Evaluation emits selection, exposure, waiting, starvation, recovered utilization and worst-slice inputs separately.
-- [ ] Thresholds remain `TBD` until development evidence exists; frozen-test results cannot set them.
+- [x] Generation configuration has an explicit schema and version.
+- [x] Development, calibration, frozen-test and challenge seed registries are distinct.
+- [x] Slice metadata is structurally unavailable to strategy scoring.
+- [x] Required invariants have executable tests, including a mutation sentinel that exposes lexical identifier leakage.
+- [x] FIFO and best-fit run on all registered scenarios without hard-constraint violations.
+- [x] Evaluation emits selection, exposure, compatible-opportunity waiting, starvation-threshold, recovered-utilization and worst-slice inputs separately.
+- [x] Thresholds remain `TBD` until development evidence exists; frozen-test results cannot set them.
 
 ## Red, green, refactor
 
@@ -74,3 +74,23 @@ The risk reviewer must verify proxy risk, leakage, distribution imbalance, tie-b
 ## Exit and handoff
 
 SF-002 is done only when replay, invariance and evaluation-record evidence are committed. It then enables the bounded optimizer spike in SF-003.
+
+## Observed evidence
+
+- Red: `tests.test_generation_and_invariance` initially failed because the
+  generator module did not exist.
+- Green: deterministic generation, disjoint split seeds, audit-data separation,
+  identifier/order/ineligible-record invariants and duplicate rejection pass.
+- Red: `tests.test_evaluation` initially failed because the evaluation module did
+  not exist.
+- Green: event-level records expose eligibility opportunity, selection, recovered
+  utilization and hard-constraint violations after planning.
+- Red: `tests.test_longitudinal` initially failed because the longitudinal module
+  did not exist.
+- Green: controlled opportunity rounds preserve request identity, remove exposed
+  requests and count compatible opportunities missed before exposure.
+- Mutation evidence: the opaque-ID counterfactual reverses lexical identifiers and
+  proves that a deliberately broken identifier-based policy flips its decision.
+- Honest limitation: opportunity counts are inputs, not elapsed patient wait. No
+  request is labelled `starved` until a development-only threshold is proposed,
+  reviewed and frozen.
