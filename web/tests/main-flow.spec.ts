@@ -9,7 +9,7 @@ const axeSource = readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8')
 test('shows the no-go before a neutral, synchronized plan comparison', async ({ page }) => {
   await page.goto('/')
 
-  await expect(page.getByRole('heading', { name: 'SlotFit evidence lab' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Make every opening work harder.' })).toBeVisible()
   await expect(page.getByTestId('research-no-go')).toContainText('No candidate passed')
   const planChoices = page.getByRole('radio')
   await expect(planChoices).toHaveCount(3)

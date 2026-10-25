@@ -14,13 +14,13 @@ export default defineConfig({
     {
       command: 'uv run --directory .. --python 3.12 uvicorn slotfit.api:app --app-dir src --host 127.0.0.1 --port 8000',
       url: 'http://127.0.0.1:8000/health',
-      reuseExistingServer: false,
+      reuseExistingServer: true,
       timeout: 30_000,
     },
     {
       command: 'npm run dev -- --host 127.0.0.1 --port 5173',
       url: 'http://127.0.0.1:5173',
-      reuseExistingServer: false,
+      reuseExistingServer: true,
       timeout: 30_000,
     },
   ],

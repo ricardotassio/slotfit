@@ -1,329 +1,47 @@
 <script setup lang="ts">
-import FullCalendar from '@fullcalendar/vue3'
-import timeGridPlugin from '@fullcalendar/vue3/timegrid'
-import '@fullcalendar/vue3/skeleton.css'
 import { computed, onMounted, ref } from 'vue'
-
-type Assignment = {
-  request_id: string
-  interval_id: string
-  scheduled_window: { start: string; end: string; duration_minutes: number }
-}
-
-type Evaluation = {
-  request_id: string
-  interval_id: string
-  eligible: boolean
-  reason_codes: string[]
-}
-
-type Plan = {
-  strategy: string
-  assignments: Assignment[]
-  recovered_minutes: number
-  remaining_gap_minutes: number
-  evaluations: Evaluation[]
-}
-
-type Demo = {
-  schema_version: string
-  scenario_id: string
-  synthetic: true
-  automatic_action: 'none'
-  intervals: Array<{
-    interval_id: string
-    window: { start: string; end: string; duration_minutes: number }
-  }>
-  requests: Array<{ request_id: string; duration_minutes: number }>
-  plans: Plan[]
-  disclosure: string
-}
-
-type DevelopmentDecision = {
-  candidate_accepted: false
-  calibration_open: false
-  final_frozen_set_exists: false
-  decision: string
-  evidence_boundary: string
-  guardrail: { limit_percentage_points: number }
-  candidates: Array<{
-    candidate: string
-    worst_supported_degradation_percentage_points: number
-    decision: 'reject'
-  }>
-}
-
-type ReviewDecision = 'accept' | 'reject' | 'request_alternative'
-
-const demo = ref<Demo | null>(null)
-const research = ref<DevelopmentDecision | null>(null)
-const selectedStrategy = ref('')
-const loading = ref(true)
-const loadError = ref('')
-const reviewPending = ref(false)
-const reviewMessage = ref('')
-const reviewError = ref('')
-const commandIdentity = ref<{ fingerprint: string; key: string } | null>(null)
-
-const selectedPlan = computed(() =>
-  demo.value?.plans.find((plan) => plan.strategy === selectedStrategy.value) ?? null,
-)
-
-const planLabels: Record<string, string> = {
-  'fifo-eligible@0.2.0': 'FIFO baseline',
-  'local-best-fit@0.2.0': 'Local best-fit baseline',
-  'cp-sat-lexicographic@0.1.0': 'CP-SAT controlled plan',
-}
-
-const calendarOptions = computed(() => ({
-  plugins: [timeGridPlugin],
-  initialView: 'timeGridDay',
-  initialDate: demo.value?.intervals[0]?.window.start ?? '2026-11-04',
-  headerToolbar: false as const,
-  allDaySlot: false,
-  slotMinTime: '13:30:00',
-  slotMaxTime: '17:00:00',
-  height: 'auto',
-  events: selectedPlan.value?.assignments.map((assignment) => ({
-    id: `${assignment.request_id}-${assignment.interval_id}`,
-    title: `${assignment.request_id} · ${assignment.interval_id}`,
-    start: assignment.scheduled_window.start,
-    end: assignment.scheduled_window.end,
-    backgroundColor: '#334563',
-    borderColor: '#334563',
-    textColor: '#ffffff',
-  })) ?? [],
-}))
-
-function labelFor(strategy: string): string {
-  return planLabels[strategy] ?? strategy
-}
-
-function formatTime(value: string): string {
-  return new Intl.DateTimeFormat('en-CA', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-    timeZone: 'America/Toronto',
-  }).format(new Date(value))
-}
-
-async function loadEvidence(): Promise<void> {
-  loading.value = true
-  loadError.value = ''
-  try {
-    const [demoResponse, researchResponse] = await Promise.all([
-      fetch('/api/v1/demos/global-conflict'),
-      fetch('/api/v1/research/development-decision'),
-    ])
-    if (!demoResponse.ok || !researchResponse.ok) {
-      throw new Error('evidence request failed')
-    }
-    demo.value = await demoResponse.json() as Demo
-    research.value = await researchResponse.json() as DevelopmentDecision
-    selectedStrategy.value = demo.value.plans[0]?.strategy ?? ''
-  } catch {
-    demo.value = null
-    research.value = null
-    selectedStrategy.value = ''
-    loadError.value = 'Could not load the synthetic evidence. Nothing was changed.'
-  } finally {
-    loading.value = false
-  }
-}
-
-async function sha256(value: string): Promise<string> {
-  const bytes = new TextEncoder().encode(value)
-  const digest = await crypto.subtle.digest('SHA-256', bytes)
-  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join('')
-}
-
-async function recordReview(decision: ReviewDecision): Promise<void> {
-  if (!demo.value || !selectedPlan.value || reviewPending.value) return
-  reviewPending.value = true
-  reviewMessage.value = ''
-  reviewError.value = ''
-  const fingerprint = `${demo.value.scenario_id}:${selectedPlan.value.strategy}:${decision}`
-  if (commandIdentity.value?.fingerprint !== fingerprint) {
-    commandIdentity.value = { fingerprint, key: crypto.randomUUID() }
-  }
-  try {
-    const response = await fetch('/api/v1/reviews', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        schema_version: '1.0',
-        idempotency_key: commandIdentity.value.key,
-        scenario_id: demo.value.scenario_id,
-        strategy: selectedPlan.value.strategy,
-        plan_checksum: await sha256(JSON.stringify(selectedPlan.value)),
-        decision,
-        rationale: 'Simulated review from the local evidence UI.',
-      }),
-    })
-    if (!response.ok) throw new Error('review request failed')
-    const result = await response.json() as {
-      event: { event_id: string }
-      created: boolean
-      replayed: boolean
-    }
-    reviewMessage.value = `Review ${result.replayed ? 'replayed' : 'created'}: ${result.event.event_id}. No external action occurred.`
-  } catch {
-    reviewError.value = 'Review was not recorded. No external action occurred.'
-  } finally {
-    reviewPending.value = false
-  }
-}
-
+type Window={start:string;end:string;duration_minutes:number}; type Assignment={request_id:string;interval_id:string;scheduled_window:Window}; type Evaluation={request_id:string;interval_id:string;eligible:boolean;reason_codes:string[]}; type Plan={strategy:string;assignments:Assignment[];recovered_minutes:number;remaining_gap_minutes:number;evaluations:Evaluation[]};
+type Demo={schema_version:string;scenario_id:string;synthetic:true;automatic_action:'none';intervals:Array<{interval_id:string;window:Window}>;requests:Array<{request_id:string;duration_minutes:number}>;plans:Plan[];disclosure:string};
+type Research={candidate_accepted:false;calibration_open:false;final_frozen_set_exists:false;decision:string;evidence_boundary:string;guardrail:{limit_percentage_points:number};candidates:Array<{candidate:string;worst_supported_degradation_percentage_points:number;decision:'reject'}>};
+type ReviewDecision='accept'|'reject'|'request_alternative'
+const demo=ref<Demo|null>(null),research=ref<Research|null>(null),selectedStrategy=ref(''),loading=ref(true),loadError=ref(''),reviewPending=ref(false),reviewMessage=ref(''),reviewError=ref('');
+const commandIdentity=ref<{fingerprint:string;key:string}|null>(null)
+const selectedPlan=computed(()=>demo.value?.plans.find(p=>p.strategy===selectedStrategy.value)??null)
+const candidatePlan=computed(()=>demo.value?.plans.find(p=>p.strategy.startsWith('cp-sat'))??demo.value?.plans.at(-1)??null)
+const gainedMinutes=computed(()=>Math.max(0,(candidatePlan.value?.recovered_minutes??0)-(selectedPlan.value?.recovered_minutes??0)))
+const labels:Record<string,string>={'fifo-eligible@0.2.0':'FIFO · first eligible','local-best-fit@0.2.0':'Local best fit','cp-sat-lexicographic@0.1.0':'Global constraint plan'}
+const labelFor=(s:string)=>labels[s]??s
+const formatTime=(v:string)=>new Intl.DateTimeFormat('en-CA',{hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'America/Toronto'}).format(new Date(v))
+const assignmentFor=(p:Plan,id:string)=>p.assignments.find(a=>a.interval_id===id)
+const requestName=(id:string)=>id.includes('CONSTRAINED')?'Constrained request':'Flexible request'
+async function loadEvidence(){loading.value=true;loadError.value='';try{const[d,r]=await Promise.all([fetch('/api/v1/demos/global-conflict'),fetch('/api/v1/research/development-decision')]);if(!d.ok||!r.ok)throw new Error();demo.value=await d.json() as Demo;research.value=await r.json() as Research;selectedStrategy.value=demo.value.plans[0]?.strategy??''}catch{demo.value=null;research.value=null;selectedStrategy.value='';loadError.value='Could not load the synthetic evidence. Nothing was changed.'}finally{loading.value=false}}
+async function sha256(v:string){const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v));return Array.from(new Uint8Array(d),b=>b.toString(16).padStart(2,'0')).join('')}
+async function recordReview(decision:ReviewDecision){if(!demo.value||!selectedPlan.value||reviewPending.value)return;reviewPending.value=true;reviewMessage.value='';reviewError.value='';const fingerprint=`${demo.value.scenario_id}:${selectedPlan.value.strategy}:${decision}`;if(commandIdentity.value?.fingerprint!==fingerprint)commandIdentity.value={fingerprint,key:crypto.randomUUID()};try{const response=await fetch('/api/v1/reviews',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({schema_version:'1.0',idempotency_key:commandIdentity.value.key,scenario_id:demo.value.scenario_id,strategy:selectedPlan.value.strategy,plan_checksum:await sha256(JSON.stringify(selectedPlan.value)),decision,rationale:'Simulated review from the local evidence UI.'})});if(!response.ok)throw new Error();const result=await response.json() as {event:{event_id:string};replayed:boolean};reviewMessage.value=`Review ${result.replayed?'replayed':'created'}: ${result.event.event_id}. No external action occurred.`}catch{reviewError.value='Review was not recorded. No external action occurred.'}finally{reviewPending.value=false}}
 onMounted(loadEvidence)
 </script>
 
 <template>
-  <header class="site-header">
-    <div class="header-inner">
-      <p class="eyebrow">Synthetic scheduling experiment</p>
-      <h1>SlotFit evidence lab</h1>
-      <p class="lede">
-        A small engineering study of assignment trade-offs—with explicit limits,
-        reproducible evidence and a human-owned simulated review.
-      </p>
-    </div>
-  </header>
-
-  <main id="main-content" class="shell">
-    <p v-if="loading" class="state-panel" role="status">Loading controlled evidence…</p>
-
-    <section v-else-if="loadError" class="state-panel error-panel" aria-labelledby="load-error-title">
-      <h2 id="load-error-title">Evidence unavailable</h2>
-      <p role="alert">{{ loadError }}</p>
-      <button class="button primary" type="button" @click="loadEvidence">
-        Retry loading evidence
-      </button>
-    </section>
-
-    <template v-else-if="demo && research && selectedPlan">
-      <section class="outcome-panel" aria-labelledby="outcome-title" data-testid="research-no-go">
-        <div>
-          <p class="eyebrow">Development decision · 40 synthetic seeds</p>
-          <h2 id="outcome-title">No candidate passed the fixed guardrail</h2>
-          <p>{{ research.decision }}</p>
-        </div>
-        <dl class="outcome-facts">
-          <div>
-            <dt>Closest candidate</dt>
-            <dd>10.80 p.p.</dd>
-          </div>
-          <div>
-            <dt>Declared maximum</dt>
-            <dd>{{ research.guardrail.limit_percentage_points.toFixed(2) }} p.p.</dd>
-          </div>
-          <div>
-            <dt>Calibration</dt>
-            <dd>Closed</dd>
-          </div>
-        </dl>
-        <p class="boundary-note">{{ research.evidence_boundary }}</p>
-      </section>
-
-      <section class="workspace" aria-labelledby="comparison-title">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">Controlled counterexample</p>
-            <h2 id="comparison-title">Compare the same synthetic opening</h2>
-          </div>
-          <p class="scenario-id">{{ demo.scenario_id }}</p>
-        </div>
-
-        <fieldset class="plan-picker">
-          <legend>Plan shown</legend>
-          <label v-for="plan in demo.plans" :key="plan.strategy" class="plan-choice">
-            <input v-model="selectedStrategy" type="radio" name="plan" :value="plan.strategy" />
-            <span>{{ labelFor(plan.strategy) }}</span>
-          </label>
-        </fieldset>
-
-        <p class="disclosure">{{ demo.disclosure }}</p>
-
-        <dl class="metric-grid" aria-label="Selected plan metrics">
-          <div>
-            <dt>Recovered time</dt>
-            <dd data-testid="recovered-minutes">{{ selectedPlan.recovered_minutes }} min</dd>
-          </div>
-          <div>
-            <dt>Remaining gap</dt>
-            <dd>{{ selectedPlan.remaining_gap_minutes }} min</dd>
-          </div>
-          <div>
-            <dt>Requests placed</dt>
-            <dd>{{ selectedPlan.assignments.length }}</dd>
-          </div>
-          <div>
-            <dt>Automatic action</dt>
-            <dd>None</dd>
-          </div>
-        </dl>
-
-        <div class="comparison-grid">
-          <section class="calendar-panel" aria-labelledby="calendar-title">
-            <h3 id="calendar-title">Time-grid view</h3>
-            <FullCalendar :key="selectedStrategy" :options="calendarOptions" />
-          </section>
-
-          <section class="table-panel" aria-labelledby="table-title">
-            <h3 id="table-title">Assignment table</h3>
-            <table aria-label="Selected plan assignments">
-              <thead>
-                <tr>
-                  <th scope="col">Request</th>
-                  <th scope="col">Opening</th>
-                  <th scope="col">Time</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="assignment in selectedPlan.assignments" :key="assignment.request_id">
-                  <th scope="row">{{ assignment.request_id }}</th>
-                  <td>{{ assignment.interval_id }}</td>
-                  <td>
-                    {{ formatTime(assignment.scheduled_window.start) }}–{{ formatTime(assignment.scheduled_window.end) }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-            <details class="reason-details">
-              <summary>Inspect eligibility reasons</summary>
-              <ul>
-                <li v-for="evaluation in selectedPlan.evaluations" :key="`${evaluation.request_id}-${evaluation.interval_id}`">
-                  <strong>{{ evaluation.request_id }} → {{ evaluation.interval_id }}:</strong>
-                  {{ evaluation.eligible ? 'eligible' : evaluation.reason_codes.join(', ') }}
-                </li>
-              </ul>
-            </details>
-          </section>
-        </div>
-      </section>
-
-      <section class="review-panel" aria-labelledby="review-title">
-        <div>
-          <p class="eyebrow">Human-owned simulation</p>
-          <h2 id="review-title">Record how you would assess this plan</h2>
-          <p>This stores an audit event only. It does not book, notify or change a schedule.</p>
-        </div>
-        <div class="review-actions" aria-label="Simulated review decisions">
-          <button type="button" :disabled="reviewPending" @click="recordReview('accept')">
-            Record accept
-          </button>
-          <button type="button" :disabled="reviewPending" @click="recordReview('reject')">
-            Record reject
-          </button>
-          <button type="button" :disabled="reviewPending" @click="recordReview('request_alternative')">
-            Request alternative
-          </button>
-        </div>
-        <p v-if="reviewPending" role="status">Recording simulated review…</p>
-        <p v-if="reviewMessage" class="success-message" role="status">{{ reviewMessage }}</p>
-        <p v-if="reviewError" class="error-message" role="alert">{{ reviewError }}</p>
-      </section>
-    </template>
-  </main>
+<a class="skip-link" href="#main-content">Skip to evidence</a>
+<header class="topbar"><a class="brand" href="#">slot<span>fit</span></a><div class="topbar-meta"><span class="live-dot"></span>Controlled simulation<span class="topbar-rule"></span>Toronto · UTC−05</div></header>
+<main id="main-content" class="shell">
+ <p v-if="loading" class="state-panel" role="status">Loading controlled evidence…</p>
+ <section v-else-if="loadError" class="state-panel error-panel"><h1>Evidence unavailable</h1><p role="alert">{{loadError}}</p><button class="primary" @click="loadEvidence">Retry loading evidence</button></section>
+ <template v-else-if="demo&&research&&selectedPlan&&candidatePlan">
+  <section class="hero" aria-labelledby="page-title"><div><p class="eyebrow">Scheduling decision study · Synthetic data</p><h1 id="page-title">Make every opening<br><em>work harder.</em></h1></div><div class="hero-copy"><p>A controlled counterexample showing how a locally valid choice can waste capacity—and how constraint-aware allocation can recover it without automating the final decision.</p><div class="hero-tags"><span>Reproducible</span><span>Human reviewed</span><span>No patient data</span></div></div></section>
+  <section class="research-strip" aria-labelledby="outcome-title" data-testid="research-no-go"><div class="research-mark">!</div><div class="research-copy"><p class="eyebrow">Longitudinal research verdict</p><h2 id="outcome-title">No candidate passed the fixed guardrail</h2><p>{{research.decision}}</p></div><div class="research-number"><strong>{{Math.min(...research.candidates.map(c=>c.worst_supported_degradation_percentage_points)).toFixed(2)}} <small>p.p.</small></strong><span>closest result · limit {{research.guardrail.limit_percentage_points.toFixed(2)}} p.p.</span></div></section>
+  <section class="story" aria-labelledby="comparison-title">
+   <div class="story-heading"><div><p class="eyebrow">One day · Two openings · Two requests</p><h2 id="comparison-title">The same capacity. A different outcome.</h2></div><p class="scenario-id">{{demo.scenario_id}}</p></div>
+   <div class="calendar-comparison">
+    <article class="schedule"><header class="schedule-header"><div><span class="step-label">01 · Reference rule</span><h3>{{labelFor(selectedPlan.strategy)}}</h3></div><div class="capacity-pill neutral">{{selectedPlan.recovered_minutes}} / 120 min</div></header><div class="calendar-date"><div><span>WED</span><strong>04</strong></div><p>November 2026<br><small>Two independent openings</small></p></div><div class="timeline" role="list" :aria-label="`${labelFor(selectedPlan.strategy)} calendar`"><div v-for="interval in demo.intervals" :key="interval.interval_id" class="time-row" role="listitem"><time>{{formatTime(interval.window.start)}}</time><div v-if="assignmentFor(selectedPlan,interval.interval_id)" class="appointment appointment-local"><span>{{interval.interval_id}}</span><strong>{{requestName(assignmentFor(selectedPlan,interval.interval_id)!.request_id)}}</strong><small>{{assignmentFor(selectedPlan,interval.interval_id)!.request_id}}</small></div><div v-else class="appointment empty-slot"><span>{{interval.interval_id}}</span><strong>Capacity left unused</strong><small>{{interval.window.duration_minutes}} minutes available</small></div></div></div><footer><i class="swatch local"></i>Valid one-by-one, but blind to the next request</footer></article>
+    <div class="optimization-bridge" aria-label="Comparison delta"><span>Constraint-aware<br>allocation</span><div class="bridge-arrow">→</div><strong v-if="gainedMinutes">+{{gainedMinutes}} min</strong><strong v-else>same capacity</strong><small>in this controlled fixture</small></div>
+    <article class="schedule schedule-after"><header class="schedule-header"><div><span class="step-label">02 · Candidate plan</span><h3>Global constraint plan</h3></div><div class="capacity-pill optimized">{{candidatePlan.recovered_minutes}} / 120 min</div></header><div class="calendar-date"><div><span>WED</span><strong>04</strong></div><p>November 2026<br><small>Same openings, jointly evaluated</small></p></div><div class="timeline" role="list" aria-label="Candidate calendar"><div v-for="interval in demo.intervals" :key="interval.interval_id" class="time-row" role="listitem"><time>{{formatTime(interval.window.start)}}</time><div v-if="assignmentFor(candidatePlan,interval.interval_id)" class="appointment appointment-optimized"><span>{{interval.interval_id}}</span><strong>{{requestName(assignmentFor(candidatePlan,interval.interval_id)!.request_id)}}</strong><small>{{assignmentFor(candidatePlan,interval.interval_id)!.request_id}}</small></div></div></div><footer><i class="swatch optimized"></i>Both requests placed · zero automatic actions</footer></article>
+   </div>
+   <div class="impact-row"><div><span>Reference recovered</span><strong data-testid="recovered-minutes">{{selectedPlan.recovered_minutes}} min</strong></div><div><span>Candidate recovered</span><strong>{{candidatePlan.recovered_minutes}} min</strong></div><div><span>Remaining gap</span><strong>{{candidatePlan.remaining_gap_minutes}} min</strong></div><div><span>External actions</span><strong>0</strong></div></div>
+  </section>
+  <section class="evidence" aria-labelledby="evidence-title"><div class="evidence-intro"><p class="eyebrow">Inspect the evidence</p><h2 id="evidence-title">Change the reference rule</h2><p>Select a strategy to compare its result with the controlled candidate. This changes only the local visualization.</p></div><fieldset class="plan-picker"><legend class="sr-only">Plan shown</legend><label v-for="plan in demo.plans" :key="plan.strategy" class="plan-choice"><input v-model="selectedStrategy" type="radio" name="plan" :value="plan.strategy"><span><strong>{{labelFor(plan.strategy)}}</strong><small>{{plan.recovered_minutes}} min recovered</small></span></label></fieldset>
+   <div class="evidence-grid"><div class="assignment-table"><h3>Selected assignments</h3><table aria-label="Selected plan assignments"><thead><tr><th>Request</th><th>Opening</th><th>Time</th></tr></thead><tbody><tr v-for="a in selectedPlan.assignments" :key="a.request_id"><th>{{a.request_id}}</th><td>{{a.interval_id}}</td><td>{{formatTime(a.scheduled_window.start)}}–{{formatTime(a.scheduled_window.end)}}</td></tr></tbody></table></div><details class="reason-details"><summary>Eligibility trace</summary><ul><li v-for="e in selectedPlan.evaluations" :key="`${e.request_id}-${e.interval_id}`"><strong>{{e.request_id}} → {{e.interval_id}}</strong><span>{{e.eligible?'Eligible':e.reason_codes.join(', ')}}</span></li></ul></details></div><p class="disclosure">{{demo.disclosure}} {{research.evidence_boundary}}</p>
+  </section>
+  <section class="review-panel" aria-labelledby="review-title"><div><p class="eyebrow">Human-owned simulation</p><h2 id="review-title">The model proposes. A person decides.</h2><p>Record a local audit event only. Nothing is booked, published, notified or changed.</p></div><div class="review-actions"><button :disabled="reviewPending" @click="recordReview('accept')">Record accept</button><button :disabled="reviewPending" @click="recordReview('reject')">Record reject</button><button :disabled="reviewPending" @click="recordReview('request_alternative')">Request alternative</button></div><p v-if="reviewPending" role="status">Recording simulated review…</p><p v-if="reviewMessage" class="success-message" role="status">{{reviewMessage}}</p><p v-if="reviewError" class="error-message" role="alert">{{reviewError}}</p></section>
+ </template>
+</main>
 </template>
