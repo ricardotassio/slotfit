@@ -54,3 +54,15 @@ Ricardo should be able to answer:
   not by missing code.
 - The seeds initially named `frozen-test` were exercised by engineering checks and
   reclassified as `regression`. No final frozen set exists yet.
+
+## 2026-10-25 — SF-003 multi-slot baseline
+
+- Initial focused test failed because `multi_slot_counterexample` did not exist.
+- Both baselines now evaluate every request/interval pair chronologically and
+  prevent duplicate request or interval assignment.
+- In the visual counterexample, FIFO assigns the older flexible 30-minute request
+  to the 60-minute opening and recovers 30 minutes total.
+- Local best-fit assigns the constrained 60-minute request first and then the
+  flexible request, recovering all 90 open minutes.
+- Reversing input interval order does not change either plan.
+- `make test`: 29 tests passed before adding OR-Tools.

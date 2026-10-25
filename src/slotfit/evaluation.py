@@ -51,13 +51,11 @@ def evaluate_generated_plan(
 ) -> ScenarioEvaluation:
     """Create evaluator-only evidence after a strategy has produced a plan.
 
-    The current baselines support one open interval. Waiting time and starvation are
-    intentionally absent: neither can be measured honestly from a single event.
+    Waiting time and starvation are intentionally absent: neither can be measured
+    honestly from a single event.
     """
 
     scenario = generated.scenario
-    if len(scenario.open_intervals) != 1:
-        raise ValueError("event evaluation currently supports exactly one open interval")
     if generated.manifest.seed != scenario.seed:
         raise ValueError("manifest seed must match scenario seed")
     if generated.manifest.decision_checksum != decision_checksum(scenario):

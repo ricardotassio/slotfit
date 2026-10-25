@@ -41,11 +41,13 @@ Requires `uv` and an installed Python 3.12 interpreter.
 ```bash
 make test
 make demo
+make multi-slot-demo
 make generated-demo
 make longitudinal-demo
 ```
 
-`make demo` runs the fixed teaching fixture. `make generated-demo` runs registered
+`make demo` runs the fixed teaching fixture. `make multi-slot-demo` shows the
+global-assignment counterexample before CP-SAT. `make generated-demo` runs registered
 development seed `1101` and prints its provenance, plans and event evaluations.
 `make longitudinal-demo` replays three controlled compatible-opportunity rounds
 for both baselines. The current Bolt uses no third-party runtime dependency.
@@ -74,3 +76,4 @@ This is a reproducible engineering POC using synthetic data. Results will descri
 - [`docs/fairness-and-bias-plan.md`](docs/fairness-and-bias-plan.md)
 - [`docs/video-storyboard.md`](docs/video-storyboard.md)
 - [`docs/adr/0001-modular-monolith-and-baselines.md`](docs/adr/0001-modular-monolith-and-baselines.md)
+- [`docs/adr/0002-lexicographic-cp-sat.md`](docs/adr/0002-lexicographic-cp-sat.md)

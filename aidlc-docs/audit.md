@@ -24,9 +24,22 @@
 
 ## Open decisions
 
-- Exact numerical fairness guardrails after inspecting only the development distribution.
-- OR-Tools objective weights before the frozen test set.
 - Public repository license before publication.
+
+## 2026-10-25 — SF-003 design gate
+
+- Decision: CP-SAT is justified only by a multi-slot global assignment conflict,
+  not by the original single-interval example.
+- Decision: pin `ortools==9.15.6755` when the dependency enters.
+- Decision: use lexicographic recovered-minutes, requests-served and wait-age
+  phases; do not use a blended tunable score.
+- Decision: keep repeated-exclusion guardrails outside the first solver objective.
+- Decision: define a controlled starvation event at three compatible opportunities
+  without plan exposure and report sensitivity at two and four.
+- Decision: use one worker, fixed seed, deterministic-time bound and wall-time
+  ceiling; require `OPTIMAL` in every phase for an optimized claim.
+- Decision: mint 400 final frozen seeds only after configuration and guardrails are
+  committed. Previously exercised seeds remain regression-only.
 
 ## 2026-10-25 — Cross-agent specification workflow
 

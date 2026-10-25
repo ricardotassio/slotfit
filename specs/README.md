@@ -18,7 +18,7 @@ Specifications are the implementation contract between product intent, code and 
 |---|---|---|
 | [`SF-001`](001-domain-and-baselines.md) | Accepted with follow-up | Validate the deterministic domain and first baselines already implemented |
 | [`SF-002`](002-scenarios-and-fairness-controls.md) | Done | Add real seeded variation, audit-only slices and invariance controls |
-| [`SF-003`](003-optimizer-and-evaluation.md) | Draft | Compare an optimizer with baselines under frozen efficiency and fairness gates |
+| [`SF-003`](003-optimizer-and-evaluation.md) | In progress | Compare a multi-slot optimizer with baselines under frozen efficiency and fairness gates |
 
 ## Working rule
 

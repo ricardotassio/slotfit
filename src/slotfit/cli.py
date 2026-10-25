@@ -9,7 +9,7 @@ from typing import Any
 from slotfit.evaluation import evaluate_generated_plan
 from slotfit.generation import EvaluationSplit, generate_scenario
 from slotfit.longitudinal import simulate_opportunity_rounds
-from slotfit.scenarios import demo_scenario
+from slotfit.scenarios import demo_scenario, multi_slot_counterexample
 from slotfit.strategies import best_fit_plan, fifo_plan
 
 
@@ -22,7 +22,11 @@ def _json_default(value: Any) -> str:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run a SlotFit synthetic scenario")
     parser.add_argument("--seed", type=int, default=1400)
-    parser.add_argument("--mode", choices=("fixture", "generated"), default="fixture")
+    parser.add_argument(
+        "--mode",
+        choices=("fixture", "multi-slot", "generated"),
+        default="fixture",
+    )
     parser.add_argument(
         "--rounds",
         type=int,
@@ -44,6 +48,8 @@ def main() -> None:
     if args.mode == "generated":
         generated = generate_scenario(args.seed, split=EvaluationSplit(args.split))
         scenario = generated.scenario
+    elif args.mode == "multi-slot":
+        scenario = multi_slot_counterexample(seed=args.seed)
     else:
         scenario = demo_scenario(seed=args.seed)
 

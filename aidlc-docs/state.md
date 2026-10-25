@@ -3,17 +3,17 @@
 - Project: SlotFit
 - Repository type: greenfield
 - Phase: Construction
-- Active Bolt: none — preparing the S3 decision gate
-- Active spec: none; `SF-003` remains Draft
-- Last completed gate: S2 generated scenarios and fairness-control evidence
+- Active Bolt: S3 — multi-slot baselines before the optimizer dependency
+- Active spec: `SF-003` — In progress
+- Last completed gate: SF-003 design contract moved from Draft to Ready
 - External integrations: none
 - Real data: prohibited
 
 ## Current objective
 
-Resolve the bounded optimizer experiment before adding OR-Tools: choose a
-development-only threshold method, solver runtime, objective units and output
-artifact contract before minting or inspecting the final frozen-test set.
+Implement the visual multi-slot counterexample and generalize both greedy baselines
+before adding OR-Tools. The optimizer dependency enters only after those tests are
+red and the baseline behavior is understood.
 
 ## Exit criteria for S1
 
@@ -38,8 +38,8 @@ artifact contract before minting or inspecting the final frozen-test set.
 
 ## Next gate
 
-Move `SF-003` from `Draft` to `Ready` only after its five unresolved acceptance
-criteria are explicit. Do not add OR-Tools before that spec gate closes.
+Make the multi-slot greedy counterexample executable. Do not add OR-Tools until the
+baseline tests demonstrate the global-assignment gap.
 
 The S1 machine-verifiable criteria passed on 2026-10-25. Ricardo explicitly
 authorized progression. His teach-back self-assessment remains a non-blocking

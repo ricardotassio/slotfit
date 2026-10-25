@@ -120,17 +120,23 @@ def simulate_opportunity_rounds(
         elif strategy_name != plan.strategy:
             raise ValueError("strategy identifier changed between rounds")
 
-        selected_eligible_ids: set[str] = set()
-        for record in evaluation.requests:
-            if not record.eligible_opportunity:
-                continue
-            request_history = history[record.request_id]
+        eligible_request_ids = {
+            record.request_id
+            for record in evaluation.requests
+            if record.eligible_opportunity
+        }
+        selected_eligible_ids = {
+            record.request_id
+            for record in evaluation.requests
+            if record.eligible_opportunity and record.selected
+        }
+        for request_id in eligible_request_ids:
+            request_history = history[request_id]
             request_history.eligible_opportunities += 1
-            if record.selected:
+            if request_id in selected_eligible_ids:
                 request_history.plan_exposures += 1
                 if request_history.first_exposure_round is None:
                     request_history.first_exposure_round = round_number
-                selected_eligible_ids.add(record.request_id)
             else:
                 request_history.unselected_compatible_opportunities += 1
 

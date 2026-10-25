@@ -3,10 +3,10 @@
 Current evidence-backed flow:
 
 ```text
-demo scenario
+single- or multi-slot scenario
   -> immutable domain objects
   -> eligibility evaluation
-  -> FIFO or best-fit strategy
+  -> chronological FIFO or best-fit strategy
   -> candidate plan
   -> CLI JSON output
 ```
@@ -28,6 +28,8 @@ Vue calendar
 - Domain objects do not import web, database or solver frameworks.
 - Strategies receive a scenario and return a plan.
 - Eligibility returns reason codes; it does not silently filter.
+- Greedy strategies evaluate every request/interval pair and assign a request at
+  most once.
 - Persistence and HTTP will be adapters around the domain.
 
 ## Failure stories
@@ -36,4 +38,3 @@ Vue calendar
 - No eligible request: return an empty plan with exclusions.
 - Solver unavailable in a future Bolt: baselines remain executable.
 - No feasible optimized plan: return `infeasible`; do not relax hard constraints.
-
