@@ -3,17 +3,16 @@
 - Project: SlotFit
 - Repository type: greenfield
 - Phase: Construction
-- Active Bolt: S4 — FastAPI/Pydantic boundary
-- Active spec: `SF-004` — Ready
-- Last completed gate: SF-003 terminal no-go review
+- Active Bolt: none — S4 closed; S5 specification is next
+- Active spec: none
+- Last completed gate: SF-004 read-only API verified
 - External integrations: none
 - Real data: prohibited
 
 ## Current objective
 
-Implement the read-only S4 HTTP boundary without changing the rejected research
-result. The API may expose synthetic demonstrations and evidence, but no accepted
-optimizer recommendation exists.
+Specify S5 persistence and simulated human review without adding any real schedule
+mutation. Preserve the rejected research result and read-only planning routes.
 
 ## Exit criteria for S1
 
@@ -38,8 +37,9 @@ optimizer recommendation exists.
 
 ## Next gate
 
-Close SF-004 only after its contract, integration, smoke and OpenAPI checks pass.
-Calibration remains closed and the final frozen set remains nonexistent.
+Open SF-005 only after the persistence schema, idempotency behavior and failure
+semantics are explicit. Calibration remains closed and the final frozen set
+remains nonexistent.
 
 The S1 machine-verifiable criteria passed on 2026-10-25. Ricardo explicitly
 authorized progression. His teach-back self-assessment remains a non-blocking

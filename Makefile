@@ -1,9 +1,15 @@
 PYTHON := uv run --python 3.12 python
 
-.PHONY: test demo multi-slot-demo generated-demo longitudinal-demo development-report alternative-diagnostic exposure-frontier
+.PHONY: test api-test api-smoke demo multi-slot-demo generated-demo longitudinal-demo development-report alternative-diagnostic exposure-frontier
 
 test:
 	PYTHONPATH=src $(PYTHON) -m unittest discover -s tests -v
+
+api-test:
+	PYTHONPATH=src $(PYTHON) -m unittest tests.test_api_contract -v
+
+api-smoke:
+	PYTHONPATH=src $(PYTHON) -c 'from fastapi.testclient import TestClient; from slotfit.api import app; client = TestClient(app); assert client.get("/health").status_code == 200; assert client.get("/api/v1/demos/global-conflict").status_code == 200; assert client.get("/api/v1/research/development-decision").json()["candidate_accepted"] is False'
 
 demo:
 	PYTHONPATH=src $(PYTHON) -m slotfit.cli --seed 1400

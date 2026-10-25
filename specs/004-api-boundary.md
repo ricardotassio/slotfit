@@ -1,6 +1,6 @@
 # SF-004 — Read-only HTTP boundary
 
-- Status: Ready
+- Status: Done
 - AI-DLC mapping: Bolt S4
 - Depends on: SF-003 terminal no-go
 - Dependency boundary: add FastAPI/Pydantic/TestClient dependencies only after
@@ -64,7 +64,7 @@ the 40-seed experiment on every request or describe V4 as a recommendation.
 
 - `fastapi==0.162.0` for the synchronous local REST adapter and generated OpenAPI;
 - `pydantic==2.14.1` for explicit versioned response validation;
-- `httpx==0.28.1` for FastAPI's in-process `TestClient` contract tests.
+- `httpx2==2.13.0` for FastAPI/Starlette's in-process `TestClient` contract tests.
 
 The versions are pinned for replay. GraphQL, gRPC, authentication, queues and
 microservices are outside this local synthetic POC.
@@ -80,15 +80,22 @@ microservices are outside this local synthetic POC.
 
 ## Acceptance criteria
 
-- [ ] Health response is versioned and does not run planning.
-- [ ] Both deterministic demos return two or three explainable plans.
-- [ ] The global counterexample exposes three `OPTIMAL` phases and a disclosure.
-- [ ] Unknown demo IDs return the stable versioned error contract.
-- [ ] Development decision reports the terminal no-go without recomputation.
-- [ ] OpenAPI exposes only the declared read-only routes.
-- [ ] Domain and strategy modules remain framework-independent.
-- [ ] Tests use no network, database, real data or external action.
-- [ ] `make test` and `make api-smoke` pass from the pinned environment.
+- [x] Health response is versioned and does not run planning.
+- [x] Both deterministic demos return two or three explainable plans.
+- [x] The global counterexample exposes three `OPTIMAL` phases and a disclosure.
+- [x] Unknown demo IDs return the stable versioned error contract.
+- [x] Development decision reports the terminal no-go without recomputation.
+- [x] OpenAPI exposes only the declared read-only routes.
+- [x] Domain and strategy modules remain framework-independent.
+- [x] Tests use no network, database, real data or external action.
+- [x] `make test` and `make api-smoke` pass from the pinned environment.
+
+## Observed evidence
+
+The focused contract suite passes seven tests, including deterministic replay,
+versioned errors, OpenAPI route inspection and framework-independence checks. The
+full suite passes 70 tests. `make api-smoke` exercises health, the global-conflict
+demo and the terminal no-go response in process, without opening a socket.
 
 ## Rejection conditions
 

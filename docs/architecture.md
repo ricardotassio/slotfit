@@ -11,6 +11,17 @@ single- or multi-slot scenario
   -> CLI JSON output
 ```
 
+Current read-only application boundary:
+
+```text
+FastAPI GET route
+  -> versioned Pydantic response schema
+  -> API service adapter
+  -> existing synthetic fixture + strategy boundary
+  -> explainable plans or checked-in research decision
+  -> automatic_action: none
+```
+
 Current optimizer boundary:
 
 ```text
@@ -23,7 +34,7 @@ multi-slot scenario
   -> structured plan + phase evidence
 ```
 
-Planned application flow, explicitly not implemented yet:
+Planned interactive application flow:
 
 ```text
 Vue calendar
@@ -43,6 +54,7 @@ Vue calendar
 - Greedy strategies evaluate every request/interval pair and assign a request at
   most once.
 - Persistence and HTTP will be adapters around the domain.
+- HTTP is now a read-only adapter; persistence remains planned.
 
 ## Failure stories
 

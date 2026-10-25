@@ -169,3 +169,14 @@
 - Decision: allow S4 to expose deterministic demonstrations and the rejected
   research decision, but never present V4 as an accepted recommendation.
 - Evidence: [`../docs/methodology-no-go-review.md`](../docs/methodology-no-go-review.md).
+
+## 2026-10-25 — SF-004 read-only API
+
+- Decision: expose only deterministic synthetic demos and a checked-in terminal
+  research decision; do not accept arbitrary scenario or identity payloads.
+- Decision: keep FastAPI/Pydantic in adapter modules and preserve the
+  framework-independent domain core.
+- Decision: pin FastAPI `0.162.0`, Pydantic `2.14.1` and HTTPX2 `2.13.0` for a
+  reproducible API/test boundary.
+- Verification: seven API contract tests, in-process smoke checks and 70 full-suite
+  tests pass without network, database or external actions.

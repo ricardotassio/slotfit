@@ -1,6 +1,6 @@
 # Card S4 — Fronteira FastAPI/Pydantic
 
-**Estado:** especificado; implementação não iniciada.
+**Estado:** concluído e verificado.
 **Dependência:** S3 encerrado, inclusive por no-go terminal.
 **Requisitos principais:** SF-FR-005, SF-NFR-004 e SF-NFR-005.
 
@@ -22,7 +22,7 @@ interna exposta ao cliente, operação não idempotente e contrato sem versão.
 
 ## ⚖️ Avaliação crítica
 
-**Veredito: suficiente quando houver UI.** FastAPI/Pydantic é compatível com a POC
+**Veredito: suficiente para a UI local.** FastAPI/Pydantic é compatível com a POC
 e reduz código de validação. GraphQL, gRPC, gateway e microserviço separado seriam
 excessivos para um único consumidor local. A API também torna o resultado negativo
 inspecionável pela futura UI; por isso ela pode avançar após o no-go de S3 sem
@@ -34,7 +34,8 @@ Ready: schemas e endpoints especificados em
 [`../../specs/004-api-boundary.md`](../../specs/004-api-boundary.md); erros e versionamento definidos; nenhum
 dado real permitido. Done: testes de contrato e integração sem rede externa,
 OpenAPI verificável, limites de payload, respostas determinísticas e nenhuma ação
-automática. Esta lista é contrato futuro, não evidência atual.
+automática. Como S4 possui apenas `GET`, não existe payload de entrada arbitrário
+a limitar. Os contratos, smoke test e suite completa fornecem a evidência atual.
 
 ## 🎯 Entrevista
 

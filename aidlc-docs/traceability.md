@@ -8,7 +8,7 @@ Implementation contracts: SF-FR-001 through SF-FR-003 map to [`../specs/001-doma
 | SF-FR-002 | `slotfit.eligibility` | exclusion and consent tests | Implemented in first slice |
 | SF-FR-003 | `slotfit.strategies` | FIFO and best-fit tests | Implemented |
 | SF-FR-004 | `slotfit.optimizer` | V1–V4 global-conflict, residual-policy, floor, phase and limit tests | Implemented through bounded-recovery development candidate |
-| SF-FR-005 | `slotfit.api` boundary, future web app | API contract tests; Playwright later | Specified in SF-004 |
+| SF-FR-005 | `slotfit.api` boundary, future web app | API contract tests; Playwright later | API implemented; UI planned |
 | SF-FR-006 | future review service | integration/idempotency tests | Planned |
 | SF-FR-007 | `slotfit.evaluation`, `slotfit.comparison` | event records, aggregate comparison and violation tests | Implemented for development split |
 | SF-FR-008 | `slotfit.longitudinal`, `slotfit.comparison`, `slotfit.alternative_diagnostic`, `slotfit.exposure_frontier` | compatible misses, K sensitivity, slice exposure, guardrail, alternative capacity and local frontier | Implemented for development; V1–V3 rejected |
@@ -16,7 +16,7 @@ Implementation contracts: SF-FR-001 through SF-FR-003 map to [`../specs/001-doma
 | SF-NFR-001 | scenario generator | equality under same seed | Implemented |
 | SF-NFR-002 | strategies and event evaluator | all registered generated seeds | Implemented for baselines |
 | SF-NFR-003 | core package | `make test` | Implemented |
-| SF-NFR-004 | CLI plans and optimizer evidence | strategy, engine and phase fields | Implemented for current strategies |
+| SF-NFR-004 | CLI and API plan evidence | strategy, engine and phase fields | Implemented for current strategies |
 | SF-NFR-006 | all strategies | per-seed identifier and input-order metamorphic checks | Implemented for 40-seed development comparison |
 | SF-NFR-007 | evaluation configuration | frozen threshold artifact | Planned |
 | SF-NFR-008 | `slotfit.generation.ScenarioManifest` | provenance schema and checksum test | Implemented |
