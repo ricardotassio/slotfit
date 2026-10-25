@@ -3,17 +3,16 @@
 - Project: SlotFit
 - Repository type: greenfield
 - Phase: Construction
-- Active Bolt: S3 — multi-slot baselines before the optimizer dependency
+- Active Bolt: S3 — multi-slot optimizer and development evaluation
 - Active spec: `SF-003` — In progress
-- Last completed gate: SF-003 design contract moved from Draft to Ready
+- Last completed gate: bounded CP-SAT adapter and explicit-status tests
 - External integrations: none
 - Real data: prohibited
 
 ## Current objective
 
-Implement the visual multi-slot counterexample and generalize both greedy baselines
-before adding OR-Tools. The optimizer dependency enters only after those tests are
-red and the baseline behavior is understood.
+Create versioned multi-slot development scenarios and aggregate evidence for all
+three strategies without minting or inspecting the final frozen set.
 
 ## Exit criteria for S1
 
@@ -38,8 +37,8 @@ red and the baseline behavior is understood.
 
 ## Next gate
 
-Make the multi-slot greedy counterexample executable. Do not add OR-Tools until the
-baseline tests demonstrate the global-assignment gap.
+Generate the 40-seed development manifest, implement the declared comparison
+records and review the evidence before configuration freeze.
 
 The S1 machine-verifiable criteria passed on 2026-10-25. Ricardo explicitly
 authorized progression. His teach-back self-assessment remains a non-blocking

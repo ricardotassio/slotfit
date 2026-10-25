@@ -9,6 +9,7 @@ from typing import Any
 from slotfit.evaluation import evaluate_generated_plan
 from slotfit.generation import EvaluationSplit, generate_scenario
 from slotfit.longitudinal import simulate_opportunity_rounds
+from slotfit.optimizer import optimize_plan
 from slotfit.scenarios import demo_scenario, multi_slot_counterexample
 from slotfit.strategies import best_fit_plan, fifo_plan
 
@@ -53,7 +54,10 @@ def main() -> None:
     else:
         scenario = demo_scenario(seed=args.seed)
 
+    optimizer_result = optimize_plan(scenario) if args.mode == "multi-slot" else None
     plans = (fifo_plan(scenario), best_fit_plan(scenario))
+    if optimizer_result is not None:
+        plans += (optimizer_result.plan,)
     output = {
         "scenario_id": scenario.scenario_id,
         "synthetic": True,
@@ -71,6 +75,8 @@ def main() -> None:
                 asdict(simulate_opportunity_rounds(generated, strategy, rounds=args.rounds))
                 for strategy in (fifo_plan, best_fit_plan)
             ]
+    if optimizer_result is not None:
+        output["optimizer_evidence"] = asdict(optimizer_result)
     print(json.dumps(output, default=_json_default, indent=2, sort_keys=True))
 
 

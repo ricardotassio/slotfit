@@ -3,7 +3,9 @@ name = "slotfit"
 version = "0.1.0"
 description = "Explainable scheduling optimization experiment using synthetic clinic calendars"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "ortools==9.15.6755",
+]
 
 [build-system]
 requires = ["hatchling"]

@@ -40,6 +40,9 @@
   ceiling; require `OPTIMAL` in every phase for an optimized claim.
 - Decision: mint 400 final frozen seeds only after configuration and guardrails are
   committed. Previously exercised seeds remain regression-only.
+- Evidence: the dependency entered only after the multi-slot baseline tests failed
+  and then passed independently; Python is pinned to 3.12 and OR-Tools to
+  `9.15.6755`.
 
 ## 2026-10-25 — Cross-agent specification workflow
 

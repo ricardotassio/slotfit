@@ -11,7 +11,19 @@ single- or multi-slot scenario
   -> CLI JSON output
 ```
 
-Planned flow, explicitly not implemented yet:
+Current optimizer boundary:
+
+```text
+multi-slot scenario
+  -> shared eligibility evaluations
+  -> CP-SAT eligible-pair variables
+  -> recovered minutes (phase 1)
+  -> requests served (phase 2)
+  -> wait-age tie-break (phase 3)
+  -> structured plan + phase evidence
+```
+
+Planned application flow, explicitly not implemented yet:
 
 ```text
 Vue calendar
@@ -36,5 +48,6 @@ Vue calendar
 
 - Invalid time window: reject construction.
 - No eligible request: return an empty plan with exclusions.
-- Solver unavailable in a future Bolt: baselines remain executable.
-- No feasible optimized plan: return `infeasible`; do not relax hard constraints.
+- Solver limit reached: return its explicit status and never report a baseline as
+  the optimized plan.
+- No feasible optimized plan: return `INFEASIBLE`; do not relax hard constraints.

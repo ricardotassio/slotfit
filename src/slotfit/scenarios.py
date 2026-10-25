@@ -75,7 +75,7 @@ def multi_slot_counterexample(seed: int = 1500) -> Scenario:
         room_id="ROOM-A",
         window=TimeWindow(
             start=datetime(2026, 11, 4, 15, 30, tzinfo=timezone),
-            end=datetime(2026, 11, 4, 16, 0, tzinfo=timezone),
+            end=datetime(2026, 11, 4, 16, 30, tzinfo=timezone),
         ),
     )
     return Scenario(
@@ -86,7 +86,7 @@ def multi_slot_counterexample(seed: int = 1500) -> Scenario:
         wait_requests=(
             WaitRequest(
                 request_id="WR-FLEXIBLE",
-                duration_minutes=30,
+                duration_minutes=60,
                 joined_order=1,
                 eligible_provider_ids=("PROVIDER-001",),
                 availability_windows=(open_a.window, open_b.window),

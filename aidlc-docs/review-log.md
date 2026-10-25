@@ -60,9 +60,20 @@ Ricardo should be able to answer:
 - Initial focused test failed because `multi_slot_counterexample` did not exist.
 - Both baselines now evaluate every request/interval pair chronologically and
   prevent duplicate request or interval assignment.
-- In the visual counterexample, FIFO assigns the older flexible 30-minute request
-  to the 60-minute opening and recovers 30 minutes total.
-- Local best-fit assigns the constrained 60-minute request first and then the
-  flexible request, recovering all 90 open minutes.
+- In the refined visual counterexample, both openings and requests last 60 minutes.
+  FIFO and local best-fit choose the older flexible request for `OPEN-A`, then
+  cannot place the constrained request in `OPEN-B`; each recovers 60 of 120 minutes.
 - Reversing input interval order does not change either plan.
 - `make test`: 29 tests passed before adding OR-Tools.
+
+## 2026-10-25 — SF-003 CP-SAT adapter
+
+- The optimizer test initially failed because `slotfit.optimizer` did not exist.
+- Runtime is pinned to Python 3.12 and `ortools==9.15.6755` in `uv.lock`.
+- Both greedy strategies recover 60 of 120 minutes in the refined global-conflict
+  fixture; CP-SAT recovers 120 minutes.
+- CP-SAT returns three `OPTIMAL` phases with objective values `120`, `2` and `3`.
+- Opaque identifier and input-order counterfactuals preserve assignment positions.
+- A deliberately tiny deterministic-time budget returns `UNKNOWN`, an empty CP-SAT
+  plan and `optimized: false`; no baseline fallback is disguised as an optimizer.
+- `automatic_action` remains `none`.

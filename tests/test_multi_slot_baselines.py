@@ -14,18 +14,17 @@ class MultiSlotBaselineTests(unittest.TestCase):
         self.assertEqual(len(plan.assignments), 1)
         self.assertEqual(plan.assignments[0].request_id, "WR-FLEXIBLE")
         self.assertEqual(plan.assignments[0].interval_id, "OPEN-A")
-        self.assertEqual(plan.recovered_minutes, 30)
+        self.assertEqual(plan.recovered_minutes, 60)
         self.assertEqual(plan.remaining_gap_minutes, 60)
 
-    def test_best_fit_recovers_both_openings_in_the_counterexample(self) -> None:
+    def test_best_fit_exposes_the_same_local_tie_failure(self) -> None:
         plan = best_fit_plan(multi_slot_counterexample())
 
-        self.assertEqual(
-            {(item.request_id, item.interval_id) for item in plan.assignments},
-            {("WR-CONSTRAINED", "OPEN-A"), ("WR-FLEXIBLE", "OPEN-B")},
-        )
-        self.assertEqual(plan.recovered_minutes, 90)
-        self.assertEqual(plan.remaining_gap_minutes, 0)
+        self.assertEqual(len(plan.assignments), 1)
+        self.assertEqual(plan.assignments[0].request_id, "WR-FLEXIBLE")
+        self.assertEqual(plan.assignments[0].interval_id, "OPEN-A")
+        self.assertEqual(plan.recovered_minutes, 60)
+        self.assertEqual(plan.remaining_gap_minutes, 60)
 
     def test_request_is_never_assigned_twice(self) -> None:
         for strategy in (fifo_plan, best_fit_plan):

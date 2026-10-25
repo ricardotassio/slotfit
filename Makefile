@@ -1,4 +1,4 @@
-PYTHON := uv run --no-project --python 3.12 python
+PYTHON := uv run --python 3.12 python
 
 .PHONY: test demo multi-slot-demo generated-demo longitudinal-demo
 

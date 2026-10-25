@@ -21,13 +21,14 @@ single interval is not sufficient evidence for CP-SAT.
 Use two non-overlapping openings and two feasible requests:
 
 - `OPEN-A`: 60 minutes;
-- `OPEN-B`: 30 minutes;
-- an older flexible 30-minute request can use either opening;
+- `OPEN-B`: 60 minutes;
+- an older flexible 60-minute request can use either opening;
 - a 60-minute request can use only `OPEN-A`.
 
-A chronological greedy baseline may place the flexible request in `OPEN-A` and
-recover only 30 minutes. A global assignment can place the constrained request in
-`OPEN-A` and the flexible request in `OPEN-B`, recovering 90 minutes. This is a
+Both chronological greedy baselines place the older flexible request in `OPEN-A`
+because duration also ties, then cannot place the constrained request in `OPEN-B`.
+They recover 60 minutes. A global assignment can place the constrained request in
+`OPEN-A` and the flexible request in `OPEN-B`, recovering 120 minutes. This is a
 controlled counterexample, not a performance claim.
 
 ## Implementation slices
@@ -170,8 +171,8 @@ Timestamps may describe execution but never participate in replay identity.
 - [x] Output artifact and comparison schemas are explicit.
 - [x] Multi-slot counterexample fails under at least one greedy baseline.
 - [x] Multi-slot baselines preserve hard constraints and never assign a request twice.
-- [ ] CP-SAT returns the global 90-minute plan with three `OPTIMAL` phases.
-- [ ] Counterfactual, status and timeout tests pass.
+- [x] CP-SAT returns the global 120-minute plan with three `OPTIMAL` phases.
+- [x] Counterfactual, status and deterministic-limit tests pass.
 - [ ] Development evidence is reviewed before configuration freeze.
 - [ ] Final frozen manifest is created only after the freeze commit.
 

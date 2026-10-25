@@ -6,7 +6,7 @@ The project compares simple baselines with constraint optimization over entirely
 
 ## Current status
 
-**AI-DLC Construction Bolt S2 is complete; the S3 optimizer spec is still Draft.**
+**AI-DLC Construction Bolt S3 is in progress; the first bounded CP-SAT adapter is executable.**
 
 The repository currently contains:
 
@@ -19,10 +19,12 @@ The repository currently contains:
 - evaluator-only operational slices and event-level evidence;
 - deterministic opportunity rounds for repeated-exclusion analysis;
 - metamorphic tests for opaque identifiers, input order and ineligible records;
+- a multi-slot global-conflict fixture and lexicographic CP-SAT adapter;
 - executable unit tests;
 - architecture and decision records.
 
-OR-Tools, FastAPI, PostgreSQL and the Vue interface have not been added yet. They enter in later Bolts after the domain and baselines are understood.
+OR-Tools is pinned for the current optimizer Bolt. FastAPI, PostgreSQL and the Vue
+interface remain deferred until the controlled evaluation is complete.
 
 ## First demonstrable scenario
 
