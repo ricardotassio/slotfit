@@ -77,3 +77,22 @@ Ricardo should be able to answer:
 - A deliberately tiny deterministic-time budget returns `UNKNOWN`, an empty CP-SAT
   plan and `optimized: false`; no baseline fallback is disguised as an optimizer.
 - `automatic_action` remains `none`.
+
+## 2026-10-25 — SF-003 first development review
+
+- Added a deterministic three-interval, ten-request generator with 40 development,
+  40 calibration, 20 regression and 10 challenge seeds. No final frozen seeds were
+  created.
+- Compared FIFO, local best-fit and CP-SAT across all 40 development seeds and five
+  compatible-opportunity rounds per seed.
+- Mean recovered utilization was 72.01% for FIFO, 76.46% for local best-fit and
+  96.81% for CP-SAT. Mean requests served were 2.200, 2.275 and 2.700.
+- CP-SAT produced zero hard-constraint violations, zero opaque-ID flips, zero
+  input-order flips, 40 optimized runs and a 0.00% K=3 starvation-event rate.
+- The candidate failed the supported-slice guardrail: its largest exposure-shortfall
+  degradation was 12.58 percentage points for `notice_band=moderate`, above the
+  predeclared 10-point limit.
+- The candidate is rejected before calibration. The threshold was not changed.
+- Focused comparison tests: 7 passed. Final `make test`: 46 tests passed.
+- The development JSON report was generated and parsed successfully; compile and
+  whitespace checks passed.

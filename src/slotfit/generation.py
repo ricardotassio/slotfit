@@ -75,12 +75,12 @@ SPLIT_SEEDS: Mapping[EvaluationSplit, tuple[int, ...]] = MappingProxyType(
 )
 
 
-def _digest_int(seed: int, index: int, field_name: str, version: str) -> int:
+def deterministic_int(seed: int, index: int, field_name: str, version: str) -> int:
     payload = f"{version}|{seed}|{index}|{field_name}".encode()
     return int.from_bytes(hashlib.sha256(payload).digest()[:8], "big")
 
 
-def _choice[T](
+def deterministic_choice[T](
     values: tuple[T, ...],
     *,
     seed: int,
@@ -88,7 +88,7 @@ def _choice[T](
     field_name: str,
     version: str,
 ) -> T:
-    position = _digest_int(seed, index, field_name, version) % len(values)
+    position = deterministic_int(seed, index, field_name, version) % len(values)
     return values[position]
 
 
@@ -108,7 +108,7 @@ def decision_checksum(scenario: Scenario) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
-def _duration_band(duration_minutes: int) -> str:
+def duration_band(duration_minutes: int) -> str:
     if duration_minutes <= 30:
         return "short"
     if duration_minutes <= 60:
@@ -116,7 +116,7 @@ def _duration_band(duration_minutes: int) -> str:
     return "long"
 
 
-def _wait_age_band(joined_order: int, request_count: int) -> str:
+def wait_age_band(joined_order: int, request_count: int) -> str:
     if joined_order <= max(1, request_count // 3):
         return "older"
     if joined_order <= max(2, (request_count * 2) // 3):
@@ -124,7 +124,7 @@ def _wait_age_band(joined_order: int, request_count: int) -> str:
     return "recent"
 
 
-def _notice_band(minimum_notice_minutes: int) -> str:
+def notice_band(minimum_notice_minutes: int) -> str:
     if minimum_notice_minutes <= 60:
         return "short"
     if minimum_notice_minutes <= 180:
@@ -155,7 +155,12 @@ def generate_scenario(
 
     order = sorted(
         range(config.request_count),
-        key=lambda index: _digest_int(seed, index, "joined-order", config.generator_version),
+        key=lambda index: deterministic_int(
+            seed,
+            index,
+            "joined-order",
+            config.generator_version,
+        ),
     )
     joined_orders = {index: position + 1 for position, index in enumerate(order)}
 
@@ -165,7 +170,7 @@ def generate_scenario(
     for index in range(config.request_count):
         request_id = f"WR-{index + 1:03d}"
         duration_options = (30, 45, 60, 75) if index < 2 else (30, 45, 60, 75, 120)
-        duration = _choice(
+        duration = deterministic_choice(
             duration_options,
             seed=seed,
             index=index,
@@ -180,7 +185,7 @@ def generate_scenario(
             has_consent = True
             availability_profile = "broad"
         else:
-            provider_ids = _choice(
+            provider_ids = deterministic_choice(
                 (
                     ("PROVIDER-001",),
                     ("PROVIDER-001",),
@@ -192,14 +197,14 @@ def generate_scenario(
                 field_name="provider",
                 version=config.generator_version,
             )
-            required_room_id = _choice(
+            required_room_id = deterministic_choice(
                 (None, None, "ROOM-A", "ROOM-B"),
                 seed=seed,
                 index=index,
                 field_name="room",
                 version=config.generator_version,
             )
-            minimum_notice = _choice(
+            minimum_notice = deterministic_choice(
                 (30, 60, 180, 300),
                 seed=seed,
                 index=index,
@@ -207,7 +212,7 @@ def generate_scenario(
                 version=config.generator_version,
             )
             has_consent = bool(
-                _choice(
+                deterministic_choice(
                     (1, 1, 1, 1, 0),
                     seed=seed,
                     index=index,
@@ -215,7 +220,7 @@ def generate_scenario(
                     version=config.generator_version,
                 )
             )
-            availability_profile = _choice(
+            availability_profile = deterministic_choice(
                 ("broad", "broad", "narrow", "offset"),
                 seed=seed,
                 index=index,
@@ -255,11 +260,11 @@ def generate_scenario(
         audit_slices.append(
             RequestAuditSlice(
                 request_id=request_id,
-                duration_band=_duration_band(duration),
+                duration_band=duration_band(duration),
                 availability_band=availability_profile,
                 resource_band="scarce" if required_room_id == "ROOM-B" else "common",
-                wait_age_band=_wait_age_band(joined_order, config.request_count),
-                notice_band=_notice_band(minimum_notice),
+                wait_age_band=wait_age_band(joined_order, config.request_count),
+                notice_band=notice_band(minimum_notice),
             )
         )
 

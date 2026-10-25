@@ -6,7 +6,8 @@ The project compares simple baselines with constraint optimization over entirely
 
 ## Current status
 
-**AI-DLC Construction Bolt S3 is in progress; the first bounded CP-SAT adapter is executable.**
+**AI-DLC Construction Bolt S3 is in progress; the first CP-SAT candidate was
+correctly rejected by its development guardrails.**
 
 The repository currently contains:
 
@@ -20,6 +21,7 @@ The repository currently contains:
 - deterministic opportunity rounds for repeated-exclusion analysis;
 - metamorphic tests for opaque identifiers, input order and ineligible records;
 - a multi-slot global-conflict fixture and lexicographic CP-SAT adapter;
+- a 40-seed development comparison with per-slice guardrail decisions;
 - executable unit tests;
 - architecture and decision records.
 
@@ -46,13 +48,15 @@ make demo
 make multi-slot-demo
 make generated-demo
 make longitudinal-demo
+make development-report
 ```
 
 `make demo` runs the fixed teaching fixture. `make multi-slot-demo` shows the
 global-assignment counterexample before CP-SAT. `make generated-demo` runs registered
 development seed `1101` and prints its provenance, plans and event evaluations.
 `make longitudinal-demo` replays three controlled compatible-opportunity rounds
-for both baselines. The current Bolt uses no third-party runtime dependency.
+for both baselines. `make development-report` emits the full development-only JSON
+comparison. The final frozen evaluation set does not yet exist.
 
 ## Planned stack
 
@@ -76,6 +80,7 @@ This is a reproducible engineering POC using synthetic data. Results will descri
 - [`docs/problem.md`](docs/problem.md)
 - [`docs/architecture.md`](docs/architecture.md)
 - [`docs/fairness-and-bias-plan.md`](docs/fairness-and-bias-plan.md)
+- [`docs/development-evidence.md`](docs/development-evidence.md)
 - [`docs/video-storyboard.md`](docs/video-storyboard.md)
 - [`docs/adr/0001-modular-monolith-and-baselines.md`](docs/adr/0001-modular-monolith-and-baselines.md)
 - [`docs/adr/0002-lexicographic-cp-sat.md`](docs/adr/0002-lexicographic-cp-sat.md)

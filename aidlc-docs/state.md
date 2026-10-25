@@ -5,14 +5,14 @@
 - Phase: Construction
 - Active Bolt: S3 — multi-slot optimizer and development evaluation
 - Active spec: `SF-003` — In progress
-- Last completed gate: bounded CP-SAT adapter and explicit-status tests
+- Last completed gate: 40-seed development evidence reviewed; first candidate rejected
 - External integrations: none
 - Real data: prohibited
 
 ## Current objective
 
-Create versioned multi-slot development scenarios and aggregate evidence for all
-three strategies without minting or inspecting the final frozen set.
+Revise the candidate policy to address the failed supported-slice exposure
+guardrail without changing the threshold or using audit-only slices as inputs.
 
 ## Exit criteria for S1
 
@@ -37,8 +37,9 @@ three strategies without minting or inspecting the final frozen set.
 
 ## Next gate
 
-Generate the 40-seed development manifest, implement the declared comparison
-records and review the evidence before configuration freeze.
+Specify and test a minimal per-request exposure-debt signal, then rerun the same
+40 development seeds. Calibration remains closed until all development guardrails
+pass. The final frozen set remains nonexistent.
 
 The S1 machine-verifiable criteria passed on 2026-10-25. Ricardo explicitly
 authorized progression. His teach-back self-assessment remains a non-blocking

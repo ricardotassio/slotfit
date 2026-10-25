@@ -81,3 +81,16 @@
   so they are regression seeds, not a valid final frozen set. The real frozen
   manifest will be minted only after SF-003 configuration and guardrails are
   immutable.
+
+## 2026-10-25 — SF-003 development decision
+
+- Decision: operationalize an exposure deficit as `max(overall exposure - slice
+  exposure, 0)` while retaining the signed gap in report output.
+- Decision: a baseline slice may influence pass/fail only when it independently
+  meets the predeclared support of 30 eligible opportunities.
+- Decision: reject the first CP-SAT candidate because its worst supported
+  exposure-shortfall degradation is 12.58 percentage points, above the unchanged
+  10-point limit.
+- Decision: do not enter calibration, freeze configuration or mint final seeds.
+- Next hypothesis: use per-request compatible-opportunity debt, never audit-only
+  slice labels, to make the longitudinal policy exposure-aware.

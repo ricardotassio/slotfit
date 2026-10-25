@@ -1,6 +1,6 @@
 PYTHON := uv run --python 3.12 python
 
-.PHONY: test demo multi-slot-demo generated-demo longitudinal-demo
+.PHONY: test demo multi-slot-demo generated-demo longitudinal-demo development-report
 
 test:
 	PYTHONPATH=src $(PYTHON) -m unittest discover -s tests -v
@@ -16,3 +16,6 @@ generated-demo:
 
 longitudinal-demo:
 	PYTHONPATH=src $(PYTHON) -m slotfit.cli --mode generated --seed 1101 --rounds 3
+
+development-report:
+	PYTHONPATH=src $(PYTHON) -m slotfit.report_cli --split development

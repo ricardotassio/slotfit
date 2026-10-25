@@ -10,13 +10,13 @@ Implementation contracts: SF-FR-001 through SF-FR-003 map to [`../specs/001-doma
 | SF-FR-004 | `slotfit.optimizer` | global-conflict, phase and limit tests | Implemented for first multi-slot fixture |
 | SF-FR-005 | future web app | Playwright demo flow | Planned |
 | SF-FR-006 | future review service | integration/idempotency tests | Planned |
-| SF-FR-007 | `slotfit.evaluation` | versioned event records and violation tests | Partial: aggregation pending |
-| SF-FR-008 | `slotfit.evaluation`, `slotfit.longitudinal` | per-request slices and compatible-opportunity counts; aggregate report pending | Partial |
+| SF-FR-007 | `slotfit.evaluation`, `slotfit.comparison` | event records, aggregate comparison and violation tests | Implemented for development split |
+| SF-FR-008 | `slotfit.longitudinal`, `slotfit.comparison` | compatible misses, K sensitivity, slice exposure and guardrail decision | Implemented for development; candidate rejected |
 | SF-FR-009 | future web app and evaluation report | worst-slice and guardrail display | Planned |
 | SF-NFR-001 | scenario generator | equality under same seed | Implemented |
 | SF-NFR-002 | strategies and event evaluator | all registered generated seeds | Implemented for baselines |
 | SF-NFR-003 | core package | `make test` | Implemented |
 | SF-NFR-004 | CLI plans and optimizer evidence | strategy, engine and phase fields | Implemented for current strategies |
-| SF-NFR-006 | all strategies | identifier and input-order metamorphic tests | Implemented for baselines |
+| SF-NFR-006 | all strategies | per-seed identifier and input-order metamorphic checks | Implemented for 40-seed development comparison |
 | SF-NFR-007 | evaluation configuration | frozen threshold artifact | Planned |
 | SF-NFR-008 | `slotfit.generation.ScenarioManifest` | provenance schema and checksum test | Implemented |

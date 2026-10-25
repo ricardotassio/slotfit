@@ -173,8 +173,23 @@ Timestamps may describe execution but never participate in replay identity.
 - [x] Multi-slot baselines preserve hard constraints and never assign a request twice.
 - [x] CP-SAT returns the global 120-minute plan with three `OPTIMAL` phases.
 - [x] Counterfactual, status and deterministic-limit tests pass.
-- [ ] Development evidence is reviewed before configuration freeze.
+- [x] Development evidence is reviewed before configuration freeze.
 - [ ] Final frozen manifest is created only after the freeze commit.
+
+## First development decision
+
+The first candidate is rejected before calibration. Across 40 development seeds it
+recovered 96.81% mean utilization with zero hard violations, zero opaque-ID flips,
+zero input-order flips and zero K=3 starvation events. It nevertheless increased
+the worst supported exposure shortfall by 12.58 percentage points relative to the
+better supported baseline, exceeding the fixed 10-point limit. The failing slice
+was `notice_band=moderate`.
+
+For the slice gate, signed exposure gaps are retained in output, but negative gaps
+are clamped to zero for the pass/fail shortfall comparison. Only baseline slice
+observations with at least 30 eligible opportunities may serve as references.
+Unsupported results remain reported. Full evidence and the next hypothesis are in
+[`../docs/development-evidence.md`](../docs/development-evidence.md).
 
 ## Red, green, refactor
 
