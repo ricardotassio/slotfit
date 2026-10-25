@@ -9,6 +9,8 @@ const commandIdentity=ref<{fingerprint:string;key:string}|null>(null)
 const selectedPlan=computed(()=>demo.value?.plans.find(p=>p.strategy===selectedStrategy.value)??null)
 const candidatePlan=computed(()=>demo.value?.plans.find(p=>p.strategy.startsWith('cp-sat'))??demo.value?.plans.at(-1)??null)
 const gainedMinutes=computed(()=>Math.max(0,(candidatePlan.value?.recovered_minutes??0)-(selectedPlan.value?.recovered_minutes??0)))
+const animationKey=ref(0)
+function replayAnimation(){animationKey.value+=1}
 const labels:Record<string,string>={'fifo-eligible@0.2.0':'FIFO · first eligible','local-best-fit@0.2.0':'Local best fit','cp-sat-lexicographic@0.1.0':'Global constraint plan'}
 const labelFor=(s:string)=>labels[s]??s
 const formatTime=(v:string)=>new Intl.DateTimeFormat('en-CA',{hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'America/Toronto'}).format(new Date(v))
@@ -31,6 +33,16 @@ onMounted(loadEvidence)
   <section class="research-strip" aria-labelledby="outcome-title" data-testid="research-no-go"><div class="research-mark">!</div><div class="research-copy"><p class="eyebrow">Longitudinal research verdict</p><h2 id="outcome-title">No candidate passed the fixed guardrail</h2><p>{{research.decision}}</p></div><div class="research-number"><strong>{{Math.min(...research.candidates.map(c=>c.worst_supported_degradation_percentage_points)).toFixed(2)}} <small>p.p.</small></strong><span>closest result · limit {{research.guardrail.limit_percentage_points.toFixed(2)}} p.p.</span></div></section>
   <section class="story" aria-labelledby="comparison-title">
    <div class="story-heading"><div><p class="eyebrow">One day · Two openings · Two requests</p><h2 id="comparison-title">The same capacity. A different outcome.</h2></div><p class="scenario-id">{{demo.scenario_id}}</p></div>
+   <section class="agenda-replay" aria-labelledby="replay-title">
+    <div class="replay-header"><div><span class="step-label">Optimization replay</span><h3 id="replay-title">Watch the unused opening become usable</h3></div><button class="replay-button" type="button" @click="replayAnimation">↻ Replay</button></div>
+    <div :key="animationKey" class="replay-stage" aria-live="polite">
+     <div class="replay-times" aria-hidden="true"><span>14:00</span><span>15:00</span><span>15:30</span><span>16:30</span></div>
+     <div class="replay-lane"><strong>Local rule</strong><div class="replay-track"><span class="replay-block flexible-before">Flexible request</span><span class="replay-gap">60 min gap</span></div></div>
+     <div class="replay-lane"><strong>Candidate</strong><div class="replay-track"><span class="replay-block constrained-after">Constrained request</span><span class="replay-block flexible-after">Flexible request</span></div></div>
+     <p class="replay-caption"><span>Preserve the only compatible opening</span><strong>Gap recovered · +60 min</strong></p>
+    </div>
+    <p class="sr-only">The local rule puts the flexible request at 14:00 and leaves the 15:30 opening unused. The candidate plan puts the constrained request at 14:00 and moves the flexible request to 15:30, using both openings.</p>
+   </section>
    <div class="calendar-comparison">
     <article class="schedule"><header class="schedule-header"><div><span class="step-label">01 · Reference rule</span><h3>{{labelFor(selectedPlan.strategy)}}</h3></div><div class="capacity-pill neutral">{{selectedPlan.recovered_minutes}} / 120 min</div></header><div class="calendar-date"><div><span>WED</span><strong>04</strong></div><p>November 2026<br><small>Two independent openings</small></p></div><div class="timeline" role="list" :aria-label="`${labelFor(selectedPlan.strategy)} calendar`"><div v-for="interval in demo.intervals" :key="interval.interval_id" class="time-row" role="listitem"><time>{{formatTime(interval.window.start)}}</time><div v-if="assignmentFor(selectedPlan,interval.interval_id)" class="appointment appointment-local"><span>{{interval.interval_id}}</span><strong>{{requestName(assignmentFor(selectedPlan,interval.interval_id)!.request_id)}}</strong><small>{{assignmentFor(selectedPlan,interval.interval_id)!.request_id}}</small></div><div v-else class="appointment empty-slot"><span>{{interval.interval_id}}</span><strong>Capacity left unused</strong><small>{{interval.window.duration_minutes}} minutes available</small></div></div></div><footer><i class="swatch local"></i>Valid one-by-one, but blind to the next request</footer></article>
     <div class="optimization-bridge" aria-label="Comparison delta"><span>Constraint-aware<br>allocation</span><div class="bridge-arrow">→</div><strong v-if="gainedMinutes">+{{gainedMinutes}} min</strong><strong v-else>same capacity</strong><small>in this controlled fixture</small></div>
