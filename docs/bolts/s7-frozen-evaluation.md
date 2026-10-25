@@ -1,6 +1,6 @@
 # Card S7 — Avaliação congelada
 
-**Estado:** planejado; fundações parciais existem em S2/S3.  
+**Estado:** encerrado sem execução; o gate de entrada falhou corretamente.
 **Dependência:** candidato e guardrails congelados após desenvolvimento/calibração.  
 **Requisitos principais:** SF-FR-007–009; SF-NFR-006–008.
 
@@ -34,7 +34,9 @@ estatístico estar testado.
 Ready: candidato passou desenvolvimento e calibração; commit de freeze existe;
 seeds finais nunca foram executados. Done: execução única; artefatos imutáveis;
 checksums/proveniência válidos; decisão automática dos guardrails; revisão de risco
-e de testes. Hoje, o manifest final **não existe**, corretamente.
+e de testes. O estado Ready não foi alcançado: V1–V4 falharam em desenvolvimento,
+calibração não abriu e o manifest final **não existe**, corretamente. O gate está
+registrado em [`../../specs/007-frozen-evaluation-gate.md`](../../specs/007-frozen-evaluation-gate.md).
 
 ## 🎯 Entrevista
 

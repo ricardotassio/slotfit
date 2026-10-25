@@ -31,12 +31,20 @@ Cards pedagógicos e operacionais de todos os Bolts:
 - Reject configurations that cross predeclared starvation or worst-slice guardrails.
 - Record infeasible and timeout behavior.
 
+## Bolt S7 gate outcome
+
+- Status: closed without execution.
+- Reason: no SF-003 candidate passed the fixed development guardrails, so
+  calibration and configuration freeze never opened.
+- Consequence: the 400-seed final set remains intentionally nonexistent and no
+  final-effect claim is allowed.
+
 ## Later Bolts
 
 - S4: FastAPI and Pydantic boundary.
 - S5: PostgreSQL, runs and idempotent review events.
 - S6: Vue/FullCalendar UI.
-- S7: frozen simulation, slice analysis, counterfactual tests and evaluation.
+- S7: frozen simulation gate closed without execution; no candidate was eligible.
 - S8: hardening, documentation, evidence-backed video and post.
 
 Os itens S4–S8 são contratos de roadmap. Seus cards descrevem Definition of Ready,

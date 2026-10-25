@@ -3,16 +3,16 @@
 - Project: SlotFit
 - Repository type: greenfield
 - Phase: Construction
-- Active Bolt: none — S6 closed; S7 gate review is next
+- Active Bolt: none — S7 gate closed; S8 hardening is next
 - Active spec: none
-- Last completed gate: SF-006 browser and accessibility verification
+- Last completed gate: SF-007 not executed because eligibility failed
 - External integrations: none
 - Real data: prohibited
 
 ## Current objective
 
-Apply the S7 eligibility gate. Because SF-003 produced no accepted candidate, do
-not mint a frozen set or run a final evaluation under the rejected configuration.
+Specify S8 hardening and bilingual evidence-based communication around the real
+terminal no-go. Do not publish or push anything.
 
 ## Exit criteria for S1
 
@@ -37,9 +37,8 @@ not mint a frozen set or run a final evaluation under the rejected configuration
 
 ## Next gate
 
-Document S7 as not executed by design unless a new research spec independently
-earns calibration eligibility. Calibration remains closed and the final frozen set
-remains nonexistent.
+Open S8 only with explicit reproducibility, claim-review, threat/risk, bilingual
+script and publication-draft criteria. Publishing remains outside authorization.
 
 The S1 machine-verifiable criteria passed on 2026-10-25. Ricardo explicitly
 authorized progression. His teach-back self-assessment remains a non-blocking

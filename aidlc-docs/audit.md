@@ -203,3 +203,12 @@
 - Verification: production build passes; five Playwright tests pass against real
   local API/UI processes; axe reports zero serious or critical violations in the
   main flow.
+
+## 2026-10-25 — SF-007 frozen-evaluation gate
+
+- Decision: close S7 without executing calibration or the 400-seed final set
+  because no SF-003 candidate passed development.
+- Decision: treat the nonexistent final manifest as the correct evidence-preserving
+  outcome, not incomplete implementation.
+- Reopening rule: require a new hypothesis and fresh development/calibration
+  registries; V4 may not be relabeled or tuned against the same evidence.

@@ -18,5 +18,5 @@ Implementation contracts: SF-FR-001 through SF-FR-003 map to [`../specs/001-doma
 | SF-NFR-003 | core package | `make test` | Implemented |
 | SF-NFR-004 | CLI and API plan evidence | strategy, engine and phase fields | Implemented for current strategies |
 | SF-NFR-006 | all strategies | per-seed identifier and input-order metamorphic checks | Implemented for 40-seed development comparison |
-| SF-NFR-007 | evaluation configuration | frozen threshold artifact | Planned |
+| SF-NFR-007 | SF-003/SF-007 gate | fixed threshold plus terminal no-go | Final run intentionally ineligible |
 | SF-NFR-008 | `slotfit.generation.ScenarioManifest` | provenance schema and checksum test | Implemented |
