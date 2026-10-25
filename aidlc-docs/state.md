@@ -3,16 +3,17 @@
 - Project: SlotFit
 - Repository type: greenfield
 - Phase: Construction
-- Active Bolt: S3 — multi-slot optimizer and development evaluation
-- Active spec: `SF-003` — In progress
-- Last completed gate: bounded-recovery V4 tested and rejected
+- Active Bolt: none — S3 closed; S4 specification is next
+- Active spec: none
+- Last completed gate: SF-003 terminal no-go review
 - External integrations: none
 - Real data: prohibited
 
 ## Current objective
 
-Perform an SF-003 methodology/no-go review before adding any candidate or changing
-the experiment. Do not change the guardrail from observed development pressure.
+Specify the S4 HTTP boundary without changing the rejected research result. The
+API may expose synthetic demonstrations and evidence, but no accepted optimizer
+recommendation exists.
 
 ## Exit criteria for S1
 
@@ -37,9 +38,8 @@ the experiment. Do not change the guardrail from observed development pressure.
 
 ## Next gate
 
-Decide whether to close SF-003 as a valid negative experiment or revise the problem
-contract in a new spec. Calibration remains closed and the final frozen set remains
-nonexistent.
+Open SF-004 only after its endpoints, schemas, errors and safety boundaries are
+explicit. Calibration remains closed and the final frozen set remains nonexistent.
 
 The S1 machine-verifiable criteria passed on 2026-10-25. Ricardo explicitly
 authorized progression. His teach-back self-assessment remains a non-blocking

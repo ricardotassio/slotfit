@@ -159,3 +159,13 @@
   oracle cannot predict the full longitudinal path directly.
 - Decision: reject V4, keep calibration closed and require a methodology/no-go
   review before any further objective or threshold change.
+
+## 2026-10-25 — SF-003 terminal no-go
+
+- Decision: close SF-003 as a valid negative experiment after four candidates
+  failed the unchanged worst-supported-slice guardrail.
+- Decision: do not create V5, enter calibration, freeze a configuration or mint a
+  final frozen set under the current research line.
+- Decision: allow S4 to expose deterministic demonstrations and the rejected
+  research decision, but never present V4 as an accepted recommendation.
+- Evidence: [`../docs/methodology-no-go-review.md`](../docs/methodology-no-go-review.md).

@@ -1,6 +1,6 @@
 # SF-003 — Multi-slot optimizer and controlled evaluation
 
-- Status: In progress
+- Status: Done — terminal no-go
 - AI-DLC mapping: Bolts S3 and S7
 - Depends on: SF-002
 - Dependency boundary: pin `ortools==9.15.6755` only after the multi-slot
@@ -174,7 +174,8 @@ Timestamps may describe execution but never participate in replay identity.
 - [x] CP-SAT returns the global 120-minute plan with three `OPTIMAL` phases.
 - [x] Counterfactual, status and deterministic-limit tests pass.
 - [x] Development evidence is reviewed before configuration freeze.
-- [ ] Final frozen manifest is created only after the freeze commit.
+- [x] Terminal no-go prevents configuration freeze, calibration and final frozen
+  manifest creation.
 
 ## First development decision
 
@@ -399,6 +400,16 @@ The end-to-end cohort path therefore did not reproduce the local oracle's 8.24
 point result. No V5 will be added without a methodology review: four candidates
 have now tested static optimality, exposure debt, placement scarcity and bounded
 recovery. Calibration and final frozen generation remain closed.
+
+## Terminal methodology decision
+
+The methodology review closes SF-003 as a valid negative experiment. V1–V4 each
+failed the unchanged worst-supported-slice guardrail, so no candidate is eligible
+for calibration or configuration freeze. Creating a final manifest would violate
+the experimental contract rather than complete it. The next product Bolt may
+expose this evidence, but it must not promote a rejected candidate as an accepted
+recommendation. See
+[`../docs/methodology-no-go-review.md`](../docs/methodology-no-go-review.md).
 
 ## Red, green, refactor
 
