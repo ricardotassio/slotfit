@@ -14,12 +14,16 @@
 
 - Add provider, duration, room, availability, notice and consent reason codes.
 - Add property-oriented invariant tests.
+- Separate decision attributes from audit-only operational slice labels.
+- Implement identifier and input-order metamorphic tests.
 - Do not add optimization yet.
 
 ## Bolt S3 — OR-Tools spike
 
 - Add one CP-SAT strategy behind the existing strategy boundary.
 - Compare it with baselines on development fixtures.
+- Report utilization and fairness dimensions separately.
+- Reject configurations that cross predeclared starvation or worst-slice guardrails.
 - Record infeasible and timeout behavior.
 
 ## Later Bolts
@@ -27,6 +31,5 @@
 - S4: FastAPI and Pydantic boundary.
 - S5: PostgreSQL, runs and idempotent review events.
 - S6: Vue/FullCalendar UI.
-- S7: frozen simulation and evaluation.
-- S8: hardening, documentation, video and post.
-
+- S7: frozen simulation, slice analysis, counterfactual tests and evaluation.
+- S8: hardening, documentation, evidence-backed video and post.

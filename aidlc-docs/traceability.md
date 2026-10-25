@@ -9,7 +9,11 @@
 | SF-FR-005 | future web app | Playwright demo flow | Planned |
 | SF-FR-006 | future review service | integration/idempotency tests | Planned |
 | SF-FR-007 | future evaluation runner | versioned artifacts | Planned |
+| SF-FR-008 | future evaluation runner | per-slice exposure, wait and starvation report | Planned |
+| SF-FR-009 | future web app and evaluation report | worst-slice and guardrail display | Planned |
 | SF-NFR-001 | scenario generator | equality under same seed | Implemented |
 | SF-NFR-002 | all strategies | invariant suite | Partial |
 | SF-NFR-003 | core package | `make test` | Implemented |
-
+| SF-NFR-006 | all strategies | identifier and input-order metamorphic tests | Planned |
+| SF-NFR-007 | evaluation configuration | frozen threshold artifact | Planned |
+| SF-NFR-008 | scenario manifest | provenance schema test | Planned |

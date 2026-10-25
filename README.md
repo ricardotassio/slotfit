@@ -61,5 +61,6 @@ This is a reproducible engineering POC using synthetic data. Results will descri
 - [`aidlc-docs/execution-plan.md`](aidlc-docs/execution-plan.md)
 - [`docs/problem.md`](docs/problem.md)
 - [`docs/architecture.md`](docs/architecture.md)
+- [`docs/fairness-and-bias-plan.md`](docs/fairness-and-bias-plan.md)
+- [`docs/video-storyboard.md`](docs/video-storyboard.md)
 - [`docs/adr/0001-modular-monolith-and-baselines.md`](docs/adr/0001-modular-monolith-and-baselines.md)
-
