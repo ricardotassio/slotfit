@@ -180,3 +180,14 @@
   reproducible API/test boundary.
 - Verification: seven API contract tests, in-process smoke checks and 70 full-suite
   tests pass without network, database or external actions.
+
+## 2026-10-25 — SF-005 append-only simulated review
+
+- Decision: use SQLite for the single-user local POC and defer PostgreSQL until a
+  shared deployment or measured contention exists; see ADR-0003.
+- Decision: make review events immutable with database triggers and enforce
+  idempotency through a unique constraint plus winner comparison after races.
+- Decision: the only write endpoint records a simulated human review with
+  `external_action: none`; it cannot book, message or mutate a schedule.
+- Verification: ten focused persistence/API tests and 80 full-suite tests pass,
+  including two-connection uniqueness and direct update/delete rejection.

@@ -1,6 +1,6 @@
 # SF-005 — Append-only simulated human review
 
-- Status: Ready
+- Status: Done
 - AI-DLC mapping: Bolt S5
 - Depends on: SF-004
 - Architecture decision: ADR-0003
@@ -56,15 +56,22 @@ delete route.
 
 ## Acceptance criteria
 
-- [ ] Schema migration is deterministic and repeatable.
-- [ ] First write creates one immutable event.
-- [ ] Equivalent replay returns the same event without a second row.
-- [ ] Conflicting replay fails with a stable conflict.
-- [ ] Direct update and delete attempts fail closed.
-- [ ] Two repository connections cannot create duplicate idempotency rows.
-- [ ] API returns versioned 201, 200, 404, 409 and validation contracts.
-- [ ] No endpoint or repository performs an external action.
-- [ ] Full test suite passes without Docker or PostgreSQL.
+- [x] Schema migration is deterministic and repeatable.
+- [x] First write creates one immutable event.
+- [x] Equivalent replay returns the same event without a second row.
+- [x] Conflicting replay fails with a stable conflict.
+- [x] Direct update and delete attempts fail closed.
+- [x] Two repository connections cannot create duplicate idempotency rows.
+- [x] API returns versioned 201, 200, 404, 409 and validation contracts.
+- [x] No endpoint or repository performs an external action.
+- [x] Full test suite passes without Docker or PostgreSQL.
+
+## Observed evidence
+
+Ten focused tests cover repeatable initialization, create/replay/conflict,
+database-level update/delete rejection, two-connection uniqueness and HTTP error
+contracts. The full suite passes 80 tests. Test databases are isolated temporary
+files and the persisted event always records `external_action: none`.
 
 ## Scope exclusions
 
@@ -75,4 +82,3 @@ delete route.
 
 Those exclusions are appropriate only for the local synthetic POC. A shared
 deployment must reopen them explicitly.
-

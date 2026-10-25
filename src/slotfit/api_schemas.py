@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Literal
+from typing import Annotated, Literal
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, StringConstraints
 
 
 class ApiModel(BaseModel):
@@ -121,3 +121,34 @@ class DevelopmentDecisionResponse(ApiModel):
     decision: str
     evidence_boundary: str
 
+
+class ReviewCommandRequest(ApiModel):
+    schema_version: Literal["1.0"]
+    idempotency_key: Annotated[
+        str,
+        StringConstraints(pattern=r"^[!-~]{1,64}$"),
+    ]
+    scenario_id: Annotated[str, StringConstraints(min_length=1, max_length=128)]
+    strategy: Annotated[str, StringConstraints(min_length=1, max_length=128)]
+    plan_checksum: Annotated[str, StringConstraints(pattern=r"^[0-9a-f]{64}$")]
+    decision: Literal["accept", "reject", "request_alternative"]
+    rationale: Annotated[str, StringConstraints(max_length=500)] | None = None
+
+
+class ReviewEventResponse(ApiModel):
+    event_id: str
+    created_at: datetime
+    idempotency_key: str
+    scenario_id: str
+    strategy: str
+    plan_checksum: str
+    decision: Literal["accept", "reject", "request_alternative"]
+    rationale: str | None
+    external_action: Literal["none"]
+
+
+class RecordReviewResponse(ApiModel):
+    schema_version: str
+    event: ReviewEventResponse
+    created: bool
+    replayed: bool

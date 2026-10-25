@@ -1,6 +1,6 @@
 # Card S5 — Persistência e revisão humana
 
-**Estado:** especificado; implementação não iniciada.
+**Estado:** concluído e verificado.
 **Dependência:** contrato HTTP estável no S4.  
 **Requisitos principais:** SF-FR-006, SF-FR-007 e SF-NFR-004.
 
@@ -34,7 +34,7 @@ Ready: schema, retenção, estados permitidos e semântica da idempotência revi
 [`../../specs/005-persistence-and-review.md`](../../specs/005-persistence-and-review.md).
 Done: migrations reproduzíveis; constraint única; testes concorrentes básicos;
 replay por checksum; append-only protegido; erro de persistência não provoca ação
-externa. Nada disso está implementado hoje.
+externa. O adapter SQLite, os triggers e os contratos HTTP implementam essa lista.
 
 ## 🎯 Entrevista
 

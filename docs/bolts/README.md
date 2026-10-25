@@ -12,7 +12,7 @@ possa ser usada no desenvolvimento, no vídeo e em entrevistas técnicas.
 | S2 | Geração reproduzível e controles contra bias operacional | Concluído | [S2](s2-scenarios-and-controls.md) |
 | S3 | Otimizador global e avaliação controlada | Em andamento; candidato 1 rejeitado | [S3](s3-optimizer-and-evaluation.md) |
 | S4 | Fronteira HTTP com FastAPI/Pydantic | Concluído | [S4](s4-api-boundary.md) |
-| S5 | Persistência e revisão humana idempotente | Planejado | [S5](s5-persistence-and-review.md) |
+| S5 | Persistência e revisão humana idempotente | Concluído | [S5](s5-persistence-and-review.md) |
 | S6 | Interface visual para comparar planos | Planejado | [S6](s6-review-ui.md) |
 | S7 | Avaliação congelada e análise final | Planejado; fundação parcial pronta | [S7](s7-frozen-evaluation.md) |
 | S8 | Hardening, vídeo e publicação baseada em evidências | Planejado | [S8](s8-hardening-and-publication.md) |

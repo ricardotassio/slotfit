@@ -22,6 +22,16 @@ FastAPI GET route
   -> automatic_action: none
 ```
 
+Current simulated-review flow:
+
+```text
+versioned POST review command
+  -> Pydantic validation
+  -> SQLite transaction + unique idempotency key
+  -> immutable review event
+  -> external_action: none
+```
+
 Current optimizer boundary:
 
 ```text
@@ -43,7 +53,7 @@ Vue calendar
   -> FIFO | best-fit | CP-SAT
   -> explanation builder
   -> human review
-  -> PostgreSQL audit event
+  -> SQLite audit event
 ```
 
 ## Boundaries
@@ -53,8 +63,9 @@ Vue calendar
 - Eligibility returns reason codes; it does not silently filter.
 - Greedy strategies evaluate every request/interval pair and assign a request at
   most once.
-- Persistence and HTTP will be adapters around the domain.
-- HTTP is now a read-only adapter; persistence remains planned.
+- Persistence and HTTP are adapters around the domain.
+- Planning/evidence routes remain read-only; the only POST appends a simulated
+  human-review event and cannot mutate an external schedule.
 
 ## Failure stories
 

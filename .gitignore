@@ -15,3 +15,5 @@ build/
 node_modules/
 artifacts/evaluation/*
 !artifacts/evaluation/.gitkeep
+artifacts/reviews/*
+!artifacts/reviews/.gitkeep

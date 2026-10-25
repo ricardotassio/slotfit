@@ -20,7 +20,7 @@ Specifications are the implementation contract between product intent, code and 
 | [`SF-002`](002-scenarios-and-fairness-controls.md) | Done | Add real seeded variation, audit-only slices and invariance controls |
 | [`SF-003`](003-optimizer-and-evaluation.md) | Done — terminal no-go | Compared four optimizer candidates; none passed the fixed development guardrails |
 | [`SF-004`](004-api-boundary.md) | Done | Expose deterministic demos and the terminal research decision through a read-only API |
-| [`SF-005`](005-persistence-and-review.md) | Ready | Record idempotent, append-only simulated human review events locally |
+| [`SF-005`](005-persistence-and-review.md) | Done | Record idempotent, append-only simulated human review events locally |
 
 ## Working rule
 

@@ -89,22 +89,18 @@ class ApiContractTests(unittest.TestCase):
         )
         self.assertEqual(payload["guardrail"]["limit_percentage_points"], 10.0)
 
-    def test_openapi_exposes_only_declared_read_only_operations(self) -> None:
+    def test_openapi_exposes_only_declared_operations(self) -> None:
         schema = self.client.get("/openapi.json").json()
 
         self.assertEqual(
-            set(schema["paths"]),
+            {path: set(item) for path, item in schema["paths"].items()},
             {
-                "/health",
-                "/api/v1/demos/{demo_id}",
-                "/api/v1/research/development-decision",
+                "/health": {"get"},
+                "/api/v1/demos/{demo_id}": {"get"},
+                "/api/v1/research/development-decision": {"get"},
+                "/api/v1/reviews": {"post"},
+                "/api/v1/reviews/{event_id}": {"get"},
             },
-        )
-        self.assertTrue(
-            all(
-                set(path_item).issubset({"get", "parameters"})
-                for path_item in schema["paths"].values()
-            )
         )
 
     def test_domain_and_strategies_do_not_import_transport_frameworks(self) -> None:

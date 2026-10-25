@@ -6,8 +6,9 @@ The project compares simple baselines with constraint optimization over entirely
 
 ## Current status
 
-**AI-DLC Construction Bolt S3 is in progress; CP-SAT candidates V1–V4 were
-correctly rejected by development evidence before calibration.**
+**AI-DLC Construction Bolts S1–S5 are implemented; CP-SAT candidates V1–V4 were
+correctly rejected by development evidence before calibration, and the API exposes
+that no-go without presenting it as a recommendation.**
 
 The repository currently contains:
 
@@ -31,11 +32,14 @@ The repository currently contains:
 - a local oracle frontier that quantifies the observed efficiency/exposure trade-off
   without presenting the oracle as a deployable policy;
 - a bounded-recovery V4 that improves but still fails the unchanged guardrail;
+- a versioned FastAPI/Pydantic boundary for deterministic demos and research evidence;
+- an idempotent append-only SQLite review log with no external action;
 - executable unit tests;
 - architecture and decision records.
 
-OR-Tools is pinned for the current optimizer Bolt. FastAPI, PostgreSQL and the Vue
-interface remain deferred until the controlled evaluation is complete.
+OR-Tools, FastAPI, Pydantic and HTTPX2 are pinned. PostgreSQL was deliberately
+deferred in favor of SQLite for the single-user local POC; the Vue interface is the
+next Bolt.
 
 ## First demonstrable scenario
 
@@ -53,6 +57,9 @@ Requires `uv` and an installed Python 3.12 interpreter.
 
 ```bash
 make test
+make api-test
+make review-test
+make api-smoke
 make demo
 make multi-slot-demo
 make generated-demo
@@ -74,12 +81,12 @@ minutes and requests served; it is not a deployable slice-aware strategy.
 `make exposure-frontier` measures predeclared local efficiency floors on the fixed
 V3 path and carries the same diagnostic-only boundary.
 
-## Planned stack
+## Stack
 
 - Python 3.12
 - FastAPI and Pydantic v2 at the API boundary
 - OR-Tools CP-SAT for constraint optimization
-- PostgreSQL for runs and append-only review events
+- SQLite for local append-only review events; PostgreSQL deferred until justified
 - Vue 3, TypeScript and FullCalendar for the visual workflow
 - pytest, Hypothesis and Playwright as the project grows
 - Docker Compose for the reproducible local environment
