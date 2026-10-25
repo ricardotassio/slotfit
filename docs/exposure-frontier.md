@@ -41,6 +41,13 @@ change subsequent cohorts and may move the worst slice again.
 Calibration remains closed. The 90% value is a development-derived candidate
 configuration and must be frozen before calibration if V4 passes development.
 
+## V4 follow-up
+
+V4 did not pass development. Its real longitudinal path reached 95.71% mean
+utilization and improved the binding degradation to 10.80 p.p., still above the
+10 p.p. limit. The difference from the oracle's 8.24 p.p. confirms the documented
+fixed-path limitation. No configuration was frozen.
+
 ## Reproduction
 
 ```bash

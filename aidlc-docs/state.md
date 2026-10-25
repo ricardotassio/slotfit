@@ -5,14 +5,14 @@
 - Phase: Construction
 - Active Bolt: S3 — multi-slot optimizer and development evaluation
 - Active spec: `SF-003` — In progress
-- Last completed gate: local efficiency/exposure frontier completed
+- Last completed gate: bounded-recovery V4 tested and rejected
 - External integrations: none
 - Real data: prohibited
 
 ## Current objective
 
-Specify V4 with a 90% per-round recovered-minute floor and label-free residual
-objectives. Do not change the guardrail or use audit-only slices.
+Perform an SF-003 methodology/no-go review before adding any candidate or changing
+the experiment. Do not change the guardrail from observed development pressure.
 
 ## Exit criteria for S1
 
@@ -37,8 +37,9 @@ objectives. Do not change the guardrail or use audit-only slices.
 
 ## Next gate
 
-Test V4 end-to-end on the unchanged 40-seed development set. Calibration remains
-closed and the final frozen set remains nonexistent.
+Decide whether to close SF-003 as a valid negative experiment or revise the problem
+contract in a new spec. Calibration remains closed and the final frozen set remains
+nonexistent.
 
 The S1 machine-verifiable criteria passed on 2026-10-25. Ricardo explicitly
 authorized progression. His teach-back self-assessment remains a non-blocking

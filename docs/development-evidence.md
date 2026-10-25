@@ -111,6 +111,21 @@ residual alternatives and V3 used only part of that capacity, the next analysis
 will construct an explicit development-only efficiency/exposure frontier rather
 than adding another heuristic tie-break.
 
+## Candidate V4 — tested and rejected
+
+V4 applied the frontier-derived 90% per-round recovery floor before the label-free
+debt, scarcity and wait-age phases. End-to-end, it reached 95.71% mean utilization
+and kept 2.700 mean requests served, zero K=3 starvation and zero safety or
+counterfactual violations.
+
+The worst supported degradation improved to 10.80 p.p. but still failed the fixed
+10 p.p. limit. This also demonstrates why the local oracle was correctly labelled a
+diagnostic: changed selections alter later cohorts, so its 8.24 p.p. estimate did
+not transfer directly.
+
+After four candidates, the next action is a methodology/no-go review rather than
+another objective. Calibration and final frozen generation remain closed.
+
 ## Reproduction
 
 ```bash

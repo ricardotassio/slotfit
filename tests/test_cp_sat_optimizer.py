@@ -7,6 +7,7 @@ from slotfit.optimizer import (
     SolverConfig,
     SolverStatus,
     optimize_plan,
+    optimize_plan_with_bounded_recovery,
     optimize_plan_with_exposure_debt,
     optimize_plan_with_placement_scarcity,
 )
@@ -235,6 +236,47 @@ class CpSatOptimizerTests(unittest.TestCase):
                 ("wait-age-score", 3),
             ],
         )
+
+    def test_bounded_recovery_allows_debt_choice_only_above_floor(self) -> None:
+        scenario = multi_slot_counterexample()
+        one_interval = replace(
+            scenario,
+            scenario_id="bounded-recovery-choice",
+            open_intervals=(scenario.open_intervals[0],),
+            wait_requests=(
+                scenario.wait_requests[0],
+                replace(scenario.wait_requests[1], duration_minutes=54),
+            ),
+        )
+
+        result = optimize_plan_with_bounded_recovery(
+            one_interval,
+            exposure_debt_by_request_id={"WR-CONSTRAINED": 2},
+            minimum_recovered_ratio=0.90,
+        )
+
+        self.assertEqual(result.plan.recovered_minutes, 54)
+        self.assertEqual(result.plan.assignments[0].request_id, "WR-CONSTRAINED")
+        self.assertEqual(
+            [(phase.name, phase.objective_value) for phase in result.phases],
+            [
+                ("recovered-minutes-ceiling", 60),
+                ("requests-served", 1),
+                ("exposure-debt-score", 2),
+                ("placement-scarcity-score", 1),
+                ("wait-age-score", 1),
+            ],
+        )
+
+    def test_bounded_recovery_rejects_invalid_floor(self) -> None:
+        for invalid in (0.0, -0.1, 1.01):
+            with self.subTest(invalid=invalid):
+                with self.assertRaisesRegex(ValueError, "within"):
+                    optimize_plan_with_bounded_recovery(
+                        multi_slot_counterexample(),
+                        exposure_debt_by_request_id={},
+                        minimum_recovered_ratio=invalid,
+                    )
 
 
 if __name__ == "__main__":

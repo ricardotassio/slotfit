@@ -6,7 +6,7 @@ The project compares simple baselines with constraint optimization over entirely
 
 ## Current status
 
-**AI-DLC Construction Bolt S3 is in progress; CP-SAT candidates V1–V3 were
+**AI-DLC Construction Bolt S3 is in progress; CP-SAT candidates V1–V4 were
 correctly rejected by development evidence before calibration.**
 
 The repository currently contains:
@@ -30,6 +30,7 @@ The repository currently contains:
   the fixed exposure guardrail;
 - a local oracle frontier that quantifies the observed efficiency/exposure trade-off
   without presenting the oracle as a deployable policy;
+- a bounded-recovery V4 that improves but still fails the unchanged guardrail;
 - executable unit tests;
 - architecture and decision records.
 

@@ -1,6 +1,6 @@
 # Card S3 — Otimizador e avaliação controlada
 
-**Estado:** em andamento; candidatos V1–V3 rejeitados no desenvolvimento.
+**Estado:** em andamento; candidatos V1–V4 rejeitados no desenvolvimento.
 **Spec:** [`SF-003`](../../specs/003-optimizer-and-evaluation.md).  
 **ADR:** [`ADR-0002`](../adr/0002-lexicographic-cp-sat.md).
 
@@ -45,6 +45,10 @@ passo é mostrar a fronteira eficiência/exposição, não acumular heurísticas
 A fronteira local mostrou que um piso de 90% por rodada realiza 99,43% dos minutos
 ótimos no agregado e leva o slice curto a 8,24 p.p. O resultado fundamenta um V4
 label-free, mas não valida o oracle pós-hoc nem abre calibração.
+
+V4 confirmou essa cautela: no caminho longitudinal real, atingiu 95,71% de
+utilização média e 10,80 p.p. de degradação. Melhorou, mas falhou. Após quatro
+candidatos, o próximo passo é revisão metodológica/no-go, não V5 automático.
 
 ## ✅ Evidência e Definition of Done
 

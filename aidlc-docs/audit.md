@@ -150,3 +150,12 @@
   remains V3's path.
 - Decision: use the result only to specify a label-free 90%-floor V4 candidate on
   development; do not enter calibration.
+
+## 2026-10-25 — Bounded-recovery V4 decision
+
+- Observation: V4 improves worst supported degradation from 12.35 to 10.80 p.p.
+  but fails the fixed 10 p.p. guardrail.
+- Observation: realized mean utilization is 95.71%, showing the local fixed-path
+  oracle cannot predict the full longitudinal path directly.
+- Decision: reject V4, keep calibration closed and require a methodology/no-go
+  review before any further objective or threshold change.

@@ -361,6 +361,45 @@ This authorizes a label-free V4 hypothesis with a 90% per-round recovered-minute
 floor; it does not authorize calibration or a slice-aware strategy. Full method and
 limitations: [`../docs/exposure-frontier.md`](../docs/exposure-frontier.md).
 
+## Candidate V4 — bounded recovery
+
+V4 is label-free. It first solves for the maximum recoverable minutes in the active
+round, then replaces equality to that optimum with the development-derived hard
+floor `ceil(maximum * 0.90)`. Within that bounded region it solves, in order:
+
+1. maximize requests served;
+2. maximize prior exposure debt served;
+3. maximize placement-scarcity score;
+4. maximize wait-age score.
+
+The 90% value comes from the predeclared local frontier and is not adjusted after
+the V4 development report. The floor applies per round, while aggregate realized
+recovery is reported separately. V4 accepts no audit slice or label.
+
+### V4 acceptance criteria
+
+- [x] A focused fixture demonstrates that debt may choose a lower-minute plan only
+  when it satisfies the declared 90% floor.
+- [x] Invalid floor values fail closed.
+- [x] V1–V3 remain reproducible and separately identified.
+- [x] V4 preserves hard constraints, deterministic replay and counterfactual
+  invariance.
+- [x] The unchanged 40-seed development report explicitly accepts or rejects V4.
+- [x] Calibration remains closed unless every development guardrail passes.
+
+### V4 development decision
+
+V4 is rejected before calibration. Mean recovered utilization fell from V3's
+96.81% to 95.71% while mean requests served remained 2.700, K=3 starvation remained
+zero and all safety/invariance checks passed. The short-duration degradation
+improved from 12.35 to 10.80 percentage points but remained above the unchanged
+10-point limit.
+
+The end-to-end cohort path therefore did not reproduce the local oracle's 8.24
+point result. No V5 will be added without a methodology review: four candidates
+have now tested static optimality, exposure debt, placement scarcity and bounded
+recovery. Calibration and final frozen generation remain closed.
+
 ## Red, green, refactor
 
 - Red: add the multi-slot counterexample and duplicate-assignment tests before

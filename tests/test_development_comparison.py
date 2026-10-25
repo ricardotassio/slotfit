@@ -19,7 +19,7 @@ class DevelopmentComparisonTests(unittest.TestCase):
             {
                 "fifo-eligible@0.2.0",
                 "local-best-fit@0.2.0",
-                "cp-sat-placement-scarcity@0.3.0",
+                "cp-sat-bounded-recovery@0.4.0",
             },
         )
 
@@ -34,7 +34,7 @@ class DevelopmentComparisonTests(unittest.TestCase):
 
     def test_optimizer_is_optimal_and_not_less_efficient_than_baselines(self) -> None:
         summaries = {item.strategy: item for item in self.report.strategies}
-        optimized = summaries["cp-sat-placement-scarcity@0.3.0"]
+        optimized = summaries["cp-sat-bounded-recovery@0.4.0"]
 
         self.assertEqual(optimized.optimized_runs, 40)
         self.assertGreaterEqual(
@@ -50,7 +50,7 @@ class DevelopmentComparisonTests(unittest.TestCase):
         candidate_records = [
             item
             for item in self.report.scenarios
-            if item.strategy == "cp-sat-placement-scarcity@0.3.0"
+            if item.strategy == "cp-sat-bounded-recovery@0.4.0"
         ]
 
         self.assertEqual(len(candidate_records), 40)
@@ -87,7 +87,7 @@ class DevelopmentComparisonTests(unittest.TestCase):
         )
         self.assertAlmostEqual(
             checks["worst-supported-slice-gap-degradation"].observed_value,
-            0.12345266046859138,
+            0.10801758425790253,
         )
         self.assertIn(
             "duration_band=short",

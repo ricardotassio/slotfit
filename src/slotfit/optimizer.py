@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 from collections.abc import Mapping
 from dataclasses import dataclass
 from enum import StrEnum
@@ -84,6 +85,7 @@ def optimize_plan(
         config=config,
         exposure_debt_by_request_id=None,
         use_placement_scarcity=False,
+        minimum_recovered_ratio=None,
         strategy="cp-sat-lexicographic@0.1.0",
     )
 
@@ -103,6 +105,7 @@ def optimize_plan_with_exposure_debt(
         config=config,
         exposure_debt_by_request_id=exposure_debt_by_request_id,
         use_placement_scarcity=False,
+        minimum_recovered_ratio=None,
         strategy="cp-sat-exposure-debt@0.2.0",
     )
 
@@ -121,7 +124,30 @@ def optimize_plan_with_placement_scarcity(
         config=config,
         exposure_debt_by_request_id=exposure_debt_by_request_id,
         use_placement_scarcity=True,
+        minimum_recovered_ratio=None,
         strategy="cp-sat-placement-scarcity@0.3.0",
+    )
+
+
+def optimize_plan_with_bounded_recovery(
+    scenario: Scenario,
+    *,
+    exposure_debt_by_request_id: Mapping[str, int],
+    minimum_recovered_ratio: float = 0.90,
+    config: SolverConfig = DEFAULT_SOLVER_CONFIG,
+) -> OptimizationResult:
+    """Solve residual objectives inside a declared recovered-minute floor."""
+
+    if minimum_recovered_ratio <= 0 or minimum_recovered_ratio > 1:
+        raise ValueError("minimum_recovered_ratio must be within (0, 1]")
+    _validate_exposure_debt(scenario, exposure_debt_by_request_id)
+    return _optimize_plan(
+        scenario,
+        config=config,
+        exposure_debt_by_request_id=exposure_debt_by_request_id,
+        use_placement_scarcity=True,
+        minimum_recovered_ratio=minimum_recovered_ratio,
+        strategy="cp-sat-bounded-recovery@0.4.0",
     )
 
 
@@ -146,6 +172,7 @@ def _optimize_plan(
     config: SolverConfig,
     exposure_debt_by_request_id: Mapping[str, int] | None,
     use_placement_scarcity: bool,
+    minimum_recovered_ratio: float | None,
     strategy: str,
 ) -> OptimizationResult:
 
@@ -212,7 +239,12 @@ def _optimize_plan(
         for (request_id, _interval_id), variable in variables.items()
     )
     phase_contract = [
-        ("recovered-minutes", recovered_minutes),
+        (
+            "recovered-minutes-ceiling"
+            if minimum_recovered_ratio is not None
+            else "recovered-minutes",
+            recovered_minutes,
+        ),
         ("requests-served", requests_served),
     ]
     if exposure_debt_by_request_id is not None:
@@ -245,7 +277,7 @@ def _optimize_plan(
     selected_keys: set[tuple[str, str]] = set()
     final_status = SolverStatus.UNKNOWN
 
-    for phase_name, objective in phase_contract:
+    for phase_index, (phase_name, objective) in enumerate(phase_contract):
         model.maximize(objective)
         solver = _configured_solver(config)
         raw_status = solver.solve(model)
@@ -269,7 +301,12 @@ def _optimize_plan(
         if final_status is not SolverStatus.OPTIMAL:
             break
         assert objective_value is not None
-        model.add(objective == objective_value)
+        if phase_index == 0 and minimum_recovered_ratio is not None:
+            model.add(
+                objective >= math.ceil(objective_value * minimum_recovered_ratio)
+            )
+        else:
+            model.add(objective == objective_value)
 
     assignments = tuple(
         Assignment(

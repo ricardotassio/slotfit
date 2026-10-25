@@ -23,7 +23,7 @@ from slotfit.multi_generation import (
 )
 from slotfit.optimizer import (
     OptimizationResult,
-    optimize_plan_with_placement_scarcity,
+    optimize_plan_with_bounded_recovery,
 )
 from slotfit.strategies import best_fit_plan, fifo_plan
 
@@ -311,7 +311,7 @@ def _guardrail_checks(
     strategies: tuple[StrategyComparison, ...],
 ) -> tuple[GuardrailCheck, ...]:
     summaries = {item.strategy: item for item in strategies}
-    candidate = summaries["cp-sat-placement-scarcity@0.3.0"]
+    candidate = summaries["cp-sat-bounded-recovery@0.4.0"]
     baselines = (
         summaries["fifo-eligible@0.2.0"],
         summaries["local-best-fit@0.2.0"],
@@ -401,7 +401,7 @@ def compare_engineering_split(
     scenario_results: list[ScenarioComparison] = []
 
     def optimizer_planner(scenario: Scenario) -> CandidatePlan:
-        return optimize_plan_with_placement_scarcity(
+        return optimize_plan_with_bounded_recovery(
             scenario,
             exposure_debt_by_request_id={},
         ).plan
@@ -410,7 +410,7 @@ def compare_engineering_split(
         scenario: Scenario,
         exposure_debt_by_request_id: Mapping[str, int],
     ) -> CandidatePlan:
-        return optimize_plan_with_placement_scarcity(
+        return optimize_plan_with_bounded_recovery(
             scenario,
             exposure_debt_by_request_id=exposure_debt_by_request_id,
         ).plan
@@ -419,7 +419,7 @@ def compare_engineering_split(
         ("fifo-eligible@0.2.0", fifo_plan, None),
         ("local-best-fit@0.2.0", best_fit_plan, None),
         (
-            "cp-sat-placement-scarcity@0.3.0",
+            "cp-sat-bounded-recovery@0.4.0",
             optimizer_planner,
             debt_aware_optimizer_planner,
         ),
@@ -430,7 +430,7 @@ def compare_engineering_split(
         for strategy_name, planner, debt_aware_planner in planners:
             optimization: OptimizationResult | None = None
             if debt_aware_planner is not None:
-                optimization = optimize_plan_with_placement_scarcity(
+                optimization = optimize_plan_with_bounded_recovery(
                     generated.scenario,
                     exposure_debt_by_request_id={},
                 )

@@ -153,3 +153,17 @@ Ricardo should be able to answer:
   per-round recovered-minute floor. Calibration remains closed.
 - Final verification: 61 tests passed; the frontier JSON parsed successfully;
   compile and whitespace checks passed.
+
+## 2026-10-25 — SF-003 bounded-recovery V4
+
+- Added a separate `cp-sat-bounded-recovery@0.4.0` candidate with a fixed 90%
+  per-round recovery floor derived from the predeclared frontier.
+- A focused test proves debt can select a lower-minute plan only inside the floor;
+  invalid floors fail closed.
+- V4 reached 95.71% mean utilization, preserved 2.700 mean requests served and
+  retained zero K=3 starvation, hard violations and counterfactual flips.
+- Worst supported degradation improved to 10.80 p.p. but remained above 10 p.p.;
+  V4 is rejected and calibration remains closed.
+- Decision: conduct a methodology/no-go review before any V5.
+- Final verification: 63 tests passed; the V4 development JSON parsed successfully;
+  compile and whitespace checks passed.

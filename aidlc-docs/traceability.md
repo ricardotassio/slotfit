@@ -7,7 +7,7 @@ Implementation contracts: SF-FR-001 through SF-FR-003 map to [`../specs/001-doma
 | SF-FR-001 | `slotfit.scenarios.demo`, `slotfit.generation` | fixture and generated replay tests | Implemented |
 | SF-FR-002 | `slotfit.eligibility` | exclusion and consent tests | Implemented in first slice |
 | SF-FR-003 | `slotfit.strategies` | FIFO and best-fit tests | Implemented |
-| SF-FR-004 | `slotfit.optimizer` | global-conflict, phase and limit tests | Implemented for first multi-slot fixture |
+| SF-FR-004 | `slotfit.optimizer` | V1–V4 global-conflict, residual-policy, floor, phase and limit tests | Implemented through bounded-recovery development candidate |
 | SF-FR-005 | future web app | Playwright demo flow | Planned |
 | SF-FR-006 | future review service | integration/idempotency tests | Planned |
 | SF-FR-007 | `slotfit.evaluation`, `slotfit.comparison` | event records, aggregate comparison and violation tests | Implemented for development split |
