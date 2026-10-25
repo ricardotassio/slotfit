@@ -57,6 +57,7 @@ This is a reproducible engineering POC using synthetic data. Results will descri
 
 ## Documentation
 
+- [`specs/README.md`](specs/README.md)
 - [`aidlc-docs/requirements.md`](aidlc-docs/requirements.md)
 - [`aidlc-docs/execution-plan.md`](aidlc-docs/execution-plan.md)
 - [`docs/problem.md`](docs/problem.md)

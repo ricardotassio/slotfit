@@ -27,3 +27,12 @@
 - Exact numerical fairness guardrails after inspecting only the development distribution.
 - OR-Tools objective weights before the frozen test set.
 - Public repository license before publication.
+
+## 2026-10-25 — Cross-agent specification workflow
+
+- Decision: `AGENTS.md` is the canonical repository instruction file for Codex and Claude Code.
+- Decision: `CLAUDE.md` imports `AGENTS.md` rather than duplicating project rules.
+- Decision: specs under `specs/` own bounded implementation contracts; AI-DLC files own lifecycle state and traceability.
+- Decision: read-only spec, risk and test reviewer roles are available in both agent environments.
+- Decision: no model is pinned in repository configuration; the active environment chooses an available model.
+- Decision: SF-001 remains in verification until the human teach-back closes; SF-002 is ready but inactive.

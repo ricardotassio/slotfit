@@ -1,5 +1,7 @@
 .DS_Store
 .env
+CLAUDE.local.md
+.claude/settings.local.json
 .venv/
 __pycache__/
 *.py[cod]
@@ -13,4 +15,3 @@ build/
 node_modules/
 artifacts/evaluation/*
 !artifacts/evaluation/.gitkeep
-

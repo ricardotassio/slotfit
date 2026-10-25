@@ -4,6 +4,7 @@
 - Repository type: greenfield
 - Phase: Construction
 - Active Bolt: S1 — deterministic domain and first synthetic scenario
+- Active spec: `SF-001` — Verification
 - Last completed gate: problem contract and baseline definition
 - External integrations: none
 - Real data: prohibited
@@ -27,3 +28,4 @@ Prove that the same synthetic scenario can be represented, replayed and evaluate
 
 Review S1 and perform the teach-back before Bolt S2 expands eligibility rules.
 
+The machine-verifiable S1 criteria passed on 2026-10-25. The remaining gate is the human teach-back and review-log closure; `SF-002` is specified but not active.

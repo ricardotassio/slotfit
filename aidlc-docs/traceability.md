@@ -1,5 +1,7 @@
 # Traceability
 
+Implementation contracts: SF-FR-001 through SF-FR-003 map to [`../specs/001-domain-and-baselines.md`](../specs/001-domain-and-baselines.md). Scenario provenance, invariance and slice requirements map to [`../specs/002-scenarios-and-fairness-controls.md`](../specs/002-scenarios-and-fairness-controls.md). Optimization and frozen evaluation map to [`../specs/003-optimizer-and-evaluation.md`](../specs/003-optimizer-and-evaluation.md).
+
 | Requirement | Component | Test/evidence | Status |
 |---|---|---|---|
 | SF-FR-001 | `slotfit.scenarios.demo` | `test_demo_scenario_is_deterministic` | Implemented |

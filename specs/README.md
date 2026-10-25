@@ -1,0 +1,25 @@
+# SlotFit specifications
+
+Specifications are the implementation contract between product intent, code and evidence. They are intentionally smaller than the project roadmap.
+
+## Status vocabulary
+
+- `Draft`: incomplete or still contains unresolved design choices.
+- `Ready`: bounded, traceable and eligible for implementation.
+- `In progress`: implementation has started.
+- `Verification`: code exists; required evidence or review remains.
+- `Done`: every acceptance criterion and gate has observed evidence.
+
+## Order
+
+| Spec | Status | Purpose |
+|---|---|---|
+| [`SF-001`](001-domain-and-baselines.md) | Verification | Validate the deterministic domain and first baselines already implemented |
+| [`SF-002`](002-scenarios-and-fairness-controls.md) | Ready after SF-001 | Add real seeded variation, audit-only slices and invariance controls |
+| [`SF-003`](003-optimizer-and-evaluation.md) | Draft | Compare an optimizer with baselines under frozen efficiency and fairness gates |
+
+## Working rule
+
+Only one spec may be active. Future specs may document dependencies and open decisions, but must not authorize early implementation.
+
+The roadmap remains in [`../aidlc-docs/execution-plan.md`](../aidlc-docs/execution-plan.md). Safety and fairness definitions remain in [`../docs/fairness-and-bias-plan.md`](../docs/fairness-and-bias-plan.md).
