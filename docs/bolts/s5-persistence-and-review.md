@@ -1,6 +1,6 @@
 # Card S5 — Persistência e revisão humana
 
-**Estado:** planejado; não implementado.  
+**Estado:** especificado; implementação não iniciada.
 **Dependência:** contrato HTTP estável no S4.  
 **Requisitos principais:** SF-FR-006, SF-FR-007 e SF-NFR-004.
 
@@ -12,7 +12,7 @@ humano registrou, mas não executa a decisão fora do laboratório.
 
 ## ⚙️ Mecânica planejada
 
-PostgreSQL armazenará runs versionadas e eventos append-only de revisão. Uma chave
+SQLite armazenará eventos append-only de revisão no POC local. Uma chave
 de idempotência impedirá que o mesmo clique gere decisões duplicadas. Cada evento
 referenciará checksum de entrada, versão da estratégia e plano apresentado. Não
 haverá PHI/PII, mensagem, booking ou integração com PMS/EHR.
@@ -22,15 +22,16 @@ registro, corrida entre revisões e reconstrução impossível do resultado.
 
 ## ⚖️ Avaliação crítica
 
-**Veredito: PostgreSQL é suficiente, mas deve entrar somente quando a revisão
-existir.** SQLite seria mais simples para demo individual, porém PostgreSQL permite
-mostrar transação, unicidade e eventos idempotentes com um caminho realista. Kafka,
-event sourcing completo, Redis e banco vetorial seriam excessivos na escala não
-confirmada da POC.
+**Veredito: SQLite é suficiente na escala atual.** A revisão agora existe, mas
+continua local, individual e sem processamento assíncrono. Transação, unicidade e
+proteção append-only podem ser demonstradas sem operar um serviço. PostgreSQL fica
+deferido até existir implantação compartilhada ou contenção real. Kafka, event
+sourcing completo, Redis e banco vetorial seriam excessivos.
 
 ## ✅ Definition of Ready / Done
 
-Ready: schema, retenção, estados permitidos e semântica da idempotência revisados.
+Ready: schema, retenção, estados permitidos e semântica da idempotência revisados em
+[`../../specs/005-persistence-and-review.md`](../../specs/005-persistence-and-review.md).
 Done: migrations reproduzíveis; constraint única; testes concorrentes básicos;
 replay por checksum; append-only protegido; erro de persistência não provoca ação
 externa. Nada disso está implementado hoje.

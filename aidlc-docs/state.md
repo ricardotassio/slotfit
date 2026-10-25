@@ -3,16 +3,16 @@
 - Project: SlotFit
 - Repository type: greenfield
 - Phase: Construction
-- Active Bolt: none — S4 closed; S5 specification is next
-- Active spec: none
+- Active Bolt: S5 — persistence and simulated review
+- Active spec: `SF-005` — Ready
 - Last completed gate: SF-004 read-only API verified
 - External integrations: none
 - Real data: prohibited
 
 ## Current objective
 
-Specify S5 persistence and simulated human review without adding any real schedule
-mutation. Preserve the rejected research result and read-only planning routes.
+Implement S5 append-only local persistence and simulated human review without
+adding any real schedule mutation.
 
 ## Exit criteria for S1
 
@@ -37,8 +37,8 @@ mutation. Preserve the rejected research result and read-only planning routes.
 
 ## Next gate
 
-Open SF-005 only after the persistence schema, idempotency behavior and failure
-semantics are explicit. Calibration remains closed and the final frozen set
+Close SF-005 only after database-level immutability, idempotent replay, conflict
+and API error contracts pass. Calibration remains closed and the final frozen set
 remains nonexistent.
 
 The S1 machine-verifiable criteria passed on 2026-10-25. Ricardo explicitly
