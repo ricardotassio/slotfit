@@ -110,3 +110,17 @@ Ricardo should be able to answer:
   the unchanged 10 p.p. guardrail. Calibration remains closed.
 - Final verification: 52 tests passed; compile, JSON parsing and whitespace checks
   passed.
+
+## 2026-10-25 — SF-003 alternative-plan diagnostic
+
+- Added a bounded enumerator that consumes `Scenario` only and retains plans tied
+  on recovered minutes and requests served.
+- Joined operational slices only after enumeration for counterfactual diagnosis.
+- V2 was primary-optimal in all 200 development rounds; 34 rounds had multiple
+  primary-optimal plans.
+- `notice_band=moderate` had efficiency-equivalent local improvements in 8 rounds,
+  with 9 additional exposures of capacity.
+- Decision: test decision-derived placement scarcity before constructing a frontier
+  that sacrifices efficiency.
+- Final verification: 57 tests passed; the diagnostic JSON parsed successfully;
+  compile and whitespace checks passed.

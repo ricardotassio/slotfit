@@ -239,6 +239,41 @@ exposure outcome. If no such plan exists, the project must expose an explicit
 efficiency-versus-exposure frontier rather than pretend a residual tie-break can
 solve the conflict.
 
+## Alternative-plan diagnostic contract
+
+The diagnostic enumerates feasible assignments from `Scenario` decision data only
+and retains every plan tied on the two primary objectives: recovered minutes and
+requests served. It must not accept an audit manifest or slice label.
+
+After enumeration, a separate analyzer may join audit-only slices to answer a
+counterfactual question: did an efficiency-equivalent plan exist that would have
+exposed more requests from a currently underexposed operational slice? This is an
+oracle for experiment diagnosis, not an allowed production strategy.
+
+The first diagnostic follows the actual V2 cohort path for five rounds. For each
+round it records the number of primary-optimal alternatives and, post hoc, which
+slices had a strictly higher exposure count in at least one alternative. It does
+not claim that independently attractive round alternatives form a globally optimal
+five-round policy.
+
+### Diagnostic acceptance criteria
+
+- [x] Enumeration consumes `Scenario` only and preserves all hard constraints.
+- [x] Every returned plan ties the V2 plan on recovered minutes and requests served.
+- [x] Audit metadata is joined only after enumeration.
+- [x] The 40-seed, five-round diagnostic is deterministic and records support.
+- [x] The result determines whether V3 needs a better label-free tie-break or an
+  explicit efficiency/exposure frontier.
+
+### Diagnostic decision
+
+Across 200 development rounds, V2 was primary-optimal every time and 34 rounds had
+multiple primary-optimal plans. For the failing `notice_band=moderate` slice, 8
+rounds contained a local efficiency-equivalent alternative, with 9 additional
+exposures of capacity. The immediate next hypothesis is therefore a label-free
+placement-scarcity tie-break, not an efficiency sacrifice. See
+[`../docs/alternative-plan-diagnostic.md`](../docs/alternative-plan-diagnostic.md).
+
 ## Red, green, refactor
 
 - Red: add the multi-slot counterexample and duplicate-assignment tests before

@@ -24,6 +24,8 @@ The repository currently contains:
 - a 40-seed development comparison with per-slice guardrail decisions;
 - an exposure-debt V2 whose focused behavior works but changes zero development
   selections, preserving the negative result;
+- a bounded alternative-plan diagnostic showing where primary-optimal residual
+  choices still exist;
 - executable unit tests;
 - architecture and decision records.
 
@@ -51,6 +53,7 @@ make multi-slot-demo
 make generated-demo
 make longitudinal-demo
 make development-report
+make alternative-diagnostic
 ```
 
 `make demo` runs the fixed teaching fixture. `make multi-slot-demo` shows the
@@ -59,6 +62,9 @@ development seed `1101` and prints its provenance, plans and event evaluations.
 `make longitudinal-demo` replays three controlled compatible-opportunity rounds
 for both baselines. `make development-report` emits the full development-only JSON
 comparison. The final frozen evaluation set does not yet exist.
+
+`make alternative-diagnostic` reports post-hoc local capacity among plans tied on
+minutes and requests served; it is not a deployable slice-aware strategy.
 
 ## Planned stack
 
@@ -83,6 +89,7 @@ This is a reproducible engineering POC using synthetic data. Results will descri
 - [`docs/architecture.md`](docs/architecture.md)
 - [`docs/fairness-and-bias-plan.md`](docs/fairness-and-bias-plan.md)
 - [`docs/development-evidence.md`](docs/development-evidence.md)
+- [`docs/alternative-plan-diagnostic.md`](docs/alternative-plan-diagnostic.md)
 - [`docs/bolts/README.md`](docs/bolts/README.md)
 - [`docs/video-storyboard.md`](docs/video-storyboard.md)
 - [`docs/adr/0001-modular-monolith-and-baselines.md`](docs/adr/0001-modular-monolith-and-baselines.md)

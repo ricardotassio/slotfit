@@ -116,3 +116,16 @@
   improve the failed slice guardrail.
 - Decision: reject V2 and diagnose the efficiency/exposure feasible frontier before
   adding another objective or changing its priority.
+
+## 2026-10-25 — Primary-optimal alternative diagnosis
+
+- Decision: enumerate primary-optimal assignments from decision data before joining
+  audit slices, preserving the decision/audit boundary.
+- Observation: 34 of 200 rounds have residual primary-optimal choice; the failing
+  moderate-notice slice has 9 local additional exposures of capacity.
+- Limitation: local alternatives along the V2 cohort path are not a globally
+  optimized longitudinal policy.
+- Decision: test placement scarcity as a label-free V3 residual signal before
+  allowing any efficiency trade-off.
+- Verification: 57 tests passed and the standalone diagnostic JSON was generated
+  and parsed successfully.

@@ -34,6 +34,10 @@ O teste unitário funcionou, mas a política mudou zero decisões nos 40 seeds. 
 mostrou que um sinal correto pode ser ineficaz quando objetivos anteriores deixam
 nenhuma alternativa relevante.
 
+O diagnóstico seguinte refinou essa conclusão: 34 de 200 rodadas tinham alternativas
+primárias equivalentes, e 8 poderiam melhorar localmente o slice moderado sem perda
+de eficiência. Portanto, há alternativas; V2 simplesmente não as distingue.
+
 ## ✅ Evidência e Definition of Done
 
 - 40/40 execuções com três fases `OPTIMAL`;
