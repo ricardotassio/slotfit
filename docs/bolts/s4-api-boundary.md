@@ -1,7 +1,7 @@
 # Card S4 — Fronteira FastAPI/Pydantic
 
-**Estado:** planejado; não implementado.  
-**Dependência:** S3 aceito e configuração apta a progredir.  
+**Estado:** especificado; implementação não iniciada.
+**Dependência:** S3 encerrado, inclusive por no-go terminal.
 **Requisitos principais:** SF-FR-005, SF-NFR-004 e SF-NFR-005.
 
 ## 💡 Propósito e analogia
@@ -24,12 +24,14 @@ interna exposta ao cliente, operação não idempotente e contrato sem versão.
 
 **Veredito: suficiente quando houver UI.** FastAPI/Pydantic é compatível com a POC
 e reduz código de validação. GraphQL, gRPC, gateway e microserviço separado seriam
-excessivos para um único consumidor local. Uma CLI permanece mais barata até S6;
-por isso S4 não deve começar antes do gate de S3.
+excessivos para um único consumidor local. A API também torna o resultado negativo
+inspecionável pela futura UI; por isso ela pode avançar após o no-go de S3 sem
+transformar um candidato rejeitado em recomendação.
 
 ## ✅ Definition of Ready / Done
 
-Ready: schemas e endpoints especificados; erros e versionamento definidos; nenhum
+Ready: schemas e endpoints especificados em
+[`../../specs/004-api-boundary.md`](../../specs/004-api-boundary.md); erros e versionamento definidos; nenhum
 dado real permitido. Done: testes de contrato e integração sem rede externa,
 OpenAPI verificável, limites de payload, respostas determinísticas e nenhuma ação
 automática. Esta lista é contrato futuro, não evidência atual.

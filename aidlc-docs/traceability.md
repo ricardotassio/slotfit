@@ -1,6 +1,6 @@
 # Traceability
 
-Implementation contracts: SF-FR-001 through SF-FR-003 map to [`../specs/001-domain-and-baselines.md`](../specs/001-domain-and-baselines.md). Scenario provenance, invariance and slice requirements map to [`../specs/002-scenarios-and-fairness-controls.md`](../specs/002-scenarios-and-fairness-controls.md). Optimization and frozen evaluation map to [`../specs/003-optimizer-and-evaluation.md`](../specs/003-optimizer-and-evaluation.md).
+Implementation contracts: SF-FR-001 through SF-FR-003 map to [`../specs/001-domain-and-baselines.md`](../specs/001-domain-and-baselines.md). Scenario provenance, invariance and slice requirements map to [`../specs/002-scenarios-and-fairness-controls.md`](../specs/002-scenarios-and-fairness-controls.md). Optimization and its terminal development decision map to [`../specs/003-optimizer-and-evaluation.md`](../specs/003-optimizer-and-evaluation.md). The read-only HTTP boundary maps to [`../specs/004-api-boundary.md`](../specs/004-api-boundary.md).
 
 | Requirement | Component | Test/evidence | Status |
 |---|---|---|---|
@@ -8,7 +8,7 @@ Implementation contracts: SF-FR-001 through SF-FR-003 map to [`../specs/001-doma
 | SF-FR-002 | `slotfit.eligibility` | exclusion and consent tests | Implemented in first slice |
 | SF-FR-003 | `slotfit.strategies` | FIFO and best-fit tests | Implemented |
 | SF-FR-004 | `slotfit.optimizer` | V1–V4 global-conflict, residual-policy, floor, phase and limit tests | Implemented through bounded-recovery development candidate |
-| SF-FR-005 | future web app | Playwright demo flow | Planned |
+| SF-FR-005 | `slotfit.api` boundary, future web app | API contract tests; Playwright later | Specified in SF-004 |
 | SF-FR-006 | future review service | integration/idempotency tests | Planned |
 | SF-FR-007 | `slotfit.evaluation`, `slotfit.comparison` | event records, aggregate comparison and violation tests | Implemented for development split |
 | SF-FR-008 | `slotfit.longitudinal`, `slotfit.comparison`, `slotfit.alternative_diagnostic`, `slotfit.exposure_frontier` | compatible misses, K sensitivity, slice exposure, guardrail, alternative capacity and local frontier | Implemented for development; V1–V3 rejected |

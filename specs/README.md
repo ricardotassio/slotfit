@@ -19,6 +19,7 @@ Specifications are the implementation contract between product intent, code and 
 | [`SF-001`](001-domain-and-baselines.md) | Accepted with follow-up | Validate the deterministic domain and first baselines already implemented |
 | [`SF-002`](002-scenarios-and-fairness-controls.md) | Done | Add real seeded variation, audit-only slices and invariance controls |
 | [`SF-003`](003-optimizer-and-evaluation.md) | Done — terminal no-go | Compared four optimizer candidates; none passed the fixed development guardrails |
+| [`SF-004`](004-api-boundary.md) | Ready | Expose deterministic demos and the terminal research decision through a read-only API |
 
 ## Working rule
 
