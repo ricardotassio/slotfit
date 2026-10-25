@@ -53,12 +53,12 @@ Audit-only labels must not be accepted by an eligibility or strategy function.
 ## Acceptance criteria
 
 - [x] Generation configuration has an explicit schema and version.
-- [x] Development, calibration, frozen-test and challenge seed registries are distinct.
+- [x] Development, calibration, regression and challenge seed registries are distinct; the final frozen registry is intentionally not minted yet.
 - [x] Slice metadata is structurally unavailable to strategy scoring.
 - [x] Required invariants have executable tests, including a mutation sentinel that exposes lexical identifier leakage.
 - [x] FIFO and best-fit run on all registered scenarios without hard-constraint violations.
 - [x] Evaluation emits selection, exposure, compatible-opportunity waiting, starvation-threshold, recovered-utilization and worst-slice inputs separately.
-- [x] Thresholds remain `TBD` until development evidence exists; frozen-test results cannot set them.
+- [x] Thresholds remain `TBD` until development evidence exists; future frozen-test results cannot set them.
 
 ## Red, green, refactor
 
@@ -91,6 +91,9 @@ SF-002 is done only when replay, invariance and evaluation-record evidence are c
   requests and count compatible opportunities missed before exposure.
 - Mutation evidence: the opaque-ID counterfactual reverses lexical identifiers and
   proves that a deliberately broken identifier-based policy flips its decision.
+- Evaluation-set integrity: seeds exercised during engineering are labelled
+  `regression`, never `frozen-test`. The final frozen registry will be created only
+  after the SF-003 objective and guardrails are immutable.
 - Honest limitation: opportunity counts are inputs, not elapsed patient wait. No
   request is labelled `starved` until a development-only threshold is proposed,
   reviewed and frozen.

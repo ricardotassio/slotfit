@@ -45,7 +45,7 @@
   follow-up; do not label it `Done`.
 - Decision: use SHA-256-derived deterministic choices instead of a runtime random
   number generator so replay depends only on seed, version and field identity.
-- Decision: register disjoint development, calibration, frozen-test and challenge
+- Decision: register disjoint development, calibration, regression and challenge
   seed sets before optimizer work.
 - Decision: keep operational audit slices in the manifest and outside `Scenario`,
   which is the strategy input.
@@ -61,3 +61,7 @@
   not choose a starvation threshold inside SF-002.
 - Decision: use registered development seed `1101` for the demonstrable generated
   and longitudinal examples; do not use frozen-test outcomes for configuration.
+- Correction: the `3101`–`3104` seeds were exercised in routine engineering tests,
+  so they are regression seeds, not a valid final frozen set. The real frozen
+  manifest will be minted only after SF-003 configuration and guardrails are
+  immutable.

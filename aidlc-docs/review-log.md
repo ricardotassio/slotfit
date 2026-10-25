@@ -29,7 +29,7 @@ Ricardo should be able to answer:
   `slotfit.evaluation`.
 - The generator records schema, generator, distribution, split, seed, challenge
   property and decision checksum.
-- Development, calibration, frozen-test and challenge seeds are disjoint.
+- Development, calibration, regression and challenge seeds are disjoint.
 - Audit slices are joined only by the evaluator after a strategy returns a plan.
 - Registered scenarios run through FIFO and best-fit with zero detected
   hard-constraint violations.
@@ -52,3 +52,5 @@ Ricardo should be able to answer:
   constraint violation.
 - SF-002 is complete. SF-003 remains blocked by its documented design decisions,
   not by missing code.
+- The seeds initially named `frozen-test` were exercised by engineering checks and
+  reclassified as `regression`. No final frozen set exists yet.

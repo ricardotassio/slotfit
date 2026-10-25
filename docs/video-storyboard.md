@@ -17,7 +17,7 @@ The target length is 90–110 seconds. The demo uses synthetic data and never na
 | 55–73s | Fairness dashboard mock or implemented view: utilization, exposure, wait and worst slice | “The next candidate only qualifies if it improves utilization without crossing predeclared starvation and worst-slice guardrails.” | Separate metrics; do not show a composite magic score |
 | 73–88s | A counterfactual test passes; one stress scenario or rejected strategy fails | “Changing an opaque ID must never change the plan. And if a strategy wins on utilization but fails the fairness gate, I reject it.” | Invariance plus an honest failure |
 | 88–101s | Reviewer compares plans and chooses or rejects one | “This is decision support, not automatic booking. No patient contact, urgency inference or schedule mutation is part of the POC.” | Human control and safety boundary |
-| 101–110s | Repository structure, test command and evaluation artifact | “The repository contains the assumptions, tests, frozen scenarios and trade-offs—not just a polished demo.” | Reproducible GitHub artifact |
+| 101–110s | Repository structure, test command and evaluation artifact | “The repository contains the assumptions, tests, versioned scenarios and trade-offs—not just a polished demo.” | Reproducible GitHub artifact |
 
 ## Portuguese adaptation
 

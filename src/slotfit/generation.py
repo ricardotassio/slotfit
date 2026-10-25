@@ -15,7 +15,7 @@ from slotfit.domain import OpenInterval, Scenario, TimeWindow, WaitRequest
 class EvaluationSplit(StrEnum):
     DEVELOPMENT = "development"
     CALIBRATION = "calibration"
-    FROZEN_TEST = "frozen-test"
+    REGRESSION = "regression"
     CHALLENGE = "challenge"
 
 
@@ -69,7 +69,7 @@ SPLIT_SEEDS: Mapping[EvaluationSplit, tuple[int, ...]] = MappingProxyType(
     {
         EvaluationSplit.DEVELOPMENT: (1101, 1102, 1103, 1104),
         EvaluationSplit.CALIBRATION: (2101, 2102),
-        EvaluationSplit.FROZEN_TEST: (3101, 3102, 3103, 3104),
+        EvaluationSplit.REGRESSION: (3101, 3102, 3103, 3104),
         EvaluationSplit.CHALLENGE: (4101, 4102, 4103, 4104),
     }
 )

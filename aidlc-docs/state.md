@@ -13,7 +13,7 @@
 
 Resolve the bounded optimizer experiment before adding OR-Tools: choose a
 development-only threshold method, solver runtime, objective units and output
-artifact contract without inspecting frozen-test outcomes.
+artifact contract before minting or inspecting the final frozen-test set.
 
 ## Exit criteria for S1
 
@@ -29,7 +29,7 @@ artifact contract without inspecting frozen-test outcomes.
 ## Completed S2 evidence
 
 - versioned deterministic generator and decision checksum;
-- disjoint development, calibration, frozen-test and challenge seed registries;
+- disjoint development, calibration, regression and challenge seed registries;
 - audit-only operational slices excluded from strategy inputs;
 - metamorphic checks for opaque IDs, input order and irrelevant ineligible records;
 - event-level evaluation with hard-constraint violation detection;
