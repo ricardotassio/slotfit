@@ -3,16 +3,16 @@
 - Project: SlotFit
 - Repository type: greenfield
 - Phase: Construction
-- Active Bolt: S6 — comparison and simulated-review UI
-- Active spec: `SF-006` — Ready
-- Last completed gate: SF-005 append-only simulated review verified
+- Active Bolt: none — S6 closed; S7 gate review is next
+- Active spec: none
+- Last completed gate: SF-006 browser and accessibility verification
 - External integrations: none
 - Real data: prohibited
 
 ## Current objective
 
-Implement the S6 local comparison UI with neutral ordering, accessible fallback
-and an explicit rejected-candidate disclosure.
+Apply the S7 eligibility gate. Because SF-003 produced no accepted candidate, do
+not mint a frozen set or run a final evaluation under the rejected configuration.
 
 ## Exit criteria for S1
 
@@ -37,9 +37,9 @@ and an explicit rejected-candidate disclosure.
 
 ## Next gate
 
-Close SF-006 only after build, real local integration, browser-state,
-idempotency and automated accessibility checks pass. Calibration remains closed
-and the final frozen set remains nonexistent.
+Document S7 as not executed by design unless a new research spec independently
+earns calibration eligibility. Calibration remains closed and the final frozen set
+remains nonexistent.
 
 The S1 machine-verifiable criteria passed on 2026-10-25. Ricardo explicitly
 authorized progression. His teach-back self-assessment remains a non-blocking

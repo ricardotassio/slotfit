@@ -6,7 +6,7 @@ The project compares simple baselines with constraint optimization over entirely
 
 ## Current status
 
-**AI-DLC Construction Bolts S1–S5 are implemented; CP-SAT candidates V1–V4 were
+**AI-DLC Construction Bolts S1–S6 are implemented; CP-SAT candidates V1–V4 were
 correctly rejected by development evidence before calibration, and the API exposes
 that no-go without presenting it as a recommendation.**
 
@@ -34,12 +34,13 @@ The repository currently contains:
 - a bounded-recovery V4 that improves but still fails the unchanged guardrail;
 - a versioned FastAPI/Pydantic boundary for deterministic demos and research evidence;
 - an idempotent append-only SQLite review log with no external action;
+- a neutral Vue/FullCalendar comparison UI with Playwright and axe coverage;
 - executable unit tests;
 - architecture and decision records.
 
 OR-Tools, FastAPI, Pydantic and HTTPX2 are pinned. PostgreSQL was deliberately
 deferred in favor of SQLite for the single-user local POC; the Vue interface is the
-next Bolt.
+implemented local evidence surface.
 
 ## First demonstrable scenario
 
@@ -60,6 +61,8 @@ make test
 make api-test
 make review-test
 make api-smoke
+make web-build
+make web-test
 make demo
 make multi-slot-demo
 make generated-demo

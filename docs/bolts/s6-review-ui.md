@@ -1,6 +1,6 @@
 # Card S6 — Interface de comparação e revisão
 
-**Estado:** especificado; implementação não iniciada.
+**Estado:** concluído e verificado.
 **Dependências:** S4; S5 apenas para persistir revisão.  
 **Requisitos principais:** SF-FR-005, SF-FR-006 e SF-FR-009.
 
@@ -34,7 +34,8 @@ Ready: wireflow, hierarquia neutra, estados de erro/loading/vazio e contrato de
 acessibilidade aprovados. Done: Playwright cobre comparação, explicações e revisão
 idempotente; teclado e contraste verificados; guardrail reprovado fica visível;
 nenhum controle sugere integração real. O contrato verificável está em
-[`../../specs/006-comparison-ui.md`](../../specs/006-comparison-ui.md).
+[`../../specs/006-comparison-ui.md`](../../specs/006-comparison-ui.md); build e
+cinco testes Playwright fornecem a evidência observada.
 
 ## 🎯 Entrevista
 

@@ -21,7 +21,7 @@ Specifications are the implementation contract between product intent, code and 
 | [`SF-003`](003-optimizer-and-evaluation.md) | Done — terminal no-go | Compared four optimizer candidates; none passed the fixed development guardrails |
 | [`SF-004`](004-api-boundary.md) | Done | Expose deterministic demos and the terminal research decision through a read-only API |
 | [`SF-005`](005-persistence-and-review.md) | Done | Record idempotent, append-only simulated human review events locally |
-| [`SF-006`](006-comparison-ui.md) | Ready | Present neutral plan comparisons and simulated review in an accessible local UI |
+| [`SF-006`](006-comparison-ui.md) | Done | Present neutral plan comparisons and simulated review in an accessible local UI |
 
 ## Working rule
 

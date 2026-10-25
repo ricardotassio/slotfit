@@ -8,6 +8,7 @@ dependencies = [
     "httpx2==2.13.0",
     "ortools==9.15.6755",
     "pydantic==2.14.1",
+    "uvicorn==0.54.0",
 ]
 
 [build-system]

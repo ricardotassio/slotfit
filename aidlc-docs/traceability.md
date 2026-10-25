@@ -8,11 +8,11 @@ Implementation contracts: SF-FR-001 through SF-FR-003 map to [`../specs/001-doma
 | SF-FR-002 | `slotfit.eligibility` | exclusion and consent tests | Implemented in first slice |
 | SF-FR-003 | `slotfit.strategies` | FIFO and best-fit tests | Implemented |
 | SF-FR-004 | `slotfit.optimizer` | V1–V4 global-conflict, residual-policy, floor, phase and limit tests | Implemented through bounded-recovery development candidate |
-| SF-FR-005 | `slotfit.api` boundary, future web app | API contract tests; Playwright later | API implemented; UI planned |
+| SF-FR-005 | `slotfit.api`, Vue comparison UI | API contracts and Playwright main flow | Implemented |
 | SF-FR-006 | `slotfit.persistence`, review API | integration/idempotency tests | Implemented for simulated local review |
 | SF-FR-007 | `slotfit.evaluation`, `slotfit.comparison` | event records, aggregate comparison and violation tests | Implemented for development split |
 | SF-FR-008 | `slotfit.longitudinal`, `slotfit.comparison`, `slotfit.alternative_diagnostic`, `slotfit.exposure_frontier` | compatible misses, K sensitivity, slice exposure, guardrail, alternative capacity and local frontier | Implemented for development; V1–V3 rejected |
-| SF-FR-009 | future web app and evaluation report | worst-slice and guardrail display | Planned |
+| SF-FR-009 | Vue outcome panel and development report | Playwright no-go/metric assertions | Implemented for development evidence |
 | SF-NFR-001 | scenario generator | equality under same seed | Implemented |
 | SF-NFR-002 | strategies and event evaluator | all registered generated seeds | Implemented for baselines |
 | SF-NFR-003 | core package | `make test` | Implemented |

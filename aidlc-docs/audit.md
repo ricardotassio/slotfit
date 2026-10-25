@@ -191,3 +191,15 @@
   `external_action: none`; it cannot book, message or mutate a schedule.
 - Verification: ten focused persistence/API tests and 80 full-suite tests pass,
   including two-connection uniqueness and direct update/delete rejection.
+
+## 2026-10-25 — SF-006 neutral comparison UI
+
+- Decision: put the terminal no-go before plan controls and use neutral,
+  baseline-first plan ordering with separate metrics.
+- Decision: render assignments in both FullCalendar and a semantic table; the
+  calendar is never the only evidence representation.
+- Observation: TypeScript 7.0.2 is incompatible with `vue-tsc 3.3.13`; pin the
+  tested TypeScript 6.0.3 instead of patching compiler internals.
+- Verification: production build passes; five Playwright tests pass against real
+  local API/UI processes; axe reports zero serious or critical violations in the
+  main flow.

@@ -1,6 +1,6 @@
 # SF-006 — Neutral comparison and simulated-review UI
 
-- Status: Ready
+- Status: Done
 - AI-DLC mapping: Bolt S6
 - Depends on: SF-004 and SF-005
 
@@ -56,7 +56,9 @@ table fallback beside the calendar.
 
 ## Technology decision
 
-- Vue `3.5.44` and TypeScript `7.0.2` for a small typed component;
+- Vue `3.5.44` and TypeScript `6.0.3` for a small typed component. TypeScript 7
+  was tested first and rejected because `vue-tsc 3.3.13` does not support its
+  removed compiler subpath;
 - Vite `8.3.5` and `@vitejs/plugin-vue` `6.0.10` for local build/dev proxy;
 - FullCalendar Vue `7.1.3` plus `temporal-polyfill` for the visual time grid;
 - Playwright `1.64.1` and axe-core `4.14.0` for browser behavior/accessibility;
@@ -67,15 +69,24 @@ justified for this one-page POC.
 
 ## Acceptance criteria
 
-- [ ] Production build type-checks and bundles successfully.
-- [ ] Main flow loads real local API data and shows the terminal no-go first.
-- [ ] All three plans receive neutral treatment and are keyboard selectable.
-- [ ] Calendar and accessible assignment table update together.
-- [ ] Metrics remain separate and reason codes are inspectable.
-- [ ] Review creation and safe double-submit/replay behavior are browser-tested.
-- [ ] Loading, API error and review error states are browser-tested.
-- [ ] Axe reports no serious or critical violation in the tested main flow.
-- [ ] UI contains no booking, messaging or external-integration behavior.
+- [x] Production build type-checks and bundles successfully.
+- [x] Main flow loads real local API data and shows the terminal no-go first.
+- [x] All three plans receive neutral treatment and are keyboard selectable.
+- [x] Calendar and accessible assignment table update together.
+- [x] Metrics remain separate and reason codes are inspectable.
+- [x] Review creation and safe duplicate prevention/replay behavior are tested
+  across browser and repository suites.
+- [x] Loading, API error and review error states are browser-tested.
+- [x] Axe reports no serious or critical violation in the tested main flow.
+- [x] UI contains no booking, messaging or external-integration behavior.
+
+## Observed evidence
+
+`npm run build` completes TypeScript/Vue checking and creates the production
+bundle. Five Playwright tests pass against real local Vite and Uvicorn processes:
+neutral synchronized comparison, simulated review, API retry, review failure and
+axe analysis. The axe result contains zero serious or critical violations. S5's
+repository/API tests provide the complementary duplicate/replay proof.
 
 ## Rejection conditions
 
@@ -84,4 +95,3 @@ justified for this one-page POC.
 - the calendar is the only representation of assignments;
 - double submit can create multiple events;
 - a control implies that a real appointment or message will be changed.
-

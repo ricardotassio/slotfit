@@ -13,6 +13,9 @@ coverage.xml
 dist/
 build/
 node_modules/
+web/dist/
+web/test-results/
+web/playwright-report/
 artifacts/evaluation/*
 !artifacts/evaluation/.gitkeep
 artifacts/reviews/*
