@@ -3,16 +3,16 @@
 - Project: SlotFit
 - Repository type: greenfield
 - Phase: Construction
-- Active Bolt: none — S7 gate closed; S8 hardening is next
-- Active spec: none
+- Active Bolt: S8 — hardening and bilingual communication
+- Active spec: `SF-008` — Ready
 - Last completed gate: SF-007 not executed because eligibility failed
 - External integrations: none
 - Real data: prohibited
 
 ## Current objective
 
-Specify S8 hardening and bilingual evidence-based communication around the real
-terminal no-go. Do not publish or push anything.
+Implement S8 reproducibility, risk review and bilingual evidence-based
+communication around the real terminal no-go. Do not publish or push anything.
 
 ## Exit criteria for S1
 
@@ -37,8 +37,9 @@ terminal no-go. Do not publish or push anything.
 
 ## Next gate
 
-Open S8 only with explicit reproducibility, claim-review, threat/risk, bilingual
-script and publication-draft criteria. Publishing remains outside authorization.
+Close S8 only after locked setup, local/CI verification contracts, risk review,
+bilingual parity and publication-contract tests pass. Publishing remains outside
+authorization.
 
 The S1 machine-verifiable criteria passed on 2026-10-25. Ricardo explicitly
 authorized progression. His teach-back self-assessment remains a non-blocking

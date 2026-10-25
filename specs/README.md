@@ -23,6 +23,7 @@ Specifications are the implementation contract between product intent, code and 
 | [`SF-005`](005-persistence-and-review.md) | Done | Record idempotent, append-only simulated human review events locally |
 | [`SF-006`](006-comparison-ui.md) | Done | Present neutral plan comparisons and simulated review in an accessible local UI |
 | [`SF-007`](007-frozen-evaluation-gate.md) | Closed — not executed | Preserve the held-out set because no candidate earned final-evaluation eligibility |
+| [`SF-008`](008-hardening-and-communication.md) | Ready | Harden reproducibility and prepare bilingual evidence-based video/post materials |
 
 ## Working rule
 

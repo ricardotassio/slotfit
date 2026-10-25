@@ -1,7 +1,7 @@
 # Card S8 — Hardening e publicação
 
-**Estado:** planejado; não implementado.  
-**Dependência:** avaliação S7 concluída e revisada.  
+**Estado:** especificado; implementação não iniciada.
+**Dependência:** gate S7 encerrado e resultado negativo revisado.
 **Saída:** repositório reproduzível, vídeo e publicação com claims limitados.
 
 ## 💡 Propósito e analogia
@@ -31,7 +31,10 @@ carga real. A licença ainda é uma decisão aberta.
 
 ## ✅ Definition of Ready / Done
 
-Ready: S7 encerrado e claims aprovados contra evidência. Done: clone limpo
+Ready: S7 encerrado, inclusive sem execução por ineligibilidade, e claims aprovados
+contra evidência no
+[`../../specs/008-hardening-and-communication.md`](../../specs/008-hardening-and-communication.md).
+Done: clone limpo
 reproduzível; testes/artefatos verificáveis; nenhum segredo; vídeo e texto revisados
 em inglês principal e português; links válidos; limitações visíveis; nenhuma ação
 publicada automaticamente. Publicar exige autorização explícita.
