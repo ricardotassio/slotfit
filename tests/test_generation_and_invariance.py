@@ -3,10 +3,10 @@ from __future__ import annotations
 import unittest
 from dataclasses import fields, replace
 
+from slotfit.application.strategies import best_fit_plan, fifo_plan
 from slotfit.domain.model import Scenario
 from slotfit.research.evaluation import evaluate_generated_plan
-from slotfit.research.generation import EvaluationSplit, SPLIT_SEEDS, generate_scenario
-from slotfit.application.strategies import best_fit_plan, fifo_plan
+from slotfit.research.generation import SPLIT_SEEDS, EvaluationSplit, generate_scenario
 
 
 def _selected_joined_order(scenario: Scenario, strategy: str) -> int:

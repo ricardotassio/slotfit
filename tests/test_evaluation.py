@@ -3,11 +3,11 @@ from __future__ import annotations
 import unittest
 from dataclasses import replace
 
-from slotfit.domain.model import Assignment
+from slotfit.application.strategies import best_fit_plan
 from slotfit.domain.eligibility import scheduled_window
+from slotfit.domain.model import Assignment
 from slotfit.research.evaluation import evaluate_generated_plan
 from slotfit.research.generation import generate_scenario
-from slotfit.application.strategies import best_fit_plan
 
 
 class ScenarioEvaluationTests(unittest.TestCase):

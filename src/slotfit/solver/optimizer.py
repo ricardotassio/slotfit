@@ -8,6 +8,7 @@ from enum import StrEnum
 import ortools
 from ortools.sat.python import cp_model
 
+from slotfit.domain.eligibility import evaluate_request, scheduled_window
 from slotfit.domain.model import (
     Assignment,
     CandidateEvaluation,
@@ -16,7 +17,6 @@ from slotfit.domain.model import (
     Scenario,
     WaitRequest,
 )
-from slotfit.domain.eligibility import evaluate_request, scheduled_window
 
 
 class SolverStatus(StrEnum):

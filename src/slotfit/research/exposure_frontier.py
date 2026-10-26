@@ -3,13 +3,13 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass, replace
 
+from slotfit.domain.model import CandidatePlan, Scenario
 from slotfit.research.alternative_diagnostic import enumerate_feasible_plans
 from slotfit.research.comparison import BASELINE_STRATEGIES, compare_engineering_split
-from slotfit.domain.model import CandidatePlan, Scenario
 from slotfit.research.generation import EvaluationSplit
 from slotfit.research.multi_generation import MULTI_SLOT_SEEDS, generate_multi_slot_scenario
-from slotfit.solver.optimizer import optimize_plan_with_placement_scarcity
 from slotfit.research.thresholds import SLICE_GAP_DEGRADATION_LIMIT
+from slotfit.solver.optimizer import optimize_plan_with_placement_scarcity
 
 
 @dataclass(frozen=True, slots=True)

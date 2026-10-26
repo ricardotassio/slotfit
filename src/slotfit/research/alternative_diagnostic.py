@@ -3,12 +3,12 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 from itertools import product
 
-from slotfit.domain.model import Assignment, CandidatePlan, Scenario
 from slotfit.domain.eligibility import evaluate_request, scheduled_window
+from slotfit.domain.model import Assignment, CandidatePlan, Scenario
 from slotfit.research.generation import EvaluationSplit
 from slotfit.research.multi_generation import MULTI_SLOT_SEEDS, generate_multi_slot_scenario
-from slotfit.solver.optimizer import optimize_plan_with_exposure_debt
 from slotfit.research.thresholds import SUPPORT_THRESHOLD
+from slotfit.solver.optimizer import optimize_plan_with_exposure_debt
 
 
 @dataclass(frozen=True, slots=True)

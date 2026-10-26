@@ -20,7 +20,6 @@ from slotfit.adapters.persistence.sqlite_review_repository import (
     SQLiteReviewRepository,
 )
 
-
 APPLICATION_VERSION = "0.1.0"
 
 APPLICATION_TITLE = "SlotFit synthetic experiment API"

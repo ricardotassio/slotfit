@@ -3,12 +3,12 @@ from __future__ import annotations
 import unittest
 from dataclasses import fields, replace
 
+from slotfit.application.scenarios import multi_slot_counterexample
+from slotfit.domain.model import Scenario
 from slotfit.research.alternative_diagnostic import (
     diagnose_development_alternatives,
     enumerate_primary_optimal_plans,
 )
-from slotfit.domain.model import Scenario
-from slotfit.application.scenarios import multi_slot_counterexample
 
 
 class AlternativeDiagnosticTests(unittest.TestCase):

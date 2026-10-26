@@ -5,8 +5,8 @@ from pathlib import Path
 
 from fastapi.testclient import TestClient
 
-from slotfit.composition import app
 from slotfit.adapters.api.service import DEMO_BUILDERS
+from slotfit.composition import app
 
 
 class ApiContractTests(unittest.TestCase):

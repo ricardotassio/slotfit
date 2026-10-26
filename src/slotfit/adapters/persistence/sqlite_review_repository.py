@@ -8,7 +8,6 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Literal
 
-
 ReviewDecision = Literal["accept", "reject", "request_alternative"]
 
 

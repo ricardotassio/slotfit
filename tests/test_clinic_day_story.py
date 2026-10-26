@@ -3,17 +3,21 @@ from __future__ import annotations
 import unittest
 from pathlib import Path
 
-from slotfit.domain.model import TimeWindow
+from slotfit.application.scenarios import clinic_day_story, multi_slot_counterexample
+from slotfit.application.strategies import best_fit_plan, fifo_plan
 from slotfit.domain.eligibility import evaluate_request
+from slotfit.domain.model import TimeWindow
 from slotfit.research.generation import SPLIT_SEEDS
 from slotfit.research.multi_generation import MULTI_SLOT_SEEDS
 from slotfit.solver.optimizer import optimize_plan
-from slotfit.application.scenarios import clinic_day_story, multi_slot_counterexample
-from slotfit.application.strategies import best_fit_plan, fifo_plan
-
 
 PACKAGE_ROOT = Path(__file__).parents[1] / "src" / "slotfit"
-DECISION_MODULES = ("domain/model.py", "domain/eligibility.py", "application/strategies.py", "solver/optimizer.py")
+DECISION_MODULES = (
+    "domain/model.py",
+    "domain/eligibility.py",
+    "application/strategies.py",
+    "solver/optimizer.py",
+)
 
 
 def _disjoint(left: TimeWindow, right: TimeWindow) -> bool:

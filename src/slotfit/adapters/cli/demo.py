@@ -6,12 +6,12 @@ from dataclasses import asdict
 from datetime import datetime
 from typing import Any
 
+from slotfit.application.scenarios import demo_scenario, multi_slot_counterexample
+from slotfit.application.strategies import best_fit_plan, fifo_plan
 from slotfit.research.evaluation import evaluate_generated_plan
 from slotfit.research.generation import EvaluationSplit, generate_scenario
 from slotfit.research.longitudinal import simulate_opportunity_rounds
 from slotfit.solver.optimizer import optimize_plan
-from slotfit.application.scenarios import demo_scenario, multi_slot_counterexample
-from slotfit.application.strategies import best_fit_plan, fifo_plan
 
 
 def _json_default(value: Any) -> str:

@@ -3,13 +3,13 @@ from __future__ import annotations
 import unittest
 from collections.abc import Mapping
 
+from slotfit.application.strategies import best_fit_plan, fifo_plan
 from slotfit.research.generation import generate_scenario
 from slotfit.research.longitudinal import (
     simulate_exposure_debt_rounds,
     simulate_opportunity_rounds,
 )
 from slotfit.solver.optimizer import optimize_plan_with_exposure_debt
-from slotfit.application.strategies import best_fit_plan, fifo_plan
 
 
 class LongitudinalSimulationTests(unittest.TestCase):

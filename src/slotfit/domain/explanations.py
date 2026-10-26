@@ -11,7 +11,6 @@ from types import MappingProxyType
 
 from slotfit.domain.model import CandidateEvaluation
 
-
 ELIGIBLE_EXPLANATION = "This request can take this opening."
 
 _EXPLANATIONS = MappingProxyType(

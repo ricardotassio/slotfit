@@ -2,9 +2,8 @@ from __future__ import annotations
 
 from collections.abc import Callable
 
-from slotfit.domain.model import Assignment, CandidatePlan, OpenInterval, Scenario, WaitRequest
 from slotfit.domain.eligibility import evaluate_request, scheduled_window
-
+from slotfit.domain.model import Assignment, CandidatePlan, OpenInterval, Scenario, WaitRequest
 
 SortKey = Callable[[WaitRequest, OpenInterval], tuple[int, ...]]
 

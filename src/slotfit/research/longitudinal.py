@@ -12,7 +12,6 @@ from slotfit.research.generation import (
     decision_checksum,
 )
 
-
 Strategy = Callable[[Scenario], CandidatePlan]
 DebtAwareStrategy = Callable[[Scenario, Mapping[str, int]], CandidatePlan]
 

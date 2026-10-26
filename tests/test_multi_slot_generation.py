@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import unittest
 
+from slotfit.application.strategies import best_fit_plan, fifo_plan
 from slotfit.research.evaluation import evaluate_generated_plan
 from slotfit.research.generation import EvaluationSplit
 from slotfit.research.multi_generation import MULTI_SLOT_SEEDS, generate_multi_slot_scenario
 from slotfit.solver.optimizer import SolverStatus, optimize_plan
-from slotfit.application.strategies import best_fit_plan, fifo_plan
 
 
 class MultiSlotGenerationTests(unittest.TestCase):
