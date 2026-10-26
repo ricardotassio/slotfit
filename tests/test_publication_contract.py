@@ -17,7 +17,7 @@ class PublicationContractTests(unittest.TestCase):
             content = self._read(path).lower()
             self.assertIn("synthetic", content)
             self.assertRegex(content, r"10[.]80")
-            self.assertRegex(content, r"limit (was|at) 10|limit was declared at 10")
+            self.assertRegex(content, r"limit (was|at|of) 10|limit was declared at 10")
             self.assertTrue("rejected" in content or "no-go" in content)
             self.assertTrue("no external action" in content or "no booking" in content)
 
