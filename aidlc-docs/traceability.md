@@ -1,6 +1,6 @@
 # Traceability
 
-Implementation contracts: SF-FR-001 through SF-FR-003 map to [`../specs/001-domain-and-baselines.md`](../specs/001-domain-and-baselines.md). Scenario provenance, invariance and slice requirements map to [`../specs/002-scenarios-and-fairness-controls.md`](../specs/002-scenarios-and-fairness-controls.md). Optimization and its terminal development decision map to [`../specs/003-optimizer-and-evaluation.md`](../specs/003-optimizer-and-evaluation.md). The read-only HTTP boundary maps to [`../specs/004-api-boundary.md`](../specs/004-api-boundary.md). Governance reconciliation of the UI, dependencies and publication test after the first cycle maps to [`../specs/009-governance-reconciliation.md`](../specs/009-governance-reconciliation.md).
+Implementation contracts: SF-FR-001 through SF-FR-003 map to [`../specs/001-domain-and-baselines.md`](../specs/001-domain-and-baselines.md). Scenario provenance, invariance and slice requirements map to [`../specs/002-scenarios-and-fairness-controls.md`](../specs/002-scenarios-and-fairness-controls.md). Optimization and its terminal development decision map to [`../specs/003-optimizer-and-evaluation.md`](../specs/003-optimizer-and-evaluation.md). The read-only HTTP boundary maps to [`../specs/004-api-boundary.md`](../specs/004-api-boundary.md). Governance reconciliation of the UI, dependencies and publication test after the first cycle maps to [`../specs/009-governance-reconciliation.md`](../specs/009-governance-reconciliation.md). Code organization and the experiment narrative map to [`../specs/015-code-organization-and-experiment-narrative.md`](../specs/015-code-organization-and-experiment-narrative.md).
 
 | Requirement | Component | Test/evidence | Status |
 |---|---|---|---|
@@ -23,3 +23,5 @@ Implementation contracts: SF-FR-001 through SF-FR-003 map to [`../specs/001-doma
 | SF-NFR-006 | all strategies | per-seed identifier and input-order metamorphic checks | Implemented for 40-seed development comparison |
 | SF-NFR-007 | SF-003/SF-007 gate | fixed threshold plus terminal no-go | Final run intentionally ineligible |
 | SF-NFR-008 | `slotfit.generation.ScenarioManifest` | provenance schema and checksum test | Implemented |
+| SF-NFR-009 | `slotfit.optimizer`, `slotfit.comparison`, `slotfit.thresholds`, API boundary | behaviour-preserving refactors proven by before/after diffs of the development report, demos and diagnostics (SF-015) | Implemented |
+| SF-NFR-010 | README, `docs/architecture.md`, `web/tests/screenshots.spec.ts` | sequential experiment narrative with generated screenshots carrying the no-go strip; publication-contract tests (SF-015) | Implemented |
