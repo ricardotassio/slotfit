@@ -195,16 +195,16 @@ def _optimize_plan(
         for request in requests
     )
 
+    evaluation_by_key = {
+        (evaluation.request_id, evaluation.interval_id): evaluation
+        for evaluation in evaluations
+    }
+
     model = cp_model.CpModel()
     variables: dict[tuple[str, str], cp_model.IntVar] = {}
     for request_position, request in enumerate(requests, start=1):
         for interval_position, interval in enumerate(intervals, start=1):
-            evaluation = next(
-                item
-                for item in evaluations
-                if item.request_id == request.request_id
-                and item.interval_id == interval.interval_id
-            )
+            evaluation = evaluation_by_key[(request.request_id, interval.interval_id)]
             if evaluation.eligible:
                 variables[(request.request_id, interval.interval_id)] = model.new_bool_var(
                     f"assign_r{request_position}_i{interval_position}"
