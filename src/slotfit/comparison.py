@@ -110,18 +110,16 @@ class EngineeringComparison:
     candidate_accepted: bool
 
 
-def _percentile_90(values: list[int]) -> int:
-    if not values:
-        return 0
-    ordered = sorted(values)
-    return ordered[max(0, math.ceil(0.9 * len(ordered)) - 1)]
+P90 = 0.9
 
 
-def _percentile_90_float(values: list[float]) -> float | None:
+def _percentile[T: (int, float)](values: list[T], quantile: float) -> T | None:
+    """Nearest-rank percentile; None when there are no values."""
+
     if not values:
         return None
     ordered = sorted(values)
-    return ordered[max(0, math.ceil(0.9 * len(ordered)) - 1)]
+    return ordered[max(0, math.ceil(quantile * len(ordered)) - 1)]
 
 
 def _rate(numerator: int, denominator: int) -> float | None:
@@ -215,10 +213,10 @@ def _strategy_summary(
             else None
         ),
         mean_solver_wall_time_seconds=(mean(solver_times) if solver_times else None),
-        p90_solver_wall_time_seconds=_percentile_90_float(solver_times),
+        p90_solver_wall_time_seconds=_percentile(solver_times, P90),
         history_count=len(eligible_histories),
         median_compatible_misses=median(misses) if misses else 0.0,
-        p90_compatible_misses=_percentile_90(misses),
+        p90_compatible_misses=_percentile(misses, P90) or 0,
         starvation_rate_k2=_rate(
             sum(value >= 2 for value in misses),
             len(misses),
