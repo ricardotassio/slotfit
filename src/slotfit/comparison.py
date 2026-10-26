@@ -36,6 +36,11 @@ from slotfit.thresholds import (
 
 Planner = Callable[[Scenario], CandidatePlan]
 
+FIFO_STRATEGY = "fifo-eligible@0.2.0"
+BEST_FIT_STRATEGY = "local-best-fit@0.2.0"
+CANDIDATE_STRATEGY = "cp-sat-bounded-recovery@0.4.0"
+BASELINE_STRATEGIES = (FIFO_STRATEGY, BEST_FIT_STRATEGY)
+
 
 @dataclass(frozen=True, slots=True)
 class ScenarioComparison:
@@ -303,16 +308,25 @@ def _counterfactual_flips(
     )
 
 
-def _guardrail_checks(
-    strategies: tuple[StrategyComparison, ...],
-) -> tuple[GuardrailCheck, ...]:
-    summaries = {item.strategy: item for item in strategies}
-    candidate = summaries["cp-sat-bounded-recovery@0.4.0"]
-    baselines = (
-        summaries["fifo-eligible@0.2.0"],
-        summaries["local-best-fit@0.2.0"],
-    )
+def _starvation_degradation(
+    candidate: StrategyComparison,
+    baselines: tuple[StrategyComparison, ...],
+) -> float:
+    """Candidate starvation rate minus the lower baseline rate."""
+
     better_baseline_starvation = min(item.starvation_rate_k3 for item in baselines)
+    return candidate.starvation_rate_k3 - better_baseline_starvation
+
+
+def _worst_slice_degradation(
+    candidate: StrategyComparison,
+    baselines: tuple[StrategyComparison, ...],
+) -> tuple[float, str, int]:
+    """Largest candidate-minus-better-baseline exposure shortfall over supported slices.
+
+    Returns the worst degradation, the slice it belongs to and the number of
+    slices that had a supported baseline reference.
+    """
 
     baseline_slice_gaps: dict[tuple[str, str], float] = {}
     for slice_result in candidate.slices:
@@ -343,6 +357,20 @@ def _guardrail_checks(
         and (slice_result.dimension, slice_result.value) in baseline_slice_gaps
     ]
     worst_degradation, worst_slice = max(degradations, default=(0.0, "none"))
+    return worst_degradation, worst_slice, len(degradations)
+
+
+def _guardrail_checks(
+    strategies: tuple[StrategyComparison, ...],
+) -> tuple[GuardrailCheck, ...]:
+    summaries = {item.strategy: item for item in strategies}
+    candidate = summaries[CANDIDATE_STRATEGY]
+    baselines = tuple(summaries[name] for name in BASELINE_STRATEGIES)
+    starvation_degradation = _starvation_degradation(candidate, baselines)
+    worst_degradation, worst_slice, compared_slices = _worst_slice_degradation(
+        candidate,
+        baselines,
+    )
 
     return (
         GuardrailCheck(
@@ -368,12 +396,9 @@ def _guardrail_checks(
         ),
         GuardrailCheck(
             name="starvation-rate-k3-degradation",
-            observed_value=candidate.starvation_rate_k3 - better_baseline_starvation,
+            observed_value=starvation_degradation,
             limit=STARVATION_DEGRADATION_LIMIT,
-            passed=(
-                (candidate.starvation_rate_k3 - better_baseline_starvation)
-                <= STARVATION_DEGRADATION_LIMIT
-            ),
+            passed=starvation_degradation <= STARVATION_DEGRADATION_LIMIT,
             detail="candidate rate minus the lower development-baseline rate",
         ),
         GuardrailCheck(
@@ -383,7 +408,7 @@ def _guardrail_checks(
             passed=worst_degradation <= SLICE_GAP_DEGRADATION_LIMIT,
             detail=(
                 "largest candidate-minus-supported-better-baseline exposure shortfall: "
-                f"{worst_slice}; compared_slices={len(degradations)}"
+                f"{worst_slice}; compared_slices={compared_slices}"
             ),
         ),
     )
@@ -415,13 +440,9 @@ def compare_engineering_split(
         ).plan
 
     planners: tuple[tuple[str, Planner, DebtAwareStrategy | None], ...] = (
-        ("fifo-eligible@0.2.0", fifo_plan, None),
-        ("local-best-fit@0.2.0", best_fit_plan, None),
-        (
-            "cp-sat-bounded-recovery@0.4.0",
-            optimizer_planner,
-            debt_aware_optimizer_planner,
-        ),
+        (FIFO_STRATEGY, fifo_plan, None),
+        (BEST_FIT_STRATEGY, best_fit_plan, None),
+        (CANDIDATE_STRATEGY, optimizer_planner, debt_aware_optimizer_planner),
     )
 
     for seed in seeds:

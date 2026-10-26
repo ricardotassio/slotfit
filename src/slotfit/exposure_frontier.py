@@ -4,7 +4,7 @@ import math
 from dataclasses import dataclass, replace
 
 from slotfit.alternative_diagnostic import enumerate_feasible_plans
-from slotfit.comparison import compare_engineering_split
+from slotfit.comparison import BASELINE_STRATEGIES, compare_engineering_split
 from slotfit.domain import CandidatePlan, Scenario
 from slotfit.generation import EvaluationSplit
 from slotfit.multi_generation import MULTI_SLOT_SEEDS, generate_multi_slot_scenario
@@ -114,11 +114,10 @@ def _choose_local_oracle_plan(
 
 def _supported_baseline_shortfall(dimension: str, value: str) -> float:
     comparison = compare_engineering_split(EvaluationSplit.DEVELOPMENT)
-    baseline_names = {"fifo-eligible@0.2.0", "local-best-fit@0.2.0"}
     gaps = [
         max(slice_result.exposure_gap_from_overall or 0.0, 0.0)
         for strategy in comparison.strategies
-        if strategy.strategy in baseline_names
+        if strategy.strategy in BASELINE_STRATEGIES
         for slice_result in strategy.slices
         if slice_result.dimension == dimension
         and slice_result.value == value
