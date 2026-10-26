@@ -94,8 +94,20 @@ em tarefas de linguagem na borda (interpretar uma observação em texto livre,
 rascunhar uma mensagem de oferta), e ficou deliberadamente fora do escopo porque
 não há problema de linguagem no caminho de decisão.
 
-Frase-guia para vídeo e post: *"uma IA que prova, em vez de prever."* Usar
-sempre com a qualificação "dentro do modelo declarado".
+Frase-guia para vídeo e post: *"uma resposta que você pode conferir, em vez de
+um palpite."* A palavra "prova" só pode aparecer na mesma frase que "dentro do
+modelo declarado", e o teste de contrato de publicação passa a exigir isso
+(achado MEDIUM-5 do risk-reviewer). O `OPTIMAL` do solver prova otimalidade do
+objetivo dentro do modelo em uma fixture; não prova que o plano é certo, seguro
+ou justo.
+
+Dois limites de comunicação, também do risk-reviewer:
+
+- a descrição do "mercado" acima é premissa de design, não medição; ela não
+  entra em artefato público, ou entra rotulada como premissa;
+- a tabela CP-SAT × generativo é justificativa de design, não resultado medido;
+  qualquer cartão de UI ou post que a use recebe o rótulo "design rationale,
+  not a measured result".
 
 ## 3. A história em seis capítulos
 
@@ -107,13 +119,24 @@ inventa número.
 | 1 | Manhã cheia | Agenda sintética de um dia com atendimentos marcados; lista de espera ao lado com restrições em linguagem simples | nova fixture `clinic-day` |
 | 2 | Dois cancelamentos | Dois horários ficam vazios (14:00 e 15:30, mesmos da fixture atual); contador de capacidade ociosa sobe | fixture + `remaining_gap_minutes` |
 | 3 | A regra de todo mundo | FIFO preenche o primeiro; a solicitação restrita não cabe no segundo; `60 min sem uso` | plano `fifo` |
-| 4 | Olhar o dia inteiro | O plano CP-SAT move a flexível e preserva a vaga da restrita; `120 de 120 min`; cada solicitação mostra o motivo em linguagem simples | plano `cp_sat` + tradução de reason codes |
+| 4 | Avaliar as duas aberturas em conjunto | O plano CP-SAT move a flexível e preserva a vaga da restrita; `120 de 120 min`; cada solicitação mostra o motivo em linguagem simples; a disclosure da API ("não torna aceitável o candidato longitudinal rejeitado") acompanha o número | plano `cp_sat` + tradução de reason codes + `demo.disclosure` |
 | 5 | A pessoa decide | Aceitar, rejeitar ou pedir alternativa; confirmação de que nada foi enviado | `/api/v1/reviews` |
 | 6 | Por baixo dos panos | Regras → fases do solver (minutos, atendidos, idade da espera) com status `OPTIMAL` → testes contrafactuais → faixa de no-go 10,80 vs 10 → por que não IA generativa | `optimizer_evidence`, `development-decision` |
 
 A ordem é deliberada: 70% negócio, 30% engenharia, como já definido no plano de
-vídeo. O capítulo 6 é a porta para o modo "Evidence" atual, que permanece
-intacto.
+vídeo. O capítulo 6 é a porta para o modo "Evidence".
+
+**Regra de integridade (achado HIGH-1 do risk-reviewer):** a faixa de no-go
+(`data-testid="research-no-go"`, mesma fonte da API) é **persistente em todos os
+capítulos**, não só no 6. Links diretos `?chapter=4` e `?chapter=5`, capturas de
+tela e cortes de vídeo são superfícies de claim; sem a faixa persistente, o
+capítulo 4 apresentaria o resultado da fixture como aceitação do V4, o que o
+SF-008 proíbe. Teste Playwright obrigatório: ao navegar direto para
+`?chapter=4` ou `?chapter=5`, a faixa está visível antes de qualquer botão de
+revisão ficar habilitado.
+
+Frase "olhar o dia inteiro" fica fora da copy: a fixture tem duas aberturas e
+três solicitações; o texto diz "avaliar as duas aberturas em conjunto".
 
 ## 4. Princípios de produto e design
 
@@ -156,8 +179,16 @@ Escopo:
 - fazer `tests/test_publication_contract.py` aceitar a forma "against a limit of
   10" ou ajustar o roteiro EN; commitar `docs/video-*.md` e
   `docs/video-production-plan.md`; linkar o plano de produção no README;
-- adendo ao SF-006 registrando o redesign da UI (commits `0826cdf` e `5fb9094`):
-  título, remoção do FullCalendar do componente, animação de replay;
+- adendo ao SF-006 que **reavalia** o redesign da UI (commits `0826cdf` e
+  `5fb9094`) contra as condições de rejeição do SF-006, em vez de só registrar
+  (achado HIGH-2 do risk-reviewer). Pontos observados em `web/src/App.vue`:
+  pílulas `neutral` versus `optimized` com estilos diferentes; ponte
+  "Constraint-aware allocation → +N min" que só computa ganho a favor do CP-SAT;
+  rodapés assimétricos ("blind to the next request" versus "Both requests
+  placed"); título "Make every opening work harder." em registro de marketing.
+  Resultado exigido: tratamento visual igual entre planos, rótulo neutro
+  ("difference in this fixture") e título descritivo; ou reabertura explícita
+  do SF-006 com gate humano. Teste de frases proibidas também na aba Evidence;
 - decisão sobre `@fullcalendar/vue3` e `temporal-polyfill`: remover de
   `package.json`, do spec, do README e da ADR, ou restaurar o uso. Recomendação:
   remover, porque a grade de tempo própria já cobre o SF-006 e reduz dependência;
@@ -203,6 +234,12 @@ Testes primeiro: replay determinístico por seed; igualdade dos planos com a
 fixture 1500 nas aberturas compartilhadas; zero violações duras; cobertura de
 explicações; invariância do contexto.
 
+Disciplina de seeds: `1600` é uma fixture construída à mão, fora de
+`SPLIT_SEEDS` e `MULTI_SLOT_SEEDS`; registrar isso na spec para que nunca seja
+confundida com um seed de desenvolvimento. A copy de `explain()` não pode usar
+vocabulário das bandas de auditoria ("scarce resource", "narrow availability",
+"aging"), para que a UI não pareça consciente de slices.
+
 DoD: `make test` e `make api-smoke` verdes; nenhuma estratégia alterada;
 traceability recebe `SF-FR-010` (fixture narrativa) e `SF-FR-011` (explicações).
 
@@ -224,9 +261,16 @@ Escopo:
 - capítulo 6: resumo e botão "ver por baixo dos panos" que leva ao SF-013;
 - `prefers-reduced-motion` respeitado; tabela semântica mantida em todos os
   capítulos com agenda;
-- copy revisada pela skill `design:ux-copy` e pelo `risk-reviewer` (frases
-  proibidas: "AI optimized", "fair", "more patients", "revenue",
-  "production ready").
+- faixa de no-go persistente em todos os capítulos, com teste de link direto
+  (seção 3, regra de integridade);
+- copy revisada pela skill `design:ux-copy` e pelo `risk-reviewer`. Frases
+  proibidas, testadas em Story e Evidence: "AI optimized", "fair", "unbiased",
+  "bias-free", "guarantee", "more patients", "patient", "care",
+  "appointments delivered", "revenue", "production ready", e "proves"/"prova"
+  sem "within the declared model"/"dentro do modelo declarado" na mesma frase.
+
+Condição de rejeição do SF-011: qualquer capítulo, captura ou link direto em
+que o resultado `120` apareça sem a faixa de no-go visível.
 
 Testes Playwright novos: navegação completa por teclado; números exibidos iguais
 aos da API; texto `No external action` após revisão; axe sem violações sérias
@@ -240,14 +284,22 @@ vídeo; nenhuma frase proibida (teste de contrato de UI).
 
 Escopo:
 
-- definir e testar as métricas narrativas: `idle_provider_minutes`,
-  `appointments_not_delivered`, `openings_unfilled`, todas derivadas do plano e
-  da fixture, nunca de suposições;
+- definir e testar as métricas narrativas com nomes que não viram claim de
+  acesso ou cuidado (achado HIGH-3 do risk-reviewer): `requests_not_placed`,
+  `openings_unfilled` e o já existente `remaining_gap_minutes`, exibido como
+  "opening minutes not assigned". Não existem `idle_provider_minutes` nem
+  `appointments_not_delivered`: uma solicitação sintética não colocada não é um
+  atendimento que deixou de ser entregue a alguém. A frase "capacidade já paga"
+  fica fora de qualquer copy pública, porque é enquadramento financeiro por
+  outro nome;
 - decidir e documentar (ADR-0004) se existe um "cenário hipotético" com valor
-  por hora informado pelo espectador. Se existir: fica apenas no modo Story,
-  desligado por padrão, nunca persistido, nunca enviado à API, com o rótulo
-  "your assumption, not a result of this study", e com teste que garante que o
-  valor nunca aparece no modo Evidence nem em exportações;
+  por hora informado pelo espectador. Recomendação firme: **não neste ciclo**
+  (D1a). Se um dia for adotado: apenas no modo Story, desligado por padrão,
+  nunca persistido, nunca enviado à API, nunca no campo `rationale`, desligado
+  em toda captura de tela e trace usados em artefatos, com o rótulo "your
+  assumption, not a result of this study", com teste que garante ausência no
+  modo Evidence e nas capturas, e com "dinheiro em qualquer artefato público"
+  listado como condição de rejeição na ADR;
 - atualizar `docs/fairness-and-bias-plan.md` seção "Human factors and
   presentation bias" com o novo risco de ancoragem monetária.
 
@@ -264,11 +316,15 @@ Escopo:
   within the declared model"; uma visualização bipartida simples das variáveis
   solicitação × abertura e das restrições ativas) e **integridade** (testes
   contrafactuais de ID e ordem, faixa de no-go 10,80 vs 10, por que não há V5);
-- cartão "why not generative AI" com a tabela da seção 2 em versão curta;
+- cartão "why not generative AI" com a tabela da seção 2 em versão curta e o
+  rótulo "design rationale, not a measured result";
 - dados: `optimizer_evidence.phases` já existe; adicionar ao
   `OptimizerEvidenceResponse` os campos `variable_count` e `constraint_count`,
   expostos pelo `OptimizationResult`; teste garante igualdade com o modelo
-  construído.
+  construído. Como `OptimizationResult` é um tipo de domínio congelado, o Bolt
+  reexecuta os testes de igualdade de plano do V1 e declara "nenhuma estratégia
+  alterada" na DoD. O risk-reviewer confirmou que variáveis e restrições vêm só
+  de atributos de decisão; slices de auditoria não entram.
 
 Testes: contrato da API para os campos novos; Playwright verificando que o
 painel mostra `OPTIMAL` três vezes para o plano CP-SAT e `reject` quatro vezes
@@ -282,7 +338,12 @@ literal no código da UI.
 Escopo:
 
 - roteiros EN/PT e storyboard reescritos sobre os seis capítulos, mantendo os
-  mesmos números e o contrato de publicação; os testes de paridade continuam;
+  mesmos números e o contrato de publicação; o teste de paridade numérica
+  amplia o conjunto de números para cobrir os novos (3 solicitações, 14:00,
+  15:30) e não só `40|60|120|10.80`;
+- capturas e GIF são superfícies de claim: toda captura usada em README, post
+  ou vídeo inclui a faixa de no-go e é gerada com qualquer hipótese monetária
+  desligada;
 - README ganha "Start here": três capturas (capítulo 3, capítulo 4, faixa de
   no-go) e o fluxo de 2 minutos; GIF do capítulo 4 gerado a partir do trace do
   Playwright, não de gravação manual;
@@ -328,6 +389,9 @@ muda, registra evidência na spec e atualiza traceability e audit.
 | Animação bonita esconde o no-go | capítulo 6 obrigatório; faixa de no-go permanece no modo Evidence e no fim da história |
 | Escopo cresce para "produto" | nenhuma integração, nenhum dado real, nenhuma autenticação; qualquer um desses exige novo ciclo e novo threat model |
 | Dependência nova sem necessidade | SF-009 remove FullCalendar; nenhuma biblioteca de animação; CSS e `requestAnimationFrame` bastam |
+| Links diretos, capturas e GIFs contornam os testes de contrato de publicação | faixa de no-go persistente e testada em link direto; capturas geradas por Playwright com a faixa visível; nenhuma hipótese monetária em captura |
+| Nomes fictícios viram proxy demográfico ligado ao resultado "restrita" | D2a por padrão; se D2b, nomes só em `DayContext`/mapa de rótulos da UI, nunca em `Scenario`, payloads de decisão, eventos de revisão ou exportações, com teste; nota "placeholders aleatórios, não pacientes" |
+| Aba Evidence já perdeu neutralidade no redesign | SF-009 reavalia contra as condições de rejeição do SF-006 antes de qualquer Bolt novo |
 
 ## 8. Decisões que só você pode tomar
 
@@ -339,7 +403,12 @@ Em ordem de impacto. Cada uma muda o que será construído.
   se a audiência de negócio pedir, e nunca no vídeo.
 - **D2 — Personas com nome.** (a) Rótulos funcionais ("flexible request",
   "restricted request"). (b) Primeiros nomes fictícios com selo sintético.
-  Recomendação: **(b)** na história, **(a)** no modo Evidence.
+  Recomendação revisada após o risk-reviewer: **(a)** em ambos os modos.
+  Privacidade não é o problema; o problema é que um primeiro nome carrega
+  sinal de gênero e etnia, e ligar um nome à solicitação "restrita" que fica de
+  fora associa visualmente um marcador demográfico a uma exclusão, exatamente a
+  associação que o projeto evitou em oito specs. Se você preferir (b), valem os
+  controles da tabela de riscos.
 - **D3 — FullCalendar.** Remover a dependência ou restaurar o uso.
   Recomendação: remover.
 - **D4 — Idioma da UI.** Somente inglês, ou alternância EN/PT no modo Story.
@@ -368,9 +437,23 @@ Em ordem de impacto. Cada uma muda o que será construído.
 - roteiros, storyboard e posts alinhados aos seis capítulos e aos mesmos números;
 - nada publicado, nada enviado, nenhum dado real.
 
+## Revisão de risco da proposta
+
+O `risk-reviewer` do repositório avaliou esta proposta em 2026-10-26 com o
+veredito **aprovar com mudanças**. As mudanças exigidas foram incorporadas acima:
+faixa de no-go persistente e testada em link direto (HIGH-1); reavaliação da
+aba Evidence contra o SF-006 (HIGH-2); métricas renomeadas sem conotação de
+acesso ou cuidado (HIGH-3); D1a recomendado e controles extras se D1b (HIGH-4);
+frase-guia reescrita e "prova" gateada por teste (MEDIUM-5); D2a recomendado e
+controles para D2b (MEDIUM-6); comparações de mercado e com IA generativa
+rotuladas como premissa ou justificativa de design (MEDIUM-7); guardrails para
+`explain()` e para a mudança em `OptimizationResult` (LOW-8); seed 1600,
+paridade numérica ampliada e capturas como superfície de claim (LOW-9).
+
 ## Mock visual
 
 Um mock dos capítulos 2 a 4 foi produzido como artefato de design para aprovação
 dos beats antes de qualquer código. O link fica registrado no audit quando a
 decisão de design for tomada. O mock é ilustração de layout e linguagem; os
-números nele são os da fixture atual (60/120) e não substituem a API.
+números nele são os da fixture atual (60/120) e não substituem a API. O mock
+usa rótulos funcionais (D2a) e carrega a faixa de no-go em todas as telas.
