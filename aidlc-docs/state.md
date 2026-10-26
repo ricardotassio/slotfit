@@ -45,3 +45,12 @@ artifacts must retain the terminal no-go and claim boundary.
 The S1 machine-verifiable criteria passed on 2026-10-25. Ricardo explicitly
 authorized progression. His teach-back self-assessment remains a non-blocking
 learning follow-up, so SF-001 is `Accepted with follow-up`, not `Done`.
+
+## Proposed cycle 2 — pending human gate
+
+A refinement cycle ("Um dia na clínica": narrative mode, plain-language
+explanations, engine explorer and communication refresh) is proposed in
+[`refinement-plan-2026-10.md`](refinement-plan-2026-10.md). It is not approved.
+`Current Phase` stays `Complete` until Ricardo approves the proposed Units
+(SF-009 to SF-014) and answers decisions D1–D5 in that document. No spec file
+has been created and no code has been written for cycle 2.

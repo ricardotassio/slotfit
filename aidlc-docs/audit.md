@@ -224,3 +224,21 @@
 - Verification: frozen dependency sync/install succeeded; `make verify` passed 84
   Python tests, API smoke, production web build and five Playwright tests.
 - External state: no Git remote exists; nothing was pushed, deployed or published.
+
+## 2026-10-26 — Cycle 2 proposal (not approved)
+
+- Observation: the working tree had an uncommitted rewrite of the video scripts
+  that breaks `test_publication_contract` (English regex does not accept
+  "against a limit of 10"); 83 of 84 Python tests pass, 5 Playwright tests pass.
+- Observation: commits `0826cdf` and `5fb9094` changed the UI after SF-008 was
+  marked Done without a spec, removed FullCalendar from the component while
+  docs and `package.json` still reference it, and compressed `App.vue`.
+- Decision: propose a governance-reconciliation Bolt (SF-009) before any new
+  feature, then narrative/explanation Bolts SF-010 to SF-014; see
+  [`refinement-plan-2026-10.md`](refinement-plan-2026-10.md).
+- Decision: financial loss may not be computed or claimed by the system; the
+  narrative shows undelivered capacity. Any viewer-entered monetary hypothesis
+  is a human decision (D1) gated by the risk reviewer.
+- Decision: constraint programming is presented as deterministic symbolic AI
+  chosen for problem structure; generative AI stays outside the decision path.
+- Gate: `blocking-approval` by Ricardo; nothing in cycle 2 is implemented.

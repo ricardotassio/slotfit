@@ -51,3 +51,6 @@ Cards pedagógicos e operacionais de todos os Bolts:
 
 Os cards S4–S8 registram Definition of Ready/Done, riscos, alternativas e evidência
 observada. S7 preserva a ausência do teste final como resultado correto do gate.
+
+Proposta do ciclo 2 (aguardando gate humano):
+[`refinement-plan-2026-10.md`](refinement-plan-2026-10.md).
