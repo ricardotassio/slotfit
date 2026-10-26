@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import math
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from enum import StrEnum
 
 import ortools
@@ -57,6 +57,43 @@ class OptimizationResult:
 
 
 DEFAULT_SOLVER_CONFIG = SolverConfig()
+DEFAULT_MINIMUM_RECOVERED_RATIO = 0.90
+
+
+@dataclass(frozen=True, slots=True)
+class ObjectiveProfile:
+    """Which residual lexicographic phases a strategy variant enables."""
+
+    strategy: str
+    uses_exposure_debt: bool
+    uses_placement_scarcity: bool
+    minimum_recovered_ratio: float | None
+
+
+LEXICOGRAPHIC_PROFILE = ObjectiveProfile(
+    strategy="cp-sat-lexicographic@0.1.0",
+    uses_exposure_debt=False,
+    uses_placement_scarcity=False,
+    minimum_recovered_ratio=None,
+)
+EXPOSURE_DEBT_PROFILE = ObjectiveProfile(
+    strategy="cp-sat-exposure-debt@0.2.0",
+    uses_exposure_debt=True,
+    uses_placement_scarcity=False,
+    minimum_recovered_ratio=None,
+)
+PLACEMENT_SCARCITY_PROFILE = ObjectiveProfile(
+    strategy="cp-sat-placement-scarcity@0.3.0",
+    uses_exposure_debt=True,
+    uses_placement_scarcity=True,
+    minimum_recovered_ratio=None,
+)
+BOUNDED_RECOVERY_PROFILE = ObjectiveProfile(
+    strategy="cp-sat-bounded-recovery@0.4.0",
+    uses_exposure_debt=True,
+    uses_placement_scarcity=True,
+    minimum_recovered_ratio=DEFAULT_MINIMUM_RECOVERED_RATIO,
+)
 
 
 def _configured_solver(config: SolverConfig) -> cp_model.CpSolver:
@@ -82,11 +119,9 @@ def optimize_plan(
 
     return _optimize_plan(
         scenario,
+        profile=LEXICOGRAPHIC_PROFILE,
         config=config,
         exposure_debt_by_request_id=None,
-        use_placement_scarcity=False,
-        minimum_recovered_ratio=None,
-        strategy="cp-sat-lexicographic@0.1.0",
     )
 
 
@@ -102,11 +137,9 @@ def optimize_plan_with_exposure_debt(
 
     return _optimize_plan(
         scenario,
+        profile=EXPOSURE_DEBT_PROFILE,
         config=config,
         exposure_debt_by_request_id=exposure_debt_by_request_id,
-        use_placement_scarcity=False,
-        minimum_recovered_ratio=None,
-        strategy="cp-sat-exposure-debt@0.2.0",
     )
 
 
@@ -121,11 +154,9 @@ def optimize_plan_with_placement_scarcity(
     _validate_exposure_debt(scenario, exposure_debt_by_request_id)
     return _optimize_plan(
         scenario,
+        profile=PLACEMENT_SCARCITY_PROFILE,
         config=config,
         exposure_debt_by_request_id=exposure_debt_by_request_id,
-        use_placement_scarcity=True,
-        minimum_recovered_ratio=None,
-        strategy="cp-sat-placement-scarcity@0.3.0",
     )
 
 
@@ -133,7 +164,7 @@ def optimize_plan_with_bounded_recovery(
     scenario: Scenario,
     *,
     exposure_debt_by_request_id: Mapping[str, int],
-    minimum_recovered_ratio: float = 0.90,
+    minimum_recovered_ratio: float = DEFAULT_MINIMUM_RECOVERED_RATIO,
     config: SolverConfig = DEFAULT_SOLVER_CONFIG,
 ) -> OptimizationResult:
     """Solve residual objectives inside a declared recovered-minute floor."""
@@ -143,11 +174,12 @@ def optimize_plan_with_bounded_recovery(
     _validate_exposure_debt(scenario, exposure_debt_by_request_id)
     return _optimize_plan(
         scenario,
+        profile=replace(
+            BOUNDED_RECOVERY_PROFILE,
+            minimum_recovered_ratio=minimum_recovered_ratio,
+        ),
         config=config,
         exposure_debt_by_request_id=exposure_debt_by_request_id,
-        use_placement_scarcity=True,
-        minimum_recovered_ratio=minimum_recovered_ratio,
-        strategy="cp-sat-bounded-recovery@0.4.0",
     )
 
 
@@ -169,12 +201,13 @@ def _validate_exposure_debt(
 def _optimize_plan(
     scenario: Scenario,
     *,
+    profile: ObjectiveProfile,
     config: SolverConfig,
     exposure_debt_by_request_id: Mapping[str, int] | None,
-    use_placement_scarcity: bool,
-    minimum_recovered_ratio: float | None,
-    strategy: str,
 ) -> OptimizationResult:
+    if profile.uses_exposure_debt and exposure_debt_by_request_id is None:
+        raise ValueError(f"{profile.strategy} requires exposure_debt_by_request_id")
+    minimum_recovered_ratio = profile.minimum_recovered_ratio
 
     intervals = tuple(
         sorted(
@@ -247,13 +280,13 @@ def _optimize_plan(
         ),
         ("requests-served", requests_served),
     ]
-    if exposure_debt_by_request_id is not None:
+    if profile.uses_exposure_debt and exposure_debt_by_request_id is not None:
         exposure_debt_score = sum(
             exposure_debt_by_request_id.get(request_id, 0) * variable
             for (request_id, _interval_id), variable in variables.items()
         )
         phase_contract.append(("exposure-debt-score", exposure_debt_score))
-    if use_placement_scarcity:
+    if profile.uses_placement_scarcity:
         compatible_interval_counts = {
             request.request_id: sum(
                 request_id == request.request_id
@@ -328,7 +361,7 @@ def _optimize_plan(
     recovered_value = sum(item.scheduled_window.duration_minutes for item in assignments)
     open_minutes = sum(interval.window.duration_minutes for interval in intervals)
     plan = CandidatePlan(
-        strategy=strategy,
+        strategy=profile.strategy,
         assignments=assignments,
         recovered_minutes=recovered_value,
         remaining_gap_minutes=open_minutes - recovered_value,
