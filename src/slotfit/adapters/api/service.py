@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections.abc import Callable, Mapping
 from types import MappingProxyType
 
-from slotfit.api_schemas import (
+from slotfit.adapters.api.schemas import (
     AssignmentResponse,
     BookedAppointmentResponse,
     CancellationResponse,

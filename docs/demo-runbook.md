@@ -31,7 +31,7 @@ evidence.
 Terminal 1:
 
 ```bash
-PYTHONPATH=src uv run --python 3.12 uvicorn slotfit.api:app \
+PYTHONPATH=src uv run --python 3.12 uvicorn slotfit.composition:app \
   --app-dir src --host 127.0.0.1 --port 8000
 ```
 

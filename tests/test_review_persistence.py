@@ -6,7 +6,7 @@ import unittest
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-from slotfit.persistence import (
+from slotfit.adapters.persistence.sqlite_review_repository import (
     IdempotencyConflict,
     ReviewCommand,
     SQLiteReviewRepository,

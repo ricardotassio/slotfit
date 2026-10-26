@@ -6,8 +6,9 @@ from pathlib import Path
 
 from fastapi.testclient import TestClient
 
-from slotfit.api import app, get_review_repository
-from slotfit.persistence import SQLiteReviewRepository
+from slotfit.adapters.api.routes import get_review_repository
+from slotfit.composition import app
+from slotfit.adapters.persistence.sqlite_review_repository import SQLiteReviewRepository
 
 
 class ReviewApiTests(unittest.TestCase):

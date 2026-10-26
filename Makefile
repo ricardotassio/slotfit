@@ -12,7 +12,7 @@ review-test:
 	PYTHONPATH=src $(PYTHON) -m unittest tests.test_review_persistence tests.test_review_api -v
 
 api-smoke:
-	PYTHONPATH=src $(PYTHON) -c 'from fastapi.testclient import TestClient; from slotfit.api import app; client = TestClient(app); assert client.get("/health").status_code == 200; assert client.get("/api/v1/demos/global-conflict").status_code == 200; assert client.get("/api/v1/research/development-decision").json()["candidate_accepted"] is False'
+	PYTHONPATH=src $(PYTHON) -c 'from fastapi.testclient import TestClient; from slotfit.composition import app; client = TestClient(app); assert client.get("/health").status_code == 200; assert client.get("/api/v1/demos/global-conflict").status_code == 200; assert client.get("/api/v1/research/development-decision").json()["candidate_accepted"] is False'
 
 web-build:
 	npm --prefix web run build
@@ -26,22 +26,22 @@ screenshots:
 verify: test api-smoke web-build web-test
 
 demo:
-	PYTHONPATH=src $(PYTHON) -m slotfit.cli --seed 1400
+	PYTHONPATH=src $(PYTHON) -m slotfit.adapters.cli.demo --seed 1400
 
 multi-slot-demo:
-	PYTHONPATH=src $(PYTHON) -m slotfit.cli --mode multi-slot --seed 1500
+	PYTHONPATH=src $(PYTHON) -m slotfit.adapters.cli.demo --mode multi-slot --seed 1500
 
 generated-demo:
-	PYTHONPATH=src $(PYTHON) -m slotfit.cli --mode generated --seed 1101
+	PYTHONPATH=src $(PYTHON) -m slotfit.adapters.cli.demo --mode generated --seed 1101
 
 longitudinal-demo:
-	PYTHONPATH=src $(PYTHON) -m slotfit.cli --mode generated --seed 1101 --rounds 3
+	PYTHONPATH=src $(PYTHON) -m slotfit.adapters.cli.demo --mode generated --seed 1101 --rounds 3
 
 development-report:
-	PYTHONPATH=src $(PYTHON) -m slotfit.report_cli --split development
+	PYTHONPATH=src $(PYTHON) -m slotfit.adapters.cli.report --split development
 
 alternative-diagnostic:
-	PYTHONPATH=src $(PYTHON) -m slotfit.diagnostic_cli
+	PYTHONPATH=src $(PYTHON) -m slotfit.adapters.cli.diagnostic
 
 exposure-frontier:
-	PYTHONPATH=src $(PYTHON) -m slotfit.frontier_cli
+	PYTHONPATH=src $(PYTHON) -m slotfit.adapters.cli.frontier

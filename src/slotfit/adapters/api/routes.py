@@ -1,12 +1,10 @@
 from __future__ import annotations
 
-from pathlib import Path
-
-from fastapi import Depends, FastAPI, Request
+from fastapi import APIRouter, Depends, FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
-from slotfit.api_schemas import (
+from slotfit.adapters.api.schemas import (
     DemoResponse,
     DevelopmentDecisionResponse,
     ErrorResponse,
@@ -15,8 +13,8 @@ from slotfit.api_schemas import (
     ReviewCommandRequest,
     ReviewEventResponse,
 )
-from slotfit.api_service import SCHEMA_VERSION, get_demo, get_development_decision
-from slotfit.persistence import (
+from slotfit.adapters.api.service import SCHEMA_VERSION, get_demo, get_development_decision
+from slotfit.adapters.persistence.sqlite_review_repository import (
     IdempotencyConflict,
     ReviewCommand,
     SQLiteReviewRepository,
@@ -25,19 +23,21 @@ from slotfit.persistence import (
 
 APPLICATION_VERSION = "0.1.0"
 
-app = FastAPI(
-    title="SlotFit synthetic experiment API",
-    version=APPLICATION_VERSION,
-    description="Read-only local boundary for synthetic scheduling evidence.",
-)
+APPLICATION_TITLE = "SlotFit synthetic experiment API"
+APPLICATION_DESCRIPTION = "Read-only local boundary for synthetic scheduling evidence."
 
-_default_review_repository = SQLiteReviewRepository(
-    Path("artifacts/reviews/slotfit.db")
-)
+router = APIRouter()
 
 
 def get_review_repository() -> SQLiteReviewRepository:
-    return _default_review_repository
+    """Dependency marker; the composition root binds the concrete repository."""
+    raise RuntimeError("review repository not configured: use slotfit.composition.create_app")
+
+
+def register(app: FastAPI) -> None:
+    """Attach the routes and error handlers to an application built by the composition root."""
+    app.add_exception_handler(RequestValidationError, validation_error)
+    app.include_router(router)
 
 
 def _error(status_code: int, code: str, message: str) -> JSONResponse:
@@ -50,7 +50,6 @@ def _error(status_code: int, code: str, message: str) -> JSONResponse:
     )
 
 
-@app.exception_handler(RequestValidationError)
 def validation_error(
     _request: Request,
     _exception: RequestValidationError,
@@ -62,7 +61,7 @@ def validation_error(
     )
 
 
-@app.get("/health", response_model=HealthResponse)
+@router.get("/health", response_model=HealthResponse)
 def health() -> HealthResponse:
     return HealthResponse(
         status="ok",
@@ -71,7 +70,7 @@ def health() -> HealthResponse:
     )
 
 
-@app.get(
+@router.get(
     "/api/v1/demos/{demo_id}",
     response_model=DemoResponse,
     responses={404: {"model": ErrorResponse}},
@@ -83,7 +82,7 @@ def demo(demo_id: str) -> DemoResponse | JSONResponse:
     return _error(404, "demo_not_found", "The requested synthetic demo does not exist.")
 
 
-@app.get(
+@router.get(
     "/api/v1/research/development-decision",
     response_model=DevelopmentDecisionResponse,
 )
@@ -91,7 +90,7 @@ def development_decision() -> DevelopmentDecisionResponse:
     return get_development_decision()
 
 
-@app.post(
+@router.post(
     "/api/v1/reviews",
     response_model=RecordReviewResponse,
     status_code=201,
@@ -128,7 +127,7 @@ def record_review(
     return response
 
 
-@app.get(
+@router.get(
     "/api/v1/reviews/{event_id}",
     response_model=ReviewEventResponse,
     responses={404: {"model": ErrorResponse}},

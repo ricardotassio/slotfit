@@ -14,7 +14,7 @@ export default defineConfig({
   },
   webServer: [
     {
-      command: 'uv run --directory .. --python 3.12 uvicorn slotfit.api:app --app-dir src --host 127.0.0.1 --port 8000',
+      command: 'uv run --directory .. --python 3.12 uvicorn slotfit.composition:app --app-dir src --host 127.0.0.1 --port 8000',
       url: 'http://127.0.0.1:8000/health',
       reuseExistingServer: true,
       timeout: 30_000,
