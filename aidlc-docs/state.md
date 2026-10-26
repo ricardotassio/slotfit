@@ -2,10 +2,10 @@
 
 - Project: SlotFit
 - Repository type: greenfield
-- Phase: Complete — local POC and publication package
-- Active Bolt: none
-- Active spec: none
-- Last completed gate: SF-008 full local verification
+- Phase: Construction — cycle 2 (refinement)
+- Active Bolt: S9
+- Active spec: SF-009 — governance reconciliation
+- Last completed gate: cycle 2 proposal approved (2026-10-26)
 - External integrations: none
 - Real data: prohibited
 
@@ -46,11 +46,11 @@ The S1 machine-verifiable criteria passed on 2026-10-25. Ricardo explicitly
 authorized progression. His teach-back self-assessment remains a non-blocking
 learning follow-up, so SF-001 is `Accepted with follow-up`, not `Done`.
 
-## Proposed cycle 2 — pending human gate
+## Cycle 2 — approved
 
-A refinement cycle ("Um dia na clínica": narrative mode, plain-language
-explanations, engine explorer and communication refresh) is proposed in
-[`refinement-plan-2026-10.md`](refinement-plan-2026-10.md). It is not approved.
-`Current Phase` stays `Complete` until Ricardo approves the proposed Units
-(SF-009 to SF-014) and answers decisions D1–D5 in that document. No spec file
-has been created and no code has been written for cycle 2.
+Ricardo approved the refinement cycle in
+[`refinement-plan-2026-10.md`](refinement-plan-2026-10.md) on 2026-10-26 and
+authorized SF-009. Decisions D1–D5 are taken as recommended in the plan (D1a no
+money, D2a functional labels, D3 remove FullCalendar, D4 English-only UI, D5 S7
+stays closed) unless he states otherwise. Units: SF-009 to SF-014, one active at
+a time.

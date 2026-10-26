@@ -242,3 +242,14 @@
 - Decision: constraint programming is presented as deterministic symbolic AI
   chosen for problem structure; generative AI stays outside the decision path.
 - Gate: `blocking-approval` by Ricardo; nothing in cycle 2 is implemented.
+
+## 2026-10-26 — Cycle 2 approval and SF-009 start
+
+- Decision: Ricardo approved the cycle 2 plan and authorized SF-009. Decisions
+  D1–D5 are recorded as the plan's recommendations (no money in any surface,
+  functional request labels, FullCalendar removed, English-only UI, S7 closed)
+  pending any contrary instruction.
+- Decision: SF-009 reconciles the publication test, the unspecified UI
+  redesign, the orphaned FullCalendar dependency and stale status documents
+  before any cycle 2 feature.
+- Gate label: `blocking-approval` given in chat; recorded here.
