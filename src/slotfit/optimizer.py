@@ -8,7 +8,14 @@ from enum import StrEnum
 import ortools
 from ortools.sat.python import cp_model
 
-from slotfit.domain import Assignment, CandidatePlan, Scenario
+from slotfit.domain import (
+    Assignment,
+    CandidateEvaluation,
+    CandidatePlan,
+    OpenInterval,
+    Scenario,
+    WaitRequest,
+)
 from slotfit.eligibility import evaluate_request, scheduled_window
 
 
@@ -198,6 +205,30 @@ def _validate_exposure_debt(
         raise ValueError("exposure debt values must be non-negative integers")
 
 
+_VariableKey = tuple[str, str]
+_Variables = dict[_VariableKey, cp_model.IntVar]
+_Objective = cp_model.LinearExpr | int
+_PhaseContract = tuple[tuple[str, _Objective], ...]
+
+
+@dataclass(frozen=True, slots=True)
+class _OptimizationProblem:
+    """Deterministically ordered inputs shared by every optimizer step."""
+
+    requests: tuple[WaitRequest, ...]
+    intervals: tuple[OpenInterval, ...]
+    evaluations: tuple[CandidateEvaluation, ...]
+    request_by_id: Mapping[str, WaitRequest]
+    interval_by_id: Mapping[str, OpenInterval]
+
+
+@dataclass(frozen=True, slots=True)
+class _PhaseOutcome:
+    phases: tuple[SolverPhase, ...]
+    selected_keys: frozenset[_VariableKey]
+    status: SolverStatus
+
+
 def _optimize_plan(
     scenario: Scenario,
     *,
@@ -207,8 +238,29 @@ def _optimize_plan(
 ) -> OptimizationResult:
     if profile.uses_exposure_debt and exposure_debt_by_request_id is None:
         raise ValueError(f"{profile.strategy} requires exposure_debt_by_request_id")
-    minimum_recovered_ratio = profile.minimum_recovered_ratio
 
+    problem = _build_problem(scenario)
+    model = cp_model.CpModel()
+    variables = _create_variables(model, problem)
+    _add_exclusivity_constraints(model, problem, variables)
+    contract = _phase_contract(profile, problem, variables, exposure_debt_by_request_id)
+    outcome = _solve_phases(
+        model, contract, config, profile.minimum_recovered_ratio, variables
+    )
+    return OptimizationResult(
+        status=outcome.status,
+        optimized=(
+            len(outcome.phases) == len(contract)
+            and all(phase.status is SolverStatus.OPTIMAL for phase in outcome.phases)
+        ),
+        plan=_build_plan(problem, outcome.selected_keys, profile.strategy),
+        phases=outcome.phases,
+        config=config,
+        engine_version=ortools.__version__,
+    )
+
+
+def _build_problem(scenario: Scenario) -> _OptimizationProblem:
     intervals = tuple(
         sorted(
             scenario.open_intervals,
@@ -220,30 +272,45 @@ def _optimize_plan(
         )
     )
     requests = tuple(sorted(scenario.wait_requests, key=lambda item: item.joined_order))
-    request_by_id = {request.request_id: request for request in requests}
-    interval_by_id = {interval.interval_id: interval for interval in intervals}
     evaluations = tuple(
         evaluate_request(scenario, interval, request)
         for interval in intervals
         for request in requests
     )
+    return _OptimizationProblem(
+        requests=requests,
+        intervals=intervals,
+        evaluations=evaluations,
+        request_by_id={request.request_id: request for request in requests},
+        interval_by_id={interval.interval_id: interval for interval in intervals},
+    )
+
+
+def _create_variables(model: cp_model.CpModel, problem: _OptimizationProblem) -> _Variables:
+    """Create one boolean per eligible pair: requests outer, intervals inner."""
 
     evaluation_by_key = {
         (evaluation.request_id, evaluation.interval_id): evaluation
-        for evaluation in evaluations
+        for evaluation in problem.evaluations
     }
+    variables: _Variables = {}
+    for request_position, request in enumerate(problem.requests, start=1):
+        for interval_position, interval in enumerate(problem.intervals, start=1):
+            key = (request.request_id, interval.interval_id)
+            if not evaluation_by_key[key].eligible:
+                continue
+            variables[key] = model.new_bool_var(
+                f"assign_r{request_position}_i{interval_position}"
+            )
+    return variables
 
-    model = cp_model.CpModel()
-    variables: dict[tuple[str, str], cp_model.IntVar] = {}
-    for request_position, request in enumerate(requests, start=1):
-        for interval_position, interval in enumerate(intervals, start=1):
-            evaluation = evaluation_by_key[(request.request_id, interval.interval_id)]
-            if evaluation.eligible:
-                variables[(request.request_id, interval.interval_id)] = model.new_bool_var(
-                    f"assign_r{request_position}_i{interval_position}"
-                )
 
-    for request in requests:
+def _add_exclusivity_constraints(
+    model: cp_model.CpModel,
+    problem: _OptimizationProblem,
+    variables: _Variables,
+) -> None:
+    for request in problem.requests:
         model.add(
             sum(
                 variable
@@ -252,7 +319,7 @@ def _optimize_plan(
             )
             <= 1
         )
-    for interval in intervals:
+    for interval in problem.intervals:
         model.add(
             sum(
                 variable
@@ -262,119 +329,172 @@ def _optimize_plan(
             <= 1
         )
 
-    recovered_minutes = sum(
-        request_by_id[request_id].duration_minutes * variable
-        for (request_id, _interval_id), variable in variables.items()
+
+def _phase_contract(
+    profile: ObjectiveProfile,
+    problem: _OptimizationProblem,
+    variables: _Variables,
+    exposure_debt_by_request_id: Mapping[str, int] | None,
+) -> _PhaseContract:
+    """Ordered lexicographic objectives for the profile; the order is the contract."""
+
+    recovered_minutes_name = (
+        "recovered-minutes-ceiling"
+        if profile.minimum_recovered_ratio is not None
+        else "recovered-minutes"
     )
-    requests_served = sum(variables.values())
-    wait_age_score = sum(
-        (len(requests) + 1 - request_by_id[request_id].joined_order) * variable
-        for (request_id, _interval_id), variable in variables.items()
-    )
-    phase_contract = [
-        (
-            "recovered-minutes-ceiling"
-            if minimum_recovered_ratio is not None
-            else "recovered-minutes",
-            recovered_minutes,
-        ),
-        ("requests-served", requests_served),
+    contract: list[tuple[str, _Objective]] = [
+        (recovered_minutes_name, _recovered_minutes(problem, variables)),
+        ("requests-served", sum(variables.values())),
     ]
     if profile.uses_exposure_debt and exposure_debt_by_request_id is not None:
-        exposure_debt_score = sum(
-            exposure_debt_by_request_id.get(request_id, 0) * variable
-            for (request_id, _interval_id), variable in variables.items()
-        )
-        phase_contract.append(("exposure-debt-score", exposure_debt_score))
-    if profile.uses_placement_scarcity:
-        compatible_interval_counts = {
-            request.request_id: sum(
-                request_id == request.request_id
-                for request_id, _interval_id in variables
-            )
-            for request in requests
-        }
-        placement_scarcity_score = sum(
+        contract.append(
             (
-                len(intervals)
-                + 1
-                - compatible_interval_counts[request_id]
+                "exposure-debt-score",
+                _exposure_debt_score(variables, exposure_debt_by_request_id),
             )
-            * variable
-            for (request_id, _interval_id), variable in variables.items()
         )
-        phase_contract.append(("placement-scarcity-score", placement_scarcity_score))
-    phase_contract.append(("wait-age-score", wait_age_score))
+    if profile.uses_placement_scarcity:
+        contract.append(
+            ("placement-scarcity-score", _placement_scarcity_score(problem, variables))
+        )
+    contract.append(("wait-age-score", _wait_age_score(problem, variables)))
+    return tuple(contract)
 
-    phase_results: list[SolverPhase] = []
-    selected_keys: set[tuple[str, str]] = set()
-    final_status = SolverStatus.UNKNOWN
 
-    for phase_index, (phase_name, objective) in enumerate(phase_contract):
+def _recovered_minutes(
+    problem: _OptimizationProblem,
+    variables: _Variables,
+) -> _Objective:
+    return sum(
+        problem.request_by_id[request_id].duration_minutes * variable
+        for (request_id, _interval_id), variable in variables.items()
+    )
+
+
+def _wait_age_score(
+    problem: _OptimizationProblem,
+    variables: _Variables,
+) -> _Objective:
+    return sum(
+        (len(problem.requests) + 1 - problem.request_by_id[request_id].joined_order)
+        * variable
+        for (request_id, _interval_id), variable in variables.items()
+    )
+
+
+def _exposure_debt_score(
+    variables: _Variables,
+    exposure_debt_by_request_id: Mapping[str, int],
+) -> _Objective:
+    return sum(
+        exposure_debt_by_request_id.get(request_id, 0) * variable
+        for (request_id, _interval_id), variable in variables.items()
+    )
+
+
+def _placement_scarcity_score(
+    problem: _OptimizationProblem,
+    variables: _Variables,
+) -> _Objective:
+    compatible_interval_counts = {
+        request.request_id: sum(
+            request_id == request.request_id for request_id, _interval_id in variables
+        )
+        for request in problem.requests
+    }
+    return sum(
+        (len(problem.intervals) + 1 - compatible_interval_counts[request_id]) * variable
+        for (request_id, _interval_id), variable in variables.items()
+    )
+
+
+def _solve_phases(
+    model: cp_model.CpModel,
+    contract: _PhaseContract,
+    config: SolverConfig,
+    minimum_recovered_ratio: float | None,
+    variables: _Variables,
+) -> _PhaseOutcome:
+    """Solve each phase in order, fixing its optimum before the next one."""
+
+    phases: list[SolverPhase] = []
+    selected_keys: frozenset[_VariableKey] = frozenset()
+    status = SolverStatus.UNKNOWN
+
+    for phase_index, (phase_name, objective) in enumerate(contract):
         model.maximize(objective)
         solver = _configured_solver(config)
-        raw_status = solver.solve(model)
-        final_status = _status(solver, raw_status)
-        has_solution = final_status in (SolverStatus.OPTIMAL, SolverStatus.FEASIBLE)
-        objective_value = int(round(solver.objective_value)) if has_solution else None
-        best_bound = float(solver.best_objective_bound) if has_solution else None
-        phase_results.append(
-            SolverPhase(
-                name=phase_name,
-                status=final_status,
-                objective_value=objective_value,
-                best_objective_bound=best_bound,
-                wall_time_seconds=float(solver.wall_time),
-            )
-        )
-        if has_solution:
-            selected_keys = {
+        status = _status(solver, solver.solve(model))
+        phase = _phase_record(phase_name, solver, status)
+        phases.append(phase)
+        if phase.objective_value is not None:
+            selected_keys = frozenset(
                 key for key, variable in variables.items() if solver.value(variable) == 1
-            }
-        if final_status is not SolverStatus.OPTIMAL:
-            break
-        assert objective_value is not None
-        if phase_index == 0 and minimum_recovered_ratio is not None:
-            model.add(
-                objective >= math.ceil(objective_value * minimum_recovered_ratio)
             )
-        else:
-            model.add(objective == objective_value)
+        if status is not SolverStatus.OPTIMAL:
+            break
+        assert phase.objective_value is not None
+        _fix_phase_optimum(
+            model, objective, phase.objective_value, phase_index, minimum_recovered_ratio
+        )
 
+    return _PhaseOutcome(phases=tuple(phases), selected_keys=selected_keys, status=status)
+
+
+def _phase_record(name: str, solver: cp_model.CpSolver, status: SolverStatus) -> SolverPhase:
+    has_solution = status in (SolverStatus.OPTIMAL, SolverStatus.FEASIBLE)
+    return SolverPhase(
+        name=name,
+        status=status,
+        objective_value=int(round(solver.objective_value)) if has_solution else None,
+        best_objective_bound=float(solver.best_objective_bound) if has_solution else None,
+        wall_time_seconds=float(solver.wall_time),
+    )
+
+
+def _fix_phase_optimum(
+    model: cp_model.CpModel,
+    objective: _Objective,
+    objective_value: int,
+    phase_index: int,
+    minimum_recovered_ratio: float | None,
+) -> None:
+    if phase_index == 0 and minimum_recovered_ratio is not None:
+        model.add(objective >= math.ceil(objective_value * minimum_recovered_ratio))
+        return
+    model.add(objective == objective_value)
+
+
+def _build_plan(
+    problem: _OptimizationProblem,
+    selected_keys: frozenset[_VariableKey],
+    strategy: str,
+) -> CandidatePlan:
+    ordered_keys = sorted(
+        selected_keys,
+        key=lambda key: (
+            problem.interval_by_id[key[1]].window.start,
+            problem.request_by_id[key[0]].joined_order,
+        ),
+    )
     assignments = tuple(
         Assignment(
             request_id=request_id,
             interval_id=interval_id,
             scheduled_window=scheduled_window(
-                interval_by_id[interval_id],
-                request_by_id[request_id],
+                problem.interval_by_id[interval_id],
+                problem.request_by_id[request_id],
             ),
         )
-        for request_id, interval_id in sorted(
-            selected_keys,
-            key=lambda key: (
-                interval_by_id[key[1]].window.start,
-                request_by_id[key[0]].joined_order,
-            ),
-        )
+        for request_id, interval_id in ordered_keys
     )
     recovered_value = sum(item.scheduled_window.duration_minutes for item in assignments)
-    open_minutes = sum(interval.window.duration_minutes for interval in intervals)
-    plan = CandidatePlan(
-        strategy=profile.strategy,
+    open_minutes = sum(interval.window.duration_minutes for interval in problem.intervals)
+    return CandidatePlan(
+        strategy=strategy,
         assignments=assignments,
         recovered_minutes=recovered_value,
         remaining_gap_minutes=open_minutes - recovered_value,
-        evaluations=evaluations,
-    )
-    return OptimizationResult(
-        status=final_status,
-        optimized=(
-            len(phase_results) == len(phase_contract)
-            and all(phase.status is SolverStatus.OPTIMAL for phase in phase_results)
-        ),
-        plan=plan,
-        phases=tuple(phase_results),
-        config=config,
-        engine_version=ortools.__version__,
+        evaluations=problem.evaluations,
     )
