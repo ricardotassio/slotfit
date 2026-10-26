@@ -5,8 +5,8 @@ from pathlib import Path
 
 from slotfit.domain.model import TimeWindow
 from slotfit.domain.eligibility import evaluate_request
-from slotfit.generation import SPLIT_SEEDS
-from slotfit.multi_generation import MULTI_SLOT_SEEDS
+from slotfit.research.generation import SPLIT_SEEDS
+from slotfit.research.multi_generation import MULTI_SLOT_SEEDS
 from slotfit.solver.optimizer import optimize_plan
 from slotfit.application.scenarios import clinic_day_story, multi_slot_counterexample
 from slotfit.application.strategies import best_fit_plan, fifo_plan

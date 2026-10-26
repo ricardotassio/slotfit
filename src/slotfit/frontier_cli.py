@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from dataclasses import asdict
 
-from slotfit.exposure_frontier import build_local_exposure_frontier
+from slotfit.research.exposure_frontier import build_local_exposure_frontier
 
 
 def main() -> None:

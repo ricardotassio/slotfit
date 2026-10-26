@@ -3,7 +3,7 @@ from __future__ import annotations
 import unittest
 from dataclasses import fields, replace
 
-from slotfit.alternative_diagnostic import (
+from slotfit.research.alternative_diagnostic import (
     diagnose_development_alternatives,
     enumerate_primary_optimal_plans,
 )

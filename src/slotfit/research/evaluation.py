@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from slotfit.domain.model import CandidatePlan
 from slotfit.domain.eligibility import scheduled_window
-from slotfit.generation import (
+from slotfit.research.generation import (
     EvaluationSplit,
     GeneratedScenario,
     RequestAuditSlice,

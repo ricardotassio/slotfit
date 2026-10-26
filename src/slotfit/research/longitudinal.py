@@ -4,8 +4,8 @@ from collections.abc import Callable, Mapping
 from dataclasses import dataclass, replace
 
 from slotfit.domain.model import CandidatePlan, Scenario
-from slotfit.evaluation import ScenarioEvaluation, evaluate_generated_plan
-from slotfit.generation import (
+from slotfit.research.evaluation import ScenarioEvaluation, evaluate_generated_plan
+from slotfit.research.generation import (
     EvaluationSplit,
     GeneratedScenario,
     RequestAuditSlice,

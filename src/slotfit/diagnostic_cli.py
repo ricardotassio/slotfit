@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from dataclasses import asdict
 
-from slotfit.alternative_diagnostic import diagnose_development_alternatives
+from slotfit.research.alternative_diagnostic import diagnose_development_alternatives
 
 
 def main() -> None:

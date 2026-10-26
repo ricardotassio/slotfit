@@ -8,15 +8,15 @@ from dataclasses import dataclass, field, replace
 from statistics import mean, median
 
 from slotfit.domain.model import CandidatePlan, Scenario
-from slotfit.evaluation import evaluate_generated_plan
-from slotfit.generation import EvaluationSplit
-from slotfit.longitudinal import (
+from slotfit.research.evaluation import evaluate_generated_plan
+from slotfit.research.generation import EvaluationSplit
+from slotfit.research.longitudinal import (
     DebtAwareStrategy,
     LongitudinalRequestRecord,
     simulate_exposure_debt_rounds,
     simulate_opportunity_rounds,
 )
-from slotfit.multi_generation import (
+from slotfit.research.multi_generation import (
     DEFAULT_MULTI_SLOT_CONFIG,
     MULTI_SLOT_SEEDS,
     generate_multi_slot_scenario,
@@ -26,7 +26,7 @@ from slotfit.solver.optimizer import (
     optimize_plan_with_bounded_recovery,
 )
 from slotfit.application.strategies import best_fit_plan, fifo_plan
-from slotfit.thresholds import (
+from slotfit.research.thresholds import (
     SLICE_GAP_DEGRADATION_LIMIT,
     STARVATION_DEGRADATION_LIMIT,
     STARVATION_K,

@@ -4,8 +4,8 @@ import argparse
 import json
 from dataclasses import asdict
 
-from slotfit.comparison import compare_engineering_split
-from slotfit.generation import EvaluationSplit
+from slotfit.research.comparison import compare_engineering_split
+from slotfit.research.generation import EvaluationSplit
 
 
 def main() -> None:

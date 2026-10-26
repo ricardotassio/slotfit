@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import unittest
 
-from slotfit.comparison import compare_engineering_split
-from slotfit.generation import EvaluationSplit
+from slotfit.research.comparison import compare_engineering_split
+from slotfit.research.generation import EvaluationSplit
 
 
 class DevelopmentComparisonTests(unittest.TestCase):

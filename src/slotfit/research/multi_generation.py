@@ -7,7 +7,7 @@ from typing import Mapping
 from zoneinfo import ZoneInfo
 
 from slotfit.domain.model import OpenInterval, Scenario, TimeWindow, WaitRequest
-from slotfit.generation import (
+from slotfit.research.generation import (
     EvaluationSplit,
     GeneratedScenario,
     RequestAuditSlice,

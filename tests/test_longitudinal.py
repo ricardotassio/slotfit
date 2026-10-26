@@ -3,8 +3,8 @@ from __future__ import annotations
 import unittest
 from collections.abc import Mapping
 
-from slotfit.generation import generate_scenario
-from slotfit.longitudinal import (
+from slotfit.research.generation import generate_scenario
+from slotfit.research.longitudinal import (
     simulate_exposure_debt_rounds,
     simulate_opportunity_rounds,
 )
