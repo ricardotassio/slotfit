@@ -320,3 +320,16 @@
   GitHub account and `main` pushed; the repository URL replaced the placeholder
   in both LinkedIn drafts and the storyboard. `{VIDEO_URL}` stays until the
   video is uploaded. Making the repository public remains his decision.
+
+## 2026-10-26 — SF-016 start
+
+- Decision: Ricardo authorized a layered package layout, a Docker reproduction
+  path and architecture documentation ("faca a atualizacao no repositorio,
+  garanta que tudo esteja funcionando e rode os testes para que nao haja
+  regressao, crie um ambiente com o docker para facilitar a replicacao, e
+  documente a arquitetura utilizada").
+- Decision: hexagonal layout (domain, application, solver, research, adapters,
+  composition) chosen over feature folders because the project has one feature
+  and the meaningful split is by responsibility; no interface per dependency.
+- Decision: the architecture test is written first and must fail on the flat
+  layout before any module moves.

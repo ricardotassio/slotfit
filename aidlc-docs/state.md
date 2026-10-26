@@ -3,8 +3,8 @@
 - Project: SlotFit
 - Repository type: greenfield
 - Phase: Construction — cycle 2 (refinement)
-- Active Bolt: none (next: S11, after Ricardo authorizes SF-011)
-- Active spec: none
+- Active Bolt: S16 (SF-016, authorized 2026-10-26; S11 still next in the cycle-2 order)
+- Active spec: SF-016
 - Last completed gate: SF-015 code organization and experiment narrative (2026-10-26)
 - External integrations: none
 - Real data: prohibited
