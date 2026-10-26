@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, fields, replace
+from dataclasses import dataclass, replace
 from itertools import product
 
 from slotfit.domain import Assignment, CandidatePlan, Scenario
 from slotfit.eligibility import evaluate_request, scheduled_window
-from slotfit.generation import EvaluationSplit, RequestAuditSlice
+from slotfit.generation import EvaluationSplit
 from slotfit.multi_generation import MULTI_SLOT_SEEDS, generate_multi_slot_scenario
 from slotfit.optimizer import optimize_plan_with_exposure_debt
 
@@ -149,14 +149,6 @@ def enumerate_primary_optimal_plans(
     )
 
 
-def _slice_values(audit_slice: RequestAuditSlice) -> tuple[tuple[str, str], ...]:
-    return tuple(
-        (field.name, str(getattr(audit_slice, field.name)))
-        for field in fields(RequestAuditSlice)
-        if field.name != "request_id"
-    )
-
-
 def diagnose_development_alternatives(
     *,
     rounds: int = 5,
@@ -230,14 +222,14 @@ def diagnose_development_alternatives(
             round_slice_keys = {
                 slice_key
                 for request_id in eligible_request_ids
-                for slice_key in _slice_values(audit_by_request[request_id])
+                for slice_key in audit_by_request[request_id].dimension_values()
             }
             for slice_key in round_slice_keys:
                 totals = slice_totals.setdefault(slice_key, _MutableSliceDiagnostic())
                 eligible_ids_in_slice = {
                     request_id
                     for request_id in eligible_request_ids
-                    if slice_key in _slice_values(audit_by_request[request_id])
+                    if slice_key in audit_by_request[request_id].dimension_values()
                 }
                 actual_exposure_count = len(
                     selected_request_ids & eligible_ids_in_slice

@@ -4,12 +4,12 @@ import hashlib
 import json
 import math
 from collections.abc import Callable, Mapping
-from dataclasses import dataclass, field, fields, replace
+from dataclasses import dataclass, field, replace
 from statistics import mean, median
 
 from slotfit.domain import CandidatePlan, Scenario
 from slotfit.evaluation import evaluate_generated_plan
-from slotfit.generation import EvaluationSplit, RequestAuditSlice
+from slotfit.generation import EvaluationSplit
 from slotfit.longitudinal import (
     DebtAwareStrategy,
     LongitudinalRequestRecord,
@@ -128,21 +128,13 @@ def _rate(numerator: int, denominator: int) -> float | None:
     return numerator / denominator if denominator else None
 
 
-def _slice_values(audit_slice: RequestAuditSlice) -> tuple[tuple[str, str], ...]:
-    return tuple(
-        (field.name, str(getattr(audit_slice, field.name)))
-        for field in fields(RequestAuditSlice)
-        if field.name != "request_id"
-    )
-
-
 def _slice_comparisons(
     histories: list[LongitudinalRequestRecord],
     overall_exposure_rate: float,
 ) -> tuple[SliceComparison, ...]:
     grouped: dict[tuple[str, str], list[LongitudinalRequestRecord]] = {}
     for history in histories:
-        for dimension_and_value in _slice_values(history.audit_slice):
+        for dimension_and_value in history.audit_slice.dimension_values():
             grouped.setdefault(dimension_and_value, []).append(history)
 
     results: list[SliceComparison] = []

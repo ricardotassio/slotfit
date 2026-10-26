@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, fields
 from datetime import datetime, timedelta
 from enum import StrEnum
 from types import MappingProxyType
@@ -43,6 +43,15 @@ class RequestAuditSlice:
     resource_band: str
     wait_age_band: str
     notice_band: str
+
+    def dimension_values(self) -> tuple[tuple[str, str], ...]:
+        """Return every audit dimension with its value, excluding the request id."""
+
+        return tuple(
+            (field.name, str(getattr(self, field.name)))
+            for field in fields(RequestAuditSlice)
+            if field.name != "request_id"
+        )
 
 
 @dataclass(frozen=True, slots=True)

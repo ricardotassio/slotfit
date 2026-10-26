@@ -57,6 +57,17 @@ class GeneratedScenarioTests(unittest.TestCase):
             len(generated.manifest.audit_slices),
             len(generated.scenario.wait_requests),
         )
+        dimension_values = generated.manifest.audit_slices[0].dimension_values()
+        self.assertEqual(
+            tuple(dimension for dimension, _value in dimension_values),
+            (
+                "duration_band",
+                "availability_band",
+                "resource_band",
+                "wait_age_band",
+                "notice_band",
+            ),
+        )
 
     def test_opaque_identifiers_do_not_change_selected_position(self) -> None:
         scenario = generate_scenario(1400).scenario
