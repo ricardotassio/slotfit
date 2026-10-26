@@ -162,6 +162,30 @@ HIG orienta princípios, não cromo de plataforma.
 - **Sinteticidade visível.** Um selo "dados sintéticos" permanece em todas as
   telas; nomes de personas, se usados, são claramente fictícios e sem sobrenome.
 
+### Direção visual (decisão de 2026-10-26)
+
+- **Aparência de aplicação real, não de explicador editorial.** Barra lateral
+  de navegação (Schedule, Waitlist, Reviews, Evidence), barra de data com
+  Day/Week e filtro de profissional, grade de horários por sala com linhas de
+  meia hora, lista de espera como painel lateral em linhas, e a narrativa como
+  um cartão de passo guiado ("Step 3 of 6") no canto do painel, não como
+  manchete.
+- **Verde sobre branco.** Fundo `#FFFFFF`; tinta `#17201B`; texto secundário
+  `#5B6762`; verde primário `#0F7A3C` (contraste 5,4:1 sobre branco); verde
+  escuro `#0A5A2C`; tinta verde `#E6F4EB` para blocos propostos; cinza
+  `#F4F6F5` com borda `#B9C4BE` para blocos já marcados; aberturas vazias com
+  hachura cinza e borda tracejada `#8E9B94`. Nenhum vermelho, nenhum âmbar.
+- **Tipografia do site de referência (elemarjr.com), confirmada por Ricardo:**
+  `Montserrat` em tudo. Títulos `Montserrat 600` com entrelinha justa (a
+  referência usa 42px/42px) na cor verde `#0F7A3C` no lugar do laranja
+  `#ff7325` do site; corpo `Montserrat 400`, cor `#333333` (a referência usa
+  20px/30px; a aplicação reduz o tamanho para densidade de agenda, mantendo
+  peso, cor e proporção de entrelinha). Sem serifa.
+- **Sem marcas de página gerada:** sem eyebrows em caixa alta, sem
+  separadores "·", sem cartões idênticos com sombra, sem números gigantes em
+  serifa, sem ícones de emoji; ícones são SVG de traço.
+- **Faixa de no-go** logo abaixo da barra de data, em todas as telas.
+
 ## 5. Bolts propostos
 
 Cada Bolt vira uma spec em `specs/` só depois do gate. Todos herdam as regras de
@@ -453,7 +477,8 @@ paridade numérica ampliada e capturas como superfície de claim (LOW-9).
 ## Mock visual
 
 Um mock dos capítulos 2 a 4 foi produzido como artefato de design para aprovação
-dos beats antes de qualquer código. O link fica registrado no audit quando a
-decisão de design for tomada. O mock é ilustração de layout e linguagem; os
+dos beats antes de qualquer código (artefato privado:
+`https://claude.ai/artifact/9r6HZ48dfgbw1q43DAxooQ`). O link fica registrado no
+audit quando a decisão de design for tomada. O mock é ilustração de layout e linguagem; os
 números nele são os da fixture atual (60/120) e não substituem a API. O mock
 usa rótulos funcionais (D2a) e carrega a faixa de no-go em todas as telas.
