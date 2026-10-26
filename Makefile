@@ -1,6 +1,6 @@
 PYTHON := uv run --python 3.12 python
 
-.PHONY: test api-test review-test api-smoke web-build web-test screenshots verify demo multi-slot-demo generated-demo longitudinal-demo development-report alternative-diagnostic exposure-frontier
+.PHONY: test api-test review-test api-smoke web-build web-test screenshots verify docker-build docker-run docker-test demo multi-slot-demo generated-demo longitudinal-demo development-report alternative-diagnostic exposure-frontier
 
 test:
 	PYTHONPATH=src $(PYTHON) -m unittest discover -s tests -v
@@ -45,3 +45,13 @@ alternative-diagnostic:
 
 exposure-frontier:
 	PYTHONPATH=src $(PYTHON) -m slotfit.adapters.cli.frontier
+
+docker-build:
+	docker build -t slotfit:local .
+
+docker-run:
+	docker compose up --build
+
+docker-test:
+	docker run --rm slotfit:local python -m unittest discover -s tests
+	docker run --rm slotfit:local python -c 'from fastapi.testclient import TestClient; from slotfit.composition import app; client = TestClient(app); assert client.get("/health").status_code == 200; assert client.get("/").status_code == 200; assert client.get("/api/v1/demos/clinic-day").status_code == 200'

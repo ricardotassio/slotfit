@@ -1,0 +1,15 @@
+# docker compose up --build  ->  http://localhost:8000 (UI and API in one process).
+# The review log lives in a named volume so simulated reviews survive restarts.
+services:
+  slotfit:
+    build: .
+    image: slotfit:local
+    ports:
+      - "8000:8000"
+    volumes:
+      - reviews:/data
+    environment:
+      SLOTFIT_REVIEW_DATABASE: /data/slotfit.db
+
+volumes:
+  reviews:
