@@ -285,3 +285,17 @@
 - Observation: the story fixture reproduces the counterexample numbers exactly
   (60/60/120), so the story UI can read every number from the API.
 - Next: SF-011 (three-screen story mode in the web app) awaits explicit start.
+
+## 2026-10-26 — SF-015 start
+
+- Decision: Ricardo authorized a code-organization and narrative Bolt before
+  SF-011 ("carregue as skills necessarias de SOLID, Clean Code, GRASP, Object
+  Calisthenics, para organizar o codigo... tire screenshots da tela e suba no
+  readme... use a documentacao para explicar as camadas e cada etapa do
+  experimento"). Opened as SF-015 so the cycle-2 numbering is untouched.
+- Decision: refactors are behaviour-preserving only; the existing 98 Python
+  tests, API smoke, typed build and Playwright tests are the safety net.
+- Decision: screenshots come from a Playwright script, never by hand, and every
+  capture carries the no-go strip (SF-014 capture rule applied early).
+- Decision: the README names no employer or company; the only biographical fact
+  is ten years building healthcare software.

@@ -26,6 +26,7 @@ Specifications are the implementation contract between product intent, code and 
 | [`SF-008`](008-hardening-and-communication.md) | Done | Harden reproducibility and prepare bilingual evidence-based video/post materials |
 | [`SF-009`](009-governance-reconciliation.md) | Done | Reconcile docs, tests and the web component before cycle 2 features |
 | [`SF-010`](010-clinic-day-fixture-and-explanations.md) | Done | Add the clinic-day story fixture, display-only context and plain-language explanations |
+| [`SF-015`](015-code-organization-and-experiment-narrative.md) | In progress | Organize the code along SOLID/GRASP/Clean Code and tell the experiment sequentially with generated screenshots |
 
 ## Working rule
 
