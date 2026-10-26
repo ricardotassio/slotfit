@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, replace
 
-from slotfit.domain import CandidatePlan, Scenario
+from slotfit.domain.model import CandidatePlan, Scenario
 from slotfit.evaluation import ScenarioEvaluation, evaluate_generated_plan
 from slotfit.generation import (
     EvaluationSplit,

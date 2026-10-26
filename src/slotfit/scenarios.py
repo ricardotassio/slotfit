@@ -1,8 +1,8 @@
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-from slotfit.day_context import BookedAppointment, Cancellation, DayContext
-from slotfit.domain import OpenInterval, Scenario, TimeWindow, WaitRequest
+from slotfit.domain.day_context import BookedAppointment, Cancellation, DayContext
+from slotfit.domain.model import OpenInterval, Scenario, TimeWindow, WaitRequest
 
 
 def demo_scenario(seed: int = 1400) -> Scenario:

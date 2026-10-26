@@ -5,7 +5,7 @@ from dataclasses import dataclass, replace
 
 from slotfit.alternative_diagnostic import enumerate_feasible_plans
 from slotfit.comparison import BASELINE_STRATEGIES, compare_engineering_split
-from slotfit.domain import CandidatePlan, Scenario
+from slotfit.domain.model import CandidatePlan, Scenario
 from slotfit.generation import EvaluationSplit
 from slotfit.multi_generation import MULTI_SLOT_SEEDS, generate_multi_slot_scenario
 from slotfit.optimizer import optimize_plan_with_placement_scarcity

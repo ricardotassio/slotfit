@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import timedelta
 
-from slotfit.domain import CandidateEvaluation, OpenInterval, Scenario, TimeWindow, WaitRequest
+from slotfit.domain.model import CandidateEvaluation, OpenInterval, Scenario, TimeWindow, WaitRequest
 
 
 def scheduled_window(interval: OpenInterval, request: WaitRequest) -> TimeWindow:

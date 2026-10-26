@@ -9,7 +9,7 @@ from types import MappingProxyType
 from typing import Any, Mapping
 from zoneinfo import ZoneInfo
 
-from slotfit.domain import OpenInterval, Scenario, TimeWindow, WaitRequest
+from slotfit.domain.model import OpenInterval, Scenario, TimeWindow, WaitRequest
 
 
 class EvaluationSplit(StrEnum):

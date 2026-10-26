@@ -7,7 +7,7 @@ from slotfit.alternative_diagnostic import (
     diagnose_development_alternatives,
     enumerate_primary_optimal_plans,
 )
-from slotfit.domain import Scenario
+from slotfit.domain.model import Scenario
 from slotfit.scenarios import multi_slot_counterexample
 
 

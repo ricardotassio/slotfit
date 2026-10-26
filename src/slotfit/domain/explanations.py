@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from types import MappingProxyType
 
-from slotfit.domain import CandidateEvaluation
+from slotfit.domain.model import CandidateEvaluation
 
 
 ELIGIBLE_EXPLANATION = "This request can take this opening."

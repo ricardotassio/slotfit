@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from slotfit.domain import CandidatePlan
-from slotfit.eligibility import scheduled_window
+from slotfit.domain.model import CandidatePlan
+from slotfit.domain.eligibility import scheduled_window
 from slotfit.generation import (
     EvaluationSplit,
     GeneratedScenario,

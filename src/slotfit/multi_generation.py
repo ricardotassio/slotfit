@@ -6,7 +6,7 @@ from types import MappingProxyType
 from typing import Mapping
 from zoneinfo import ZoneInfo
 
-from slotfit.domain import OpenInterval, Scenario, TimeWindow, WaitRequest
+from slotfit.domain.model import OpenInterval, Scenario, TimeWindow, WaitRequest
 from slotfit.generation import (
     EvaluationSplit,
     GeneratedScenario,

@@ -7,7 +7,7 @@ from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field, replace
 from statistics import mean, median
 
-from slotfit.domain import CandidatePlan, Scenario
+from slotfit.domain.model import CandidatePlan, Scenario
 from slotfit.evaluation import evaluate_generated_plan
 from slotfit.generation import EvaluationSplit
 from slotfit.longitudinal import (

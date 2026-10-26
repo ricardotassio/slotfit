@@ -4,8 +4,8 @@ import re
 import unittest
 from pathlib import Path
 
-from slotfit.domain import CandidateEvaluation
-from slotfit.explanations import (
+from slotfit.domain.model import CandidateEvaluation
+from slotfit.domain.explanations import (
     ELIGIBLE_EXPLANATION,
     REASON_CODES,
     explain,
@@ -13,7 +13,7 @@ from slotfit.explanations import (
 )
 
 
-ELIGIBILITY_SOURCE = Path(__file__).parents[1] / "src" / "slotfit" / "eligibility.py"
+ELIGIBILITY_SOURCE = Path(__file__).parents[1] / "src" / "slotfit" / "domain/eligibility.py"
 AUDIT_BAND_VOCABULARY = ("scarce", "narrow", "aging", "band", "slice")
 
 

@@ -20,9 +20,9 @@ from slotfit.api_schemas import (
     TimeWindowResponse,
     WaitRequestResponse,
 )
-from slotfit.day_context import DayContext
-from slotfit.domain import CandidatePlan, Scenario, TimeWindow
-from slotfit.explanations import explain_evaluation
+from slotfit.domain.day_context import DayContext
+from slotfit.domain.model import CandidatePlan, Scenario, TimeWindow
+from slotfit.domain.explanations import explain_evaluation
 from slotfit.optimizer import OptimizationResult, optimize_plan
 from slotfit.scenarios import clinic_day_story, demo_scenario, multi_slot_counterexample
 from slotfit.strategies import best_fit_plan, fifo_plan

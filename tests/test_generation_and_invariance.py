@@ -3,7 +3,7 @@ from __future__ import annotations
 import unittest
 from dataclasses import fields, replace
 
-from slotfit.domain import Scenario
+from slotfit.domain.model import Scenario
 from slotfit.evaluation import evaluate_generated_plan
 from slotfit.generation import EvaluationSplit, SPLIT_SEEDS, generate_scenario
 from slotfit.strategies import best_fit_plan, fifo_plan

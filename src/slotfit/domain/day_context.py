@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime
 
-from slotfit.domain import TimeWindow
+from slotfit.domain.model import TimeWindow
 
 
 def _disjoint(left: TimeWindow, right: TimeWindow) -> bool:

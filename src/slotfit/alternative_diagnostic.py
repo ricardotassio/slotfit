@@ -3,8 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 from itertools import product
 
-from slotfit.domain import Assignment, CandidatePlan, Scenario
-from slotfit.eligibility import evaluate_request, scheduled_window
+from slotfit.domain.model import Assignment, CandidatePlan, Scenario
+from slotfit.domain.eligibility import evaluate_request, scheduled_window
 from slotfit.generation import EvaluationSplit
 from slotfit.multi_generation import MULTI_SLOT_SEEDS, generate_multi_slot_scenario
 from slotfit.optimizer import optimize_plan_with_exposure_debt

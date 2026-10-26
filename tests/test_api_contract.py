@@ -143,7 +143,7 @@ class ApiContractTests(unittest.TestCase):
     def test_domain_and_strategies_do_not_import_transport_frameworks(self) -> None:
         package_root = Path(__file__).parents[1] / "src" / "slotfit"
 
-        for filename in ("domain.py", "eligibility.py", "strategies.py"):
+        for filename in ("domain/model.py", "domain/eligibility.py", "strategies.py"):
             source = (package_root / filename).read_text(encoding="utf-8")
             self.assertNotIn("fastapi", source)
             self.assertNotIn("pydantic", source)
