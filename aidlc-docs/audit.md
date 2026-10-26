@@ -277,3 +277,11 @@
   barred from decision modules by a source-scan test.
 - Decision: explanations are a closed map over the six reason codes; copy avoids
   audit-band vocabulary; `SCHEMA_VERSION` 1.0 → 1.1 for the additive fields.
+
+## 2026-10-26 — SF-010 closed
+
+- Verification: `make verify` passes with 98 Python tests, API smoke, typed
+  build and six Playwright tests; worktree clean after the closing commit.
+- Observation: the story fixture reproduces the counterexample numbers exactly
+  (60/60/120), so the story UI can read every number from the API.
+- Next: SF-011 (three-screen story mode in the web app) awaits explicit start.

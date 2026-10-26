@@ -15,6 +15,8 @@ Study whether a constraint-based plan can recover more usable time than FIFO or 
 - **SF-FR-007:** export per-scenario and aggregate evaluation evidence.
 - **SF-FR-008:** report selection, exposure, wait and starvation outcomes by declared operational slice.
 - **SF-FR-009:** present utilization and fairness dimensions separately, including the worst-slice result and violated guardrails.
+- **SF-FR-010:** provide a deterministic synthetic clinic-day story fixture that extends the global-conflict counterexample with display-only context kept outside every decision input.
+- **SF-FR-011:** provide a plain-language explanation for every eligibility reason code, served with each evaluation.
 
 ## Non-functional requirements
 

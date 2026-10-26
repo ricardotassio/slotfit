@@ -1,6 +1,6 @@
 # SF-010 — Clinic-day story fixture and plain-language explanations
 
-- Status: In progress
+- Status: Done
 - AI-DLC mapping: Bolt S10
 - Depends on: SF-009 Done; cycle 2 plan sections 3 and 5
   ([`../aidlc-docs/refinement-plan-2026-10.md`](../aidlc-docs/refinement-plan-2026-10.md))
@@ -40,18 +40,18 @@ hand-written in the UI.
 
 ## Acceptance criteria
 
-- [ ] `clinic_day_story` is deterministic and shares intervals and the first two
+- [x] `clinic_day_story` is deterministic and shares intervals and the first two
       requests with the 1500 fixture; FIFO and best-fit recover 60 minutes, CP-SAT
       recovers 120 with three `OPTIMAL` phases; the Room B request is ineligible
       for both openings with `REQUIRED_ROOM_UNAVAILABLE` only.
-- [ ] Booked appointments never overlap an opening; the day window contains every
+- [x] Booked appointments never overlap an opening; the day window contains every
       booked appointment and opening; every opening has a cancellation record.
-- [ ] `domain.py`, `eligibility.py`, `strategies.py` and `optimizer.py` do not
+- [x] `domain.py`, `eligibility.py`, `strategies.py` and `optimizer.py` do not
       import `day_context`.
-- [ ] Every code appended in `eligibility.py` has an explanation and vice versa.
-- [ ] The API contract test covers `clinic-day`, `explanations` on every
+- [x] Every code appended in `eligibility.py` has an explanation and vice versa.
+- [x] The API contract test covers `clinic-day`, `explanations` on every
       evaluation and `day_context: null` on the other demos.
-- [ ] `make verify` passes; traceability gains SF-FR-010 and SF-FR-011.
+- [x] `make verify` passes; traceability gains SF-FR-010 and SF-FR-011.
 
 ## Rejection conditions
 
@@ -62,4 +62,24 @@ hand-written in the UI.
 
 ## Observed evidence
 
-(filled when the gate closes)
+Closed 2026-10-26.
+
+- `make verify`: 98 Python tests (14 new), in-process API smoke, typed web build
+  and six Playwright tests pass.
+- `clinic_day_story()` is equal across calls, shares intervals and the first two
+  requests with `multi-slot-counterexample-1500`, and its third request fails only
+  with `REQUIRED_ROOM_UNAVAILABLE`; FIFO 60, best-fit 60, CP-SAT 120 with three
+  `OPTIMAL` phases and every assignment on an eligible pair.
+- Seven booked blocks sit inside the 08:00–17:00 day and never overlap the
+  14:00 and 15:30 openings; both openings carry a cancellation record; Room B is
+  listed as closed. Seed 1600 is in neither `SPLIT_SEEDS` nor `MULTI_SLOT_SEEDS`.
+- `domain.py`, `eligibility.py`, `strategies.py` and `optimizer.py` contain no
+  reference to `day_context`.
+- The six codes appended in `eligibility.py` equal `REASON_CODES`; the copy
+  contains none of "scarce", "narrow", "aging", "band", "slice".
+- `GET /api/v1/demos/clinic-day` returns three plans (60/60/120), optimizer
+  evidence, seven booked blocks, two cancellations, `["ROOM-B"]` closed and a
+  non-empty `explanations` list on every evaluation; the other demos return
+  `day_context: null`; health and error envelopes report schema `1.1`.
+
+Commits: `b0e5d2f`, `2cf4212`, `9105240`, `af39859` and the closing docs commit.

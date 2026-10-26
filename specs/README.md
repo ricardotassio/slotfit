@@ -25,7 +25,7 @@ Specifications are the implementation contract between product intent, code and 
 | [`SF-007`](007-frozen-evaluation-gate.md) | Closed — not executed | Preserve the held-out set because no candidate earned final-evaluation eligibility |
 | [`SF-008`](008-hardening-and-communication.md) | Done | Harden reproducibility and prepare bilingual evidence-based video/post materials |
 | [`SF-009`](009-governance-reconciliation.md) | Done | Reconcile docs, tests and the web component before cycle 2 features |
-| [`SF-010`](010-clinic-day-fixture-and-explanations.md) | In progress | Add the clinic-day story fixture, display-only context and plain-language explanations |
+| [`SF-010`](010-clinic-day-fixture-and-explanations.md) | Done | Add the clinic-day story fixture, display-only context and plain-language explanations |
 
 ## Working rule
 

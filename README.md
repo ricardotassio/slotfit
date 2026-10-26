@@ -37,6 +37,8 @@ The repository currently contains:
 - a neutral Vue comparison UI with a hand-written time grid, Playwright and axe coverage;
 - an intentionally nonexistent final frozen set after the development no-go;
 - a locked runbook, least-privilege CI, risk review and bilingual video/post drafts;
+- a clinic-day story fixture (same engine, display-only day context) and plain-language
+  explanations for every reason code, served by `GET /api/v1/demos/clinic-day`;
 - executable unit tests;
 - architecture and decision records.
 

@@ -13,6 +13,8 @@ Implementation contracts: SF-FR-001 through SF-FR-003 map to [`../specs/001-doma
 | SF-FR-007 | `slotfit.evaluation`, `slotfit.comparison` | event records, aggregate comparison and violation tests | Implemented for development split |
 | SF-FR-008 | `slotfit.longitudinal`, `slotfit.comparison`, `slotfit.alternative_diagnostic`, `slotfit.exposure_frontier` | compatible misses, K sensitivity, slice exposure, guardrail, alternative capacity and local frontier | Implemented for development; V1–V3 rejected |
 | SF-FR-009 | Vue outcome panel and development report | Playwright no-go/metric assertions | Implemented for development evidence |
+| SF-FR-010 | `slotfit.scenarios.clinic_day_story`, `slotfit.day_context` | determinism, superset of the 1500 fixture, 60/60/120, no overlap, registry exclusion, decision-module import scan | Implemented |
+| SF-FR-011 | `slotfit.explanations`, API `explanations` field | full reason-code coverage, unknown-code rejection, no audit-band vocabulary, API contract | Implemented |
 | SF-NFR-001 | scenario generator | equality under same seed | Implemented |
 | SF-NFR-002 | strategies and event evaluator | all registered generated seeds | Implemented for baselines |
 | SF-NFR-003 | core package | `make test` | Implemented |
