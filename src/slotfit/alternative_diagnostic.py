@@ -8,6 +8,7 @@ from slotfit.eligibility import evaluate_request, scheduled_window
 from slotfit.generation import EvaluationSplit
 from slotfit.multi_generation import MULTI_SLOT_SEEDS, generate_multi_slot_scenario
 from slotfit.optimizer import optimize_plan_with_exposure_debt
+from slotfit.thresholds import SUPPORT_THRESHOLD
 
 
 @dataclass(frozen=True, slots=True)
@@ -266,7 +267,7 @@ def diagnose_development_alternatives(
                     totals.rounds_with_improving_alternative
                 ),
                 additional_exposure_capacity=totals.additional_exposure_capacity,
-                supported=totals.eligible_opportunities >= 30,
+                supported=totals.eligible_opportunities >= SUPPORT_THRESHOLD,
             )
             for (dimension, value), totals in sorted(slice_totals.items())
         ),

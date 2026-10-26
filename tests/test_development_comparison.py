@@ -76,6 +76,9 @@ class DevelopmentComparisonTests(unittest.TestCase):
         checks = {item.name: item for item in self.report.guardrails}
 
         self.assertFalse(self.report.candidate_accepted)
+        self.assertEqual(self.report.starvation_k, 3)
+        self.assertEqual(checks["starvation-rate-k3-degradation"].limit, 0.05)
+        self.assertEqual(checks["worst-supported-slice-gap-degradation"].limit, 0.10)
         self.assertTrue(checks["hard-constraint-violations"].passed)
         self.assertTrue(checks["opaque-id-flips"].passed)
         self.assertTrue(checks["input-order-flips"].passed)

@@ -26,6 +26,12 @@ from slotfit.optimizer import (
     optimize_plan_with_bounded_recovery,
 )
 from slotfit.strategies import best_fit_plan, fifo_plan
+from slotfit.thresholds import (
+    SLICE_GAP_DEGRADATION_LIMIT,
+    STARVATION_DEGRADATION_LIMIT,
+    STARVATION_K,
+    SUPPORT_THRESHOLD,
+)
 
 
 Planner = Callable[[Scenario], CandidatePlan]
@@ -141,7 +147,7 @@ def _slice_comparisons(
         exposures = sum(record.plan_exposures for record in records)
         eligible_histories = [record for record in records if record.eligible_opportunities]
         starvation_events = sum(
-            record.unselected_compatible_opportunities >= 3
+            record.unselected_compatible_opportunities >= STARVATION_K
             for record in eligible_histories
         )
         exposure_rate = _rate(exposures, support)
@@ -157,7 +163,7 @@ def _slice_comparisons(
                     if exposure_rate is not None
                     else None
                 ),
-                supported=support >= 30,
+                supported=support >= SUPPORT_THRESHOLD,
             )
         )
     return tuple(results)
@@ -363,15 +369,18 @@ def _guardrail_checks(
         GuardrailCheck(
             name="starvation-rate-k3-degradation",
             observed_value=candidate.starvation_rate_k3 - better_baseline_starvation,
-            limit=0.05,
-            passed=(candidate.starvation_rate_k3 - better_baseline_starvation) <= 0.05,
+            limit=STARVATION_DEGRADATION_LIMIT,
+            passed=(
+                (candidate.starvation_rate_k3 - better_baseline_starvation)
+                <= STARVATION_DEGRADATION_LIMIT
+            ),
             detail="candidate rate minus the lower development-baseline rate",
         ),
         GuardrailCheck(
             name="worst-supported-slice-gap-degradation",
             observed_value=worst_degradation,
-            limit=0.10,
-            passed=worst_degradation <= 0.10,
+            limit=SLICE_GAP_DEGRADATION_LIMIT,
+            passed=worst_degradation <= SLICE_GAP_DEGRADATION_LIMIT,
             detail=(
                 "largest candidate-minus-supported-better-baseline exposure shortfall: "
                 f"{worst_slice}; compared_slices={len(degradations)}"
@@ -502,7 +511,7 @@ def compare_engineering_split(
         seed_count=len(seeds),
         seed_registry_checksum=hashlib.sha256(seed_payload).hexdigest(),
         opportunity_rounds=opportunity_rounds,
-        starvation_k=3,
+        starvation_k=STARVATION_K,
         scenarios=tuple(scenario_results),
         strategies=strategy_results,
         guardrails=guardrails,
