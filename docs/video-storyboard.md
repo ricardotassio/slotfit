@@ -1,51 +1,76 @@
-# Video storyboard
+# SlotFit video storyboard
 
-## Objective
+## Chosen template
 
-Demonstrate Senior Software Engineer judgment through a concrete scheduling problem: recover useful time after a cancellation without allowing a locally efficient rule to repeatedly overlook harder-to-place requests.
+**Editorial flat-vector product explainer with a real UI demo.**
 
-The target length is 100–115 seconds. The demo uses synthetic data and never names
-or imitates a specific company. Final narration is maintained in
-[`video-script-en.md`](video-script-en.md) and
-[`video-script-pt.md`](video-script-pt.md).
+The reference video demonstrates a code-first animation workflow: approve a
+storyboard first, reuse a working visual system, and synchronize motion to a
+word-level voice-over transcript. SlotFit should borrow that production method,
+not the reference video's subject, narration, or visual identity.
 
-## Storyboard
+This template is the best fit because:
 
-| Time | Screen | English narration | Evidence shown |
-|---|---|---|---|
-| 0–12s | Implemented UI: two openings and two requests | Frame the global conflict and healthcare-software experience | Concrete problem before architecture |
-| 12–30s | Select FIFO, then local best-fit | Both recover 60 of 120 minutes | Understandable baselines and local limitation |
-| 30–46s | Select CP-SAT | The controlled plan recovers 120 minutes with three optimal phases | Constraint programming is justified by global assignment, not hype |
-| 46–72s | Scroll to the no-go panel | Four development candidates were tested; V4 reached 10.80 p.p. against a fixed 10 p.p. limit and was rejected | Attractive fixture result is separated from longitudinal acceptance |
-| 72–92s | Show architecture, table fallback and tests | Explain framework boundaries, counterfactuals and accessibility | Senior engineering judgment and restraint |
-| 92–110s | Record a simulated reject; show repository | No external action, synthetic-only evidence and no clinical/access/revenue claim | Human control and reproducibility |
+- the wide calendar comparison remains readable in a 16:9 frame;
+- vector motion makes the scheduling conflict visible without stock footage;
+- the real interface provides evidence instead of an invented product mockup;
+- a restrained cream, navy, teal, and amber palette matches the implemented UI;
+- every movement can be reproduced and edited precisely by code.
 
-## Portuguese adaptation
+Avoid glassmorphism, photorealistic AI video, talking-head introductions, generic
+healthcare stock footage, and animated technology logos.
 
-The Portuguese version should preserve the same evidence and change only the narration, not the claims:
+## Structure: problem first, engineering last
 
-> “Um cancelamento parece apenas um horário vazio, mas operacionalmente é um pequeno problema de restrições. FIFO e melhor encaixe são baselines compreensíveis, porém ambos carregam uma política. Por isso, eu só considero uma estratégia melhor quando ela respeita as restrições, melhora a utilização e não ultrapassa limites previamente definidos de espera e exclusão recorrente. Esta POC usa apenas dados sintéticos e apoia uma decisão humana; ela não agenda, não contata pacientes e não infere prioridade clínica.”
+| Time | Share | Visual beat | Business message | Evidence |
+|---|---:|---|---|---|
+| 0–6s | 6% | Gap appears in the animated agenda | A rule can create waste | Empty 60-minute opening |
+| 6–20s | 13% | Two openings and two requests enter | Restrictions overlap | Flexible A/B; restricted A only |
+| 20–38s | 17% | First-come rule fills A; B remains empty | A reasonable local choice can block the whole schedule | 60 of 120 minutes assigned |
+| 38–57s | 18% | Flexible request moves to B; restricted enters A | Evaluate the schedule as a whole | 120 of 120 minutes in this fixture |
+| 57–73s | 15% | Human review step | Decision support, not automation | No external action |
+| 73–86s | 12% | Rules-to-solver decision graphic | Why a deterministic algorithm, not generative AI | Explicit/testable constraints |
+| 86–97s | 10% | Four engineering layers | Reproducibility and replaceability | Rules, API, UI, append-only audit |
+| 97–105s | 8% | No-go strip and repository | The failed result is part of the evidence | 40 runs; 10.80 p.p. vs limit at 10 |
 
-## Recording rules
+## Motion language
 
-- Show the real-life problem in the first frame.
-- Use only values produced by a committed command or evaluation artifact.
-- Record the implemented UI; do not substitute an unlabelled mockup.
-- Include one failed or rejected case; do not present a perfect system.
-- Keep identifiers and data visibly synthetic.
-- Put the architecture after the viewer understands the problem.
-- End with the claim boundary and the repository, not a marketing promise.
+- Use position to explain assignment: request cards physically move into openings.
+- Use a single amber hatch for unused time and teal fill for assigned time.
+- Animate once per beat; never keep decorative elements moving.
+- Keep cuts on narration keywords: “first,” “now,” “together,” “person,” and
+  “deliberately.”
+- Use 250–450 ms transitions for UI elements and 700–1,000 ms for the main request
+  movement.
+- Show one sentence or one metric at a time. No paragraph cards.
 
-## Claims allowed after the S7 gate closed
+## Frame design
 
-- “In the global-conflict fixture, both greedy baselines recover 60 minutes and the
-  controlled CP-SAT plan recovers 120 minutes.”
-- “Four candidates were evaluated on 40 synthetic development seeds and rejected
-  under the fixed guardrail.”
-- “V4 reached 10.80 p.p. against the predeclared 10 p.p. maximum.”
-- “Calibration and the final frozen evaluation were not run because no candidate
-  was eligible.”
+- Master: 1920×1080, 30 fps, H.264, 12–18 Mbps.
+- Safe area: keep text inside 120 px horizontally and 80 px vertically.
+- Display type: Georgia or a metrically compatible serif used in the web demo.
+- Interface type: Inter/system sans-serif.
+- Captions: maximum two lines, 42–48 px, high-contrast solid background.
+- Sound: quiet UI ticks for placements and one soft confirmation tone when the gap
+  closes; no synthetic “AI” sound effects.
 
-Do not claim that SlotFit is fairer, increases clinic revenue, reduces wait time,
-improves access or benefits patients. Those statements require evidence the
-project does not have.
+## Storyboard approval gates
+
+1. Approve these eight static beats before producing motion.
+2. Record the final human voice-over.
+3. Generate a word-level transcript from that exact audio.
+4. Bind each animation cue to transcript timestamps.
+5. Export a silent draft and confirm the story is understandable without audio.
+6. Add voice, captions, and restrained sound effects.
+7. Verify every number against the committed application and tests.
+
+## End card
+
+`SlotFit · Synthetic scheduling experiment`
+
+`GitHub: {GITHUB_REPOSITORY_URL}`
+
+`Synthetic POC · No booking · Development no-go`
+
+Question: **Where would you draw the line between utilization and repeated exclusion?**
+

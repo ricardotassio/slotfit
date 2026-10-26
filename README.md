@@ -118,6 +118,7 @@ This is a reproducible engineering POC using synthetic data. Results will descri
 - [`docs/demo-runbook.md`](docs/demo-runbook.md)
 - [`docs/risk-review.md`](docs/risk-review.md)
 - [`docs/bolts/README.md`](docs/bolts/README.md)
+- [`docs/video-production-plan.md`](docs/video-production-plan.md)
 - [`docs/video-storyboard.md`](docs/video-storyboard.md)
 - [`docs/video-script-en.md`](docs/video-script-en.md)
 - [`docs/video-script-pt.md`](docs/video-script-pt.md)
