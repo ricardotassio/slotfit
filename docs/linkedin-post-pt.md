@@ -23,6 +23,16 @@ suportado em 10,80 pontos percentuais. O limite definido antes do resultado era
 Então eu parei. Não ajustei o limite. Não abri calibração. Não executei o conjunto
 final reservado.
 
+Um ponto que faço questão de deixar claro: não há machine learning nem chatbot
+neste projeto. Nada é treinado. O motor é programação por restrições: primeiro
+regras explícitas de elegibilidade, depois o OR-Tools CP-SAT buscando toda
+atribuição válida com um objetivo lexicográfico (minutos recuperados, depois
+pessoas atendidas, depois idade da espera). Cada plano é provado ótimo dentro
+desse modelo, e a mesma entrada produz sempre o mesmo plano. Escolhi isso em vez
+de um modelo aprendido porque uma clínica tem regras explícitas, não tem dados de
+treino no primeiro dia e precisa de uma resposta que possa conferir, não de uma
+previsão.
+
 O repositório também contém:
 
 - cenários sintéticos determinísticos e reason codes estáveis;

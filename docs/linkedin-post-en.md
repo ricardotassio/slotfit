@@ -20,6 +20,15 @@ percentage points. My predeclared limit was 10.00.
 
 So I stopped. No threshold adjustment. No calibration. No final held-out run.
 
+One thing to be clear about: there is no machine learning and no chatbot in
+this project. Nothing is trained. The engine is constraint programming:
+explicit eligibility rules first, then OR-Tools CP-SAT searching every valid
+assignment with a lexicographic objective (recovered minutes, then people
+served, then wait age). Each plan is proven optimal within that model, and the
+same input always produces the same plan. I chose that over a learned model
+because a clinic has explicit rules, no training data on day one, and needs an
+answer it can verify, not a prediction.
+
 The repository also includes:
 
 - deterministic synthetic scenarios and stable reason codes;
