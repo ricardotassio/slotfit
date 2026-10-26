@@ -19,7 +19,7 @@ class ApiContractTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             response.json(),
-            {"status": "ok", "application_version": "0.1.0", "schema_version": "1.0"},
+            {"status": "ok", "application_version": "0.1.0", "schema_version": "1.1"},
         )
 
     def test_single_opening_demo_exposes_two_explainable_plans(self) -> None:
@@ -60,6 +60,33 @@ class ApiContractTests(unittest.TestCase):
             self.client.get("/api/v1/demos/global-conflict").json(),
         )
 
+    def test_clinic_day_demo_adds_display_context_and_explanations(self) -> None:
+        response = self.client.get("/api/v1/demos/clinic-day")
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertEqual(payload["scenario_id"], "clinic-day-story-1600")
+        self.assertEqual(len(payload["plans"]), 3)
+        self.assertEqual(
+            [plan["recovered_minutes"] for plan in payload["plans"]], [60, 60, 120]
+        )
+        self.assertEqual(payload["optimizer_evidence"]["status"], "OPTIMAL")
+        context = payload["day_context"]
+        self.assertEqual(len(context["booked"]), 7)
+        self.assertEqual(context["closed_room_ids"], ["ROOM-B"])
+        self.assertEqual(len(context["cancellations"]), 2)
+        for plan in payload["plans"]:
+            for evaluation in plan["evaluations"]:
+                self.assertTrue(evaluation["explanations"])
+                self.assertTrue(all(text.endswith(".") for text in evaluation["explanations"]))
+        self.assertEqual(payload, self.client.get("/api/v1/demos/clinic-day").json())
+
+    def test_other_demos_have_no_display_context(self) -> None:
+        for demo_id in ("single-opening", "global-conflict"):
+            with self.subTest(demo_id=demo_id):
+                payload = self.client.get(f"/api/v1/demos/{demo_id}").json()
+                self.assertIsNone(payload["day_context"])
+
     def test_unknown_demo_uses_stable_versioned_error(self) -> None:
         response = self.client.get("/api/v1/demos/not-a-demo")
 
@@ -67,7 +94,7 @@ class ApiContractTests(unittest.TestCase):
         self.assertEqual(
             response.json(),
             {
-                "schema_version": "1.0",
+                "schema_version": "1.1",
                 "error": {
                     "code": "demo_not_found",
                     "message": "The requested synthetic demo does not exist.",

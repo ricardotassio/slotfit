@@ -53,7 +53,7 @@ class ReviewApiTests(unittest.TestCase):
         response = self.client.post("/api/v1/reviews", json=conflict_payload)
 
         self.assertEqual(response.status_code, 409)
-        self.assertEqual(response.json()["schema_version"], "1.0")
+        self.assertEqual(response.json()["schema_version"], "1.1")
         self.assertEqual(response.json()["error"]["code"], "idempotency_conflict")
 
     def test_missing_review_returns_versioned_404(self) -> None:
@@ -71,7 +71,7 @@ class ReviewApiTests(unittest.TestCase):
         self.assertEqual(
             response.json(),
             {
-                "schema_version": "1.0",
+                "schema_version": "1.1",
                 "error": {
                     "code": "validation_error",
                     "message": "The request does not match the API contract.",

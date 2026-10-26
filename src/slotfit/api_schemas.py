@@ -49,6 +49,7 @@ class CandidateEvaluationResponse(ApiModel):
     interval_id: str
     eligible: bool
     reason_codes: list[str]
+    explanations: list[str]
 
 
 class PlanResponse(ApiModel):
@@ -73,6 +74,25 @@ class OptimizerEvidenceResponse(ApiModel):
     research_candidate_accepted: bool
 
 
+class BookedAppointmentResponse(ApiModel):
+    label: str
+    provider_id: str
+    room_id: str
+    window: TimeWindowResponse
+
+
+class CancellationResponse(ApiModel):
+    interval_id: str
+    cancelled_at: datetime
+
+
+class DayContextResponse(ApiModel):
+    day_window: TimeWindowResponse
+    booked: list[BookedAppointmentResponse]
+    cancellations: list[CancellationResponse]
+    closed_room_ids: list[str]
+
+
 class DemoResponse(ApiModel):
     schema_version: str
     scenario_id: str
@@ -82,6 +102,7 @@ class DemoResponse(ApiModel):
     requests: list[WaitRequestResponse]
     plans: list[PlanResponse]
     optimizer_evidence: OptimizerEvidenceResponse | None
+    day_context: DayContextResponse | None
     disclosure: str
 
 

@@ -2,8 +2,11 @@ from __future__ import annotations
 
 from slotfit.api_schemas import (
     AssignmentResponse,
+    BookedAppointmentResponse,
+    CancellationResponse,
     CandidateDecisionResponse,
     CandidateEvaluationResponse,
+    DayContextResponse,
     DemoResponse,
     DevelopmentDecisionResponse,
     GuardrailResponse,
@@ -14,13 +17,15 @@ from slotfit.api_schemas import (
     TimeWindowResponse,
     WaitRequestResponse,
 )
+from slotfit.day_context import DayContext
 from slotfit.domain import CandidatePlan, Scenario, TimeWindow
+from slotfit.explanations import explain_evaluation
 from slotfit.optimizer import OptimizationResult, optimize_plan
-from slotfit.scenarios import demo_scenario, multi_slot_counterexample
+from slotfit.scenarios import clinic_day_story, demo_scenario, multi_slot_counterexample
 from slotfit.strategies import best_fit_plan, fifo_plan
 
 
-SCHEMA_VERSION = "1.0"
+SCHEMA_VERSION = "1.1"
 
 
 def _window(value: TimeWindow) -> TimeWindowResponse:
@@ -50,6 +55,7 @@ def _plan(value: CandidatePlan) -> PlanResponse:
                 interval_id=item.interval_id,
                 eligible=item.eligible,
                 reason_codes=list(item.reason_codes),
+                explanations=list(explain_evaluation(item)),
             )
             for item in value.evaluations
         ],
@@ -73,12 +79,39 @@ def _optimizer_evidence(value: OptimizationResult) -> OptimizerEvidenceResponse:
     )
 
 
+def _day_context(value: DayContext) -> DayContextResponse:
+    return DayContextResponse(
+        day_window=_window(value.day_window),
+        booked=[
+            BookedAppointmentResponse(
+                label=item.label,
+                provider_id=item.provider_id,
+                room_id=item.room_id,
+                window=_window(item.window),
+            )
+            for item in value.booked
+        ],
+        cancellations=[
+            CancellationResponse(interval_id=item.interval_id, cancelled_at=item.cancelled_at)
+            for item in value.cancellations
+        ],
+        closed_room_ids=list(value.closed_room_ids),
+    )
+
+
+COUNTEREXAMPLE_DISCLOSURE = (
+    "This controlled counterexample demonstrates global assignment capability. "
+    "It does not make the rejected longitudinal research candidate acceptable."
+)
+
+
 def _demo_response(
     scenario: Scenario,
     plans: tuple[CandidatePlan, ...],
     *,
     optimizer_result: OptimizationResult | None,
     disclosure: str,
+    day_context: DayContext | None = None,
 ) -> DemoResponse:
     return DemoResponse(
         schema_version=SCHEMA_VERSION,
@@ -109,6 +142,7 @@ def _demo_response(
         optimizer_evidence=(
             _optimizer_evidence(optimizer_result) if optimizer_result is not None else None
         ),
+        day_context=_day_context(day_context) if day_context is not None else None,
         disclosure=disclosure,
     )
 
@@ -132,10 +166,17 @@ def get_demo(demo_id: str) -> DemoResponse | None:
             scenario,
             (fifo_plan(scenario), best_fit_plan(scenario), optimizer_result.plan),
             optimizer_result=optimizer_result,
-            disclosure=(
-                "This controlled counterexample demonstrates global assignment capability. "
-                "It does not make the rejected longitudinal research candidate acceptable."
-            ),
+            disclosure=COUNTEREXAMPLE_DISCLOSURE,
+        )
+    if demo_id == "clinic-day":
+        scenario, context = clinic_day_story(seed=1600)
+        optimizer_result = optimize_plan(scenario)
+        return _demo_response(
+            scenario,
+            (fifo_plan(scenario), best_fit_plan(scenario), optimizer_result.plan),
+            optimizer_result=optimizer_result,
+            disclosure=COUNTEREXAMPLE_DISCLOSURE,
+            day_context=context,
         )
     return None
 
