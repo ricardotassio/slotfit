@@ -68,7 +68,7 @@ healthcare stock footage, and animated technology logos.
 
 `SlotFit · Synthetic scheduling experiment`
 
-`GitHub: {GITHUB_REPOSITORY_URL}`
+`GitHub: https://github.com/ricardotassio/slotfit`
 
 `Synthetic POC · No booking · Development no-go`
 

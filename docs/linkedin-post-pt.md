@@ -47,7 +47,7 @@ segurança do paciente. O que ela demonstra é o que mais me interessa: escolher
 tecnologia mais simples que resolve o problema, medir o trade-off desconfortável e
 preservar um no-go quando a evidência diz não.
 
-Repositório: `{GITHUB_REPOSITORY_URL}`
+Repositório: `https://github.com/ricardotassio/slotfit`
 
 Vídeo: `{VIDEO_URL}`
 

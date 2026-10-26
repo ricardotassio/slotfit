@@ -43,7 +43,7 @@ improvement. What it demonstrates is the part I care about most: choosing the
 simplest useful technology, measuring the uncomfortable trade-off and preserving
 a no-go when the evidence says no.
 
-Repository: `{GITHUB_REPOSITORY_URL}`
+Repository: `https://github.com/ricardotassio/slotfit`
 
 Video: `{VIDEO_URL}`
 
