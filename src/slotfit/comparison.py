@@ -21,7 +21,7 @@ from slotfit.multi_generation import (
     MULTI_SLOT_SEEDS,
     generate_multi_slot_scenario,
 )
-from slotfit.optimizer import (
+from slotfit.solver.optimizer import (
     OptimizationResult,
     optimize_plan_with_bounded_recovery,
 )

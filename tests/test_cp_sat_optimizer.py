@@ -3,7 +3,7 @@ from __future__ import annotations
 import unittest
 from dataclasses import replace
 
-from slotfit.optimizer import (
+from slotfit.solver.optimizer import (
     SolverConfig,
     SolverStatus,
     optimize_plan,

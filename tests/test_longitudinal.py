@@ -8,7 +8,7 @@ from slotfit.longitudinal import (
     simulate_exposure_debt_rounds,
     simulate_opportunity_rounds,
 )
-from slotfit.optimizer import optimize_plan_with_exposure_debt
+from slotfit.solver.optimizer import optimize_plan_with_exposure_debt
 from slotfit.application.strategies import best_fit_plan, fifo_plan
 
 

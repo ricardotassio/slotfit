@@ -8,7 +8,7 @@ from slotfit.comparison import BASELINE_STRATEGIES, compare_engineering_split
 from slotfit.domain.model import CandidatePlan, Scenario
 from slotfit.generation import EvaluationSplit
 from slotfit.multi_generation import MULTI_SLOT_SEEDS, generate_multi_slot_scenario
-from slotfit.optimizer import optimize_plan_with_placement_scarcity
+from slotfit.solver.optimizer import optimize_plan_with_placement_scarcity
 from slotfit.thresholds import SLICE_GAP_DEGRADATION_LIMIT
 
 

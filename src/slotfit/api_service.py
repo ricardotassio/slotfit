@@ -23,7 +23,7 @@ from slotfit.api_schemas import (
 from slotfit.domain.day_context import DayContext
 from slotfit.domain.model import CandidatePlan, Scenario, TimeWindow
 from slotfit.domain.explanations import explain_evaluation
-from slotfit.optimizer import OptimizationResult, optimize_plan
+from slotfit.solver.optimizer import OptimizationResult, optimize_plan
 from slotfit.application.scenarios import clinic_day_story, demo_scenario, multi_slot_counterexample
 from slotfit.application.strategies import best_fit_plan, fifo_plan
 
