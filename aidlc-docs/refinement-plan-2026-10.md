@@ -109,31 +109,34 @@ Dois limites de comunicação, também do risk-reviewer:
   qualquer cartão de UI ou post que a use recebe o rótulo "design rationale,
   not a measured result".
 
-## 3. A história em seis capítulos
+## 3. A história em três telas
 
-Cada capítulo mapeia para um estado observável da aplicação. Nenhum capítulo
-inventa número.
+Decisão de Ricardo em 2026-10-26: a história deve ser o mais simples possível,
+sem excesso de informação. Ela mostra rapidamente o problema, como ele afeta a
+clínica e como a solução resolve. Cada tela tem uma frase, uma agenda da tarde
+(13h–17h) e um único número. Nenhuma tela inventa número.
 
-| # | Capítulo | O que o público vê | Fonte do número |
+| # | Tela | O que o público vê | Fonte do número |
 |---|---|---|---|
-| 1 | Manhã cheia | Agenda sintética de um dia com atendimentos marcados; lista de espera ao lado com restrições em linguagem simples | nova fixture `clinic-day` |
-| 2 | Dois cancelamentos | Dois horários ficam vazios (14:00 e 15:30, mesmos da fixture atual); contador de capacidade ociosa sobe | fixture + `remaining_gap_minutes` |
-| 3 | A regra de todo mundo | FIFO preenche o primeiro; a solicitação restrita não cabe no segundo; `60 min sem uso` | plano `fifo` |
-| 4 | Avaliar as duas aberturas em conjunto | O plano CP-SAT move a flexível e preserva a vaga da restrita; `120 de 120 min`; cada solicitação mostra o motivo em linguagem simples; a disclosure da API ("não torna aceitável o candidato longitudinal rejeitado") acompanha o número | plano `cp_sat` + tradução de reason codes + `demo.disclosure` |
-| 5 | A pessoa decide | Aceitar, rejeitar ou pedir alternativa; confirmação de que nada foi enviado | `/api/v1/reviews` |
-| 6 | Por baixo dos panos | Regras → fases do solver (minutos, atendidos, idade da espera) com status `OPTIMAL` → testes contrafactuais → faixa de no-go 10,80 vs 10 → por que não IA generativa | `optimizer_evidence`, `development-decision` |
+| 1 | O problema | Dois cancelamentos antes do almoço abrem 14:00 e 15:30; três pessoas esperando, cada uma com sua restrição, descritas em uma frase | fixture `clinic-day` + `remaining_gap_minutes` = 120 |
+| 2 | Como afeta a clínica | Ordem de chegada dá 14:00 à solicitação flexível; a restrita fica sem opção; sala, profissional e equipe ficam uma hora sem atender ninguém | plano `fifo`, `remaining_gap_minutes` = 60 |
+| 3 | A solução | Avaliar as duas aberturas em conjunto: 14:00 para quem só pode às 14:00, 15:30 para a flexível; uma pessoa aceita, rejeita ou pede outro plano; nada é enviado | plano `cp_sat`, `remaining_gap_minutes` = 0, `/api/v1/reviews` |
 
-A ordem é deliberada: 70% negócio, 30% engenharia, como já definido no plano de
-vídeo. O capítulo 6 é a porta para o modo "Evidence".
+O material técnico ("por baixo dos panos": regras, fases do solver com
+`OPTIMAL`, testes contrafactuais, no-go 10,80 vs 10, por que não IA generativa)
+sai da história e vive no explorador do motor (SF-013) e na aba Evidence,
+acessíveis por um link "see how it works" ao fim da tela 3. A proporção 70%
+negócio, 30% engenharia do plano de vídeo continua válida.
 
 **Regra de integridade (achado HIGH-1 do risk-reviewer):** a faixa de no-go
-(`data-testid="research-no-go"`, mesma fonte da API) é **persistente em todos os
-capítulos**, não só no 6. Links diretos `?chapter=4` e `?chapter=5`, capturas de
-tela e cortes de vídeo são superfícies de claim; sem a faixa persistente, o
-capítulo 4 apresentaria o resultado da fixture como aceitação do V4, o que o
-SF-008 proíbe. Teste Playwright obrigatório: ao navegar direto para
-`?chapter=4` ou `?chapter=5`, a faixa está visível antes de qualquer botão de
-revisão ficar habilitado.
+(`data-testid="research-no-go"`, mesma fonte da API) é **persistente nas três
+telas**, em linguagem simples ("no automated plan has passed the fixed
+repeated-exclusion check; closest 10.80 vs limit 10.00; this is one example
+only"). Links diretos `?step=2` e `?step=3`, capturas de tela e cortes de vídeo
+são superfícies de claim; sem a faixa persistente, a tela 3 apresentaria o
+resultado da fixture como aceitação do V4, o que o SF-008 proíbe. Teste
+Playwright obrigatório: ao navegar direto para `?step=3`, a faixa está visível
+antes de qualquer botão de revisão ficar habilitado.
 
 Frase "olhar o dia inteiro" fica fora da copy: a fixture tem duas aberturas e
 três solicitações; o texto diz "avaliar as duas aberturas em conjunto".
@@ -145,7 +148,7 @@ HIG orienta princípios, não cromo de plataforma.
 
 - **Conteúdo acima de cromo.** A agenda é o único elemento ousado; todo o resto
   é silencioso. Nada de cards idênticos com sombra, nada de eyebrow em caixa alta.
-- **Divulgação progressiva.** Um capítulo por vez; detalhes técnicos só quando o
+- **Divulgação progressiva.** Uma tela por vez; detalhes técnicos só quando o
   espectador pede ("ver por baixo dos panos").
 - **Feedback para toda ação.** Cada revisão simulada responde com o estado
   registrado e com `external_action: none` visível.
@@ -153,10 +156,10 @@ HIG orienta princípios, não cromo de plataforma.
   solicitação entrando na abertura. `prefers-reduced-motion` troca por crossfade.
 - **Sem modal desnecessário.** Revisão é inline; não há "tem certeza?".
 - **Acessibilidade desde o início.** Tabela semântica continua ao lado da agenda;
-  navegação por teclado entre capítulos; contraste AA; axe sem violações sérias.
+  navegação por teclado entre telas; contraste AA; axe sem violações sérias.
 - **Linguagem do usuário.** "Abertura", "solicitação flexível", "solicitação
   restrita", "avaliar o dia em conjunto". Termos técnicos aparecem só no
-  capítulo 6, com a palavra simples ao lado.
+  material técnico (SF-013), com a palavra simples ao lado.
 - **Neutralidade preservada.** Nenhum plano é "recomendado"; a ordem segue
   baseline primeiro; métricas separadas (SF-006 continua valendo).
 - **Sinteticidade visível.** Um selo "dados sintéticos" permanece em todas as
@@ -273,19 +276,27 @@ Escopo:
 
 - nova aba `Story` ao lado de `Evidence`; a página atual vira a aba `Evidence`
   sem mudanças funcionais;
-- seis capítulos navegáveis por botões, teclado (setas, Home/End) e barra de
-  progresso; o capítulo vai para a URL (`?chapter=3`) para link direto na
-  gravação do vídeo;
-- capítulos 1–2: agenda do dia com atendimentos marcados e os dois horários que
-  se abrem; contador "capacidade sem uso" em minutos e atendimentos;
-- capítulos 3–4: animação única do cartão entrando na abertura; mensagem
-  `Not compatible` para a restrita no segundo horário; plano CP-SAT com motivos
-  em linguagem simples vindos de `explanations`;
-- capítulo 5: painel de revisão existente reutilizado;
-- capítulo 6: resumo e botão "ver por baixo dos panos" que leva ao SF-013;
-- `prefers-reduced-motion` respeitado; tabela semântica mantida em todos os
-  capítulos com agenda;
-- faixa de no-go persistente em todos os capítulos, com teste de link direto
+- três telas (problema, impacto, solução) navegáveis por botões e teclado; a
+  tela vai para a URL (`?step=2`) para link direto na gravação do vídeo;
+- cada tela: uma frase-título em verde, um parágrafo curto, a agenda da tarde
+  (13h–17h) e um único número vindo de `remaining_gap_minutes`; sem lista de
+  espera separada, sem legenda, sem seletores de dia ou sala;
+- tela 2 para 3: animação única do bloco mudando de horário;
+- tela 3: botões de revisão existentes reutilizados e link "see how it works"
+  para o SF-013;
+- `prefers-reduced-motion` respeitado; a grade visual recebe `aria-hidden` e
+  uma lista ou tabela semântica, gerada do mesmo estado, é o equivalente
+  acessível completo (inclui marcados, almoço e aberturas);
+- requisitos do `ecc:a11y-architect` (revisão do mock em 2026-10-26): nenhum
+  texto abaixo de 4,5:1 (o cinza `#8E9B94` foi banido; secundário é `#5B6762`);
+  `:focus-visible` global com anel escuro e anel de dois tons sobre botões
+  verdes; bordas de controles com pelo menos 3:1 (`#6F7C75`); faixa de status
+  como `role="note"`, não `role="status"`, e uma única região `aria-live`
+  separada para anunciar mudança de plano e resultado da revisão; foco movido
+  para o título a cada troca de tela e `document.title` atualizado; unidades
+  `rem` e sem `overflow: hidden` em texto; nenhum link que aponte para a
+  própria tela; fontes do Google documentadas como exceção ou auto-hospedadas;
+- faixa de no-go persistente nas três telas, com teste de link direto
   (seção 3, regra de integridade);
 - copy revisada pela skill `design:ux-copy` e pelo `risk-reviewer`. Frases
   proibidas, testadas em Story e Evidence: "AI optimized", "fair", "unbiased",
@@ -293,15 +304,15 @@ Escopo:
   "appointments delivered", "revenue", "production ready", e "proves"/"prova"
   sem "within the declared model"/"dentro do modelo declarado" na mesma frase.
 
-Condição de rejeição do SF-011: qualquer capítulo, captura ou link direto em
-que o resultado `120` apareça sem a faixa de no-go visível.
+Condição de rejeição do SF-011: qualquer tela, captura ou link direto em que o
+resultado da tela 3 apareça sem a faixa de no-go visível.
 
 Testes Playwright novos: navegação completa por teclado; números exibidos iguais
 aos da API; texto `No external action` após revisão; axe sem violações sérias
-em cada capítulo; reduced-motion não quebra o fluxo.
+em cada tela; reduced-motion não quebra o fluxo.
 
 DoD: `make verify` com os testes novos; `ecc:a11y-architect` sem achados
-bloqueantes; captura de tela de cada capítulo em `artifacts/story/` para o
+bloqueantes; captura de cada tela em `artifacts/story/` para o
 vídeo; nenhuma frase proibida (teste de contrato de UI).
 
 ### SF-012 — Enquadramento de capacidade dentro da fronteira de claims
@@ -361,15 +372,15 @@ literal no código da UI.
 
 Escopo:
 
-- roteiros EN/PT e storyboard reescritos sobre os seis capítulos, mantendo os
+- roteiros EN/PT e storyboard reescritos sobre as três telas, mantendo os
   mesmos números e o contrato de publicação; o teste de paridade numérica
   amplia o conjunto de números para cobrir os novos (3 solicitações, 14:00,
   15:30) e não só `40|60|120|10.80`;
 - capturas e GIF são superfícies de claim: toda captura usada em README, post
   ou vídeo inclui a faixa de no-go e é gerada com qualquer hipótese monetária
   desligada;
-- README ganha "Start here": três capturas (capítulo 3, capítulo 4, faixa de
-  no-go) e o fluxo de 2 minutos; GIF do capítulo 4 gerado a partir do trace do
+- README ganha "Start here": três capturas (tela 2, tela 3, faixa de
+  no-go) e o fluxo de 2 minutos; GIF da transição para a tela 3 gerado a partir do trace do
   Playwright, não de gravação manual;
 - rascunhos de LinkedIn com a frase-guia e a explicação de "qual IA" em duas
   linhas;
@@ -410,7 +421,7 @@ muda, registra evidência na spec e atualiza traceability e audit.
 | Prejuízo financeiro vira claim | SF-012 com gate de risco; métricas só em capacidade; hipótese do espectador, se existir, isolada e rotulada |
 | Personas sintéticas parecem pessoas reais | sem sobrenome, selo "synthetic data" permanente, `risk-reviewer` revisa a copy |
 | Números da história divergem do motor | toda métrica vem da API; testes comparam UI e API; nenhuma constante numérica na UI |
-| Animação bonita esconde o no-go | capítulo 6 obrigatório; faixa de no-go permanece no modo Evidence e no fim da história |
+| Animação bonita esconde o no-go | faixa de no-go permanece no modo Evidence e no fim da história |
 | Escopo cresce para "produto" | nenhuma integração, nenhum dado real, nenhuma autenticação; qualquer um desses exige novo ciclo e novo threat model |
 | Dependência nova sem necessidade | SF-009 remove FullCalendar; nenhuma biblioteca de animação; CSS e `requestAnimationFrame` bastam |
 | Links diretos, capturas e GIFs contornam os testes de contrato de publicação | faixa de no-go persistente e testada em link direto; capturas geradas por Playwright com a faixa visível; nenhuma hipótese monetária em captura |
@@ -446,7 +457,7 @@ Em ordem de impacto. Cada uma muda o que será construído.
 |---|---|---|
 | SF-FR-010 | fixture narrativa de um dia sintético, superconjunto do contra-exemplo | SF-010 |
 | SF-FR-011 | explicação em linguagem simples para todo reason code | SF-010 |
-| SF-FR-012 | modo narrativo em seis capítulos com os mesmos números do motor | SF-011 |
+| SF-FR-012 | modo narrativo em três telas com os mesmos números do motor | SF-011 |
 | SF-FR-013 | métricas de capacidade não entregue derivadas do plano | SF-012 |
 | SF-FR-014 | explorador do motor com fases, contagens e integridade | SF-013 |
 | SF-NFR-009 | nenhuma constante numérica de resultado na UI | SF-011, SF-013 |
@@ -455,10 +466,10 @@ Em ordem de impacto. Cada uma muda o que será construído.
 ## 10. Evidência que fecha o ciclo
 
 - `make verify` verde com os testes novos (Python, API, build, Playwright);
-- capturas de cada capítulo em `artifacts/story/`;
+- capturas de cada tela em `artifacts/story/`;
 - `aidlc-docs/state.md` com o ciclo 2 completo e gates registrados;
 - `audit.md` com cada decisão D1–D5 e seu resultado;
-- roteiros, storyboard e posts alinhados aos seis capítulos e aos mesmos números;
+- roteiros, storyboard e posts alinhados às três telas e aos mesmos números;
 - nada publicado, nada enviado, nenhum dado real.
 
 ## Revisão de risco da proposta
@@ -476,9 +487,12 @@ paridade numérica ampliada e capturas como superfície de claim (LOW-9).
 
 ## Mock visual
 
-Um mock dos capítulos 2 a 4 foi produzido como artefato de design para aprovação
-dos beats antes de qualquer código (artefato privado:
-`https://claude.ai/artifact/9r6HZ48dfgbw1q43DAxooQ`). O link fica registrado no
-audit quando a decisão de design for tomada. O mock é ilustração de layout e linguagem; os
-números nele são os da fixture atual (60/120) e não substituem a API. O mock
-usa rótulos funcionais (D2a) e carrega a faixa de no-go em todas as telas.
+Um mock das três telas (problema, impacto, solução) foi produzido como artefato
+de design para aprovação antes de qualquer código (artefato privado:
+`https://claude.ai/artifact/9r6HZ48dfgbw1q43DAxooQ`). Ele passou por três
+rodadas no mesmo dia: a primeira, editorial em creme e serifa, foi rejeitada
+por "cara de IA"; a segunda, em formato de aplicação completa, foi simplificada
+a pedido; a terceira é a versão mínima descrita na seção 3. O mock é ilustração
+de layout e linguagem; os números nele são os da fixture atual (120/60/0) e não
+substituem a API. Usa rótulos funcionais (D2a), Montserrat, verde sobre branco
+e carrega a faixa de no-go nas três telas.
