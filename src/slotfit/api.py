@@ -80,16 +80,7 @@ def demo(demo_id: str) -> DemoResponse | JSONResponse:
     result = get_demo(demo_id)
     if result is not None:
         return result
-    return JSONResponse(
-        status_code=404,
-        content={
-            "schema_version": SCHEMA_VERSION,
-            "error": {
-                "code": "demo_not_found",
-                "message": "The requested synthetic demo does not exist.",
-            },
-        },
-    )
+    return _error(404, "demo_not_found", "The requested synthetic demo does not exist.")
 
 
 @app.get(
