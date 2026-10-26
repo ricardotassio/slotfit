@@ -333,3 +333,15 @@
   and the meaningful split is by responsibility; no interface per dependency.
 - Decision: the architecture test is written first and must fail on the flat
   layout before any module moves.
+
+## 2026-10-26 — SF-016 closed
+
+- Verification: `make verify` passes with 102 Python tests, API smoke, typed
+  build and six Playwright tests; `make docker-test` passes inside the image;
+  before/after diffs of every report and the clinic-day payload show zero
+  differing lines once solver wall time is excluded.
+- Observation: the architecture test failed on the flat layout and passes on
+  the layered one; entry points are `slotfit.composition:app` and
+  `slotfit.adapters.cli.*`.
+- Next: SF-011 (three-screen story mode) awaits explicit start. Repository
+  visibility remains Ricardo's decision.

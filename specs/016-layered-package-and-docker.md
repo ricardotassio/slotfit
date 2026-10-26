@@ -1,6 +1,6 @@
 # SF-016 — Layered package layout, composition root and Docker reproduction
 
-- Status: In progress
+- Status: Done
 - AI-DLC mapping: Bolt S16 (authorized by Ricardo on 2026-10-26, before SF-011)
 - Depends on: SF-015 Done
 
@@ -62,15 +62,15 @@ src/slotfit/
 
 ## Acceptance criteria
 
-- [ ] `tests/test_architecture.py` fails before the move (RED evidence) and
+- [x] `tests/test_architecture.py` fails before the move (RED evidence) and
       passes after it.
-- [ ] Every module lives in a layer package; `src/slotfit` has no loose module
+- [x] Every module lives in a layer package; `src/slotfit` has no loose module
       besides `__init__.py` and `composition.py`.
-- [ ] `make verify` passes; before/after diff of `make development-report`,
+- [x] `make verify` passes; before/after diff of `make development-report`,
       `make multi-slot-demo`, `make alternative-diagnostic` and
       `make exposure-frontier` is identical except solver wall time.
-- [ ] `docker build` succeeds and `make docker-test` passes on the host.
-- [ ] README, runbook, architecture doc and both ADRs describe the new layout.
+- [x] `docker build` succeeds and `make docker-test` passes on the host.
+- [x] README, runbook, architecture doc and both ADRs describe the new layout.
 
 ## Rejection conditions
 
@@ -81,4 +81,25 @@ src/slotfit/
 
 ## Observed evidence
 
-Open.
+Closed 2026-10-26.
+
+- RED: `tests/test_architecture.py` on the flat layout failed with two
+  failures (23 loose modules; `fastapi`, `pydantic`, `sqlite3` and `ortools`
+  imported outside any adapter package). GREEN after the move.
+- Moves, one commit per layer, each with the suite green: `80b5f56` domain,
+  `4e8bf20` application, `46123fb` solver, `b8a0a87` research, `ce6e1d6`
+  adapters plus composition root, `18191dc` import ordering.
+- `src/slotfit` now holds only `__init__.py`, `composition.py` and the six
+  layer packages; `tests/test_architecture.py` enforces direction and
+  framework placement with `ast`.
+- Equivalence: development report, multi-slot demo, alternative diagnostic,
+  exposure frontier and the clinic-day API payload diffed before and after the
+  move: 0 differing lines each once solver wall time is excluded.
+- `make verify`: 102 Python tests (3 new), API smoke through
+  `slotfit.composition:app`, typed web build, six Playwright tests.
+- Docker (`804825c`): image builds from `uv.lock` and `package-lock.json`
+  (832 MB, OR-Tools dominates); `make docker-test` runs the 102 tests and the
+  smoke inside the image; a detached container answered `/health` 200, served
+  the UI at `/` and returned the clinic-day plans 60/60/120.
+- ADR-0004 and ADR-0005 written; architecture doc, README and runbook point to
+  the real folders and entry points; publication-contract tests pass.
