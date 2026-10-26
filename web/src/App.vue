@@ -96,12 +96,13 @@ onMounted(loadEvidence)
       <section class="hero" aria-labelledby="page-title">
         <div>
           <p class="eyebrow">Scheduling decision study · Synthetic data</p>
-          <h1 id="page-title">Make every opening<br /><em>work harder.</em></h1>
+          <h1 id="page-title">Two openings,<br /><em>two requests.</em></h1>
         </div>
         <div class="hero-copy">
           <p>
-            A controlled counterexample showing how a locally valid choice can waste capacity—and
-            how constraint-aware allocation can recover it without automating the final decision.
+            A controlled counterexample comparing two greedy rules and a global constraint plan on
+            the same synthetic day. Each plan receives the same treatment; a person decides what
+            happens next.
           </p>
           <div class="hero-tags">
             <span>Reproducible</span><span>Human reviewed</span><span>No patient data</span>

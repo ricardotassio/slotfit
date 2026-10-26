@@ -9,7 +9,7 @@ const axeSource = readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8')
 test('shows the no-go before a neutral, synchronized plan comparison', async ({ page }) => {
   await page.goto('/')
 
-  await expect(page.getByRole('heading', { name: 'Make every opening work harder.' })).toBeVisible()
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(/two openings,\s*two requests/i)
   await expect(page.getByTestId('research-no-go')).toContainText('No candidate passed')
   const planChoices = page.getByRole('radio')
   await expect(planChoices).toHaveCount(3)
@@ -23,6 +23,24 @@ test('shows the no-go before a neutral, synchronized plan comparison', async ({ 
   await expect(page.getByRole('table', { name: 'Selected plan assignments' })).toBeVisible()
   await expect(page.getByRole('row', { name: /CONSTRAINED OPEN-A/ })).toBeVisible()
   await expect(page.locator('.disclosure')).toContainText(/controlled counterexample/i)
+})
+
+test('gives every plan the same treatment and makes no promotional claim', async ({ page }) => {
+  await page.goto('/')
+  await expect(page.getByTestId('research-no-go')).toBeVisible()
+
+  const cards = page.locator('article.schedule')
+  await expect(cards).toHaveCount(2)
+  expect(await cards.nth(0).getAttribute('class')).toBe(await cards.nth(1).getAttribute('class'))
+  const pills = page.locator('.capacity-pill')
+  await expect(pills).toHaveCount(2)
+  expect(await pills.nth(0).getAttribute('class')).toBe(await pills.nth(1).getAttribute('class'))
+  await expect(page.getByLabel('Comparison delta')).toContainText(/Difference in\s*this fixture/)
+
+  const text = await page.locator('main').innerText()
+  expect(text).not.toMatch(
+    /recommended|best plan|AI choice|AI optimi[sz]ed|\bfair\b|unbiased|bias-free|production.ready|revenue|more patients/i,
+  )
 })
 
 test('records only a simulated review and disables duplicate submission', async ({ page }) => {

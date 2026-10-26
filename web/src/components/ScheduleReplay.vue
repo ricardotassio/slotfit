@@ -12,8 +12,8 @@ function replayAnimation() {
   <section class="agenda-replay" aria-labelledby="replay-title">
     <div class="replay-header">
       <div>
-        <span class="step-label">Optimization replay</span>
-        <h3 id="replay-title">Watch the unused opening become usable</h3>
+        <span class="step-label">Plan replay</span>
+        <h3 id="replay-title">How each plan uses the two openings</h3>
       </div>
       <button class="replay-button" type="button" @click="replayAnimation">↻ Replay</button>
     </div>
@@ -25,7 +25,7 @@ function replayAnimation() {
         <strong>Local rule</strong>
         <div class="replay-track">
           <span class="replay-block flexible-before">Flexible request</span>
-          <span class="replay-gap">60 min gap</span>
+          <span class="replay-gap">60 min open</span>
         </div>
       </div>
       <div class="replay-lane">
@@ -36,8 +36,8 @@ function replayAnimation() {
         </div>
       </div>
       <p class="replay-caption">
-        <span>Preserve the only compatible opening</span>
-        <strong>Gap recovered · +60 min</strong>
+        <span>The constrained request can only use the first opening</span>
+        <strong>60 min difference in this fixture</strong>
       </p>
     </div>
     <p class="sr-only">

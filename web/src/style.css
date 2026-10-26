@@ -291,11 +291,6 @@ h3 {
   color:var(--ink);
 }
 
-.schedule-after {
-  border-color:#4eaa92;
-  box-shadow:0 0 0 3px rgba(78,170,146,.16);
-}
-
 .schedule-header {
   display:flex;
   justify-content:space-between;
@@ -321,14 +316,6 @@ h3 {
   border-radius:999px;
   font-size:.67rem;
   font-weight:850;
-}
-
-.capacity-pill.neutral {
-  background:#eee5da;
-  color:#765934;
-}
-
-.capacity-pill.optimized {
   background:var(--teal-soft);
   color:var(--teal);
 }
@@ -423,13 +410,7 @@ h3 {
   font-size:.64rem;
 }
 
-.appointment-local {
-  border-color:var(--amber);
-  background:#f3e9da;
-  color:#6a4e2e;
-}
-
-.appointment-optimized {
+.appointment-assigned {
   border-color:var(--teal);
   background:var(--teal-soft);
   color:#15584e;
@@ -456,13 +437,6 @@ h3 {
   width:8px;
   height:8px;
   border-radius:2px;
-}
-
-.swatch.local {
-  background:var(--amber);
-}
-
-.swatch.optimized {
   background:var(--teal);
 }
 
@@ -842,15 +816,15 @@ button:disabled {
 
 .flexible-before {
   left:0;
-  background:#f1dfc5;
-  color:#63451f;
+  background:#dceee8;
+  color:#15584e;
 }
 
 .replay-gap {
   left:50%;
-  border:1px dashed #d1a05f;
-  color:#e6cda8;
-  background:rgba(189,122,52,.08);
+  border:1px dashed #b9c6cc;
+  color:#c3ced3;
+  background:rgba(255,255,255,.04);
 }
 
 .constrained-after {
@@ -1010,11 +984,7 @@ button:disabled {
   opacity:1;
 }
 
-.appointment-local small {
-  color:#6a4e2e;
-}
-
-.appointment-optimized small {
+.appointment-assigned small {
   color:#15584e;
 }
 

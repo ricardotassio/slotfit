@@ -8,9 +8,14 @@ import ScheduleReplay from './ScheduleReplay.vue'
 
 const props = defineProps<{ demo: Demo; selectedPlan: Plan; candidatePlan: Plan }>()
 
-const gainedMinutes = computed(() =>
-  Math.max(0, props.candidatePlan.recovered_minutes - props.selectedPlan.recovered_minutes),
+const differenceMinutes = computed(
+  () => props.candidatePlan.recovered_minutes - props.selectedPlan.recovered_minutes,
 )
+const differenceLabel = computed(() => {
+  if (differenceMinutes.value === 0) return 'same minutes'
+  const sign = differenceMinutes.value > 0 ? '+' : ''
+  return `${sign}${differenceMinutes.value} min`
+})
 </script>
 
 <template>
@@ -18,7 +23,7 @@ const gainedMinutes = computed(() =>
     <div class="story-heading">
       <div>
         <p class="eyebrow">One day · Two openings · Two requests</p>
-        <h2 id="comparison-title">The same capacity. A different outcome.</h2>
+        <h2 id="comparison-title">The same openings under each rule.</h2>
       </div>
       <p class="scenario-id">{{ demo.scenario_id }}</p>
     </div>
@@ -27,37 +32,24 @@ const gainedMinutes = computed(() =>
       <ScheduleCard
         :plan="selectedPlan"
         :intervals="demo.intervals"
-        step-label="01 · Reference rule"
+        step-label="Reference rule"
         :title="labelFor(selectedPlan.strategy)"
-        subtitle="Two independent openings"
+        subtitle="Openings evaluated one by one"
         :list-label="`${labelFor(selectedPlan.strategy)} calendar`"
-        footer="Valid one-by-one, but blind to the next request"
-        card-class=""
-        pill-class="neutral"
-        appointment-class="appointment-local"
-        swatch-class="local"
-        :show-empty-slots="true"
       />
       <div class="optimization-bridge" aria-label="Comparison delta">
-        <span>Constraint-aware<br />allocation</span>
-        <div class="bridge-arrow">→</div>
-        <strong v-if="gainedMinutes">+{{ gainedMinutes }} min</strong>
-        <strong v-else>same capacity</strong>
-        <small>in this controlled fixture</small>
+        <span>Difference in<br />this fixture</span>
+        <div class="bridge-arrow">↔</div>
+        <strong>{{ differenceLabel }}</strong>
+        <small>candidate minus reference</small>
       </div>
       <ScheduleCard
         :plan="candidatePlan"
         :intervals="demo.intervals"
-        step-label="02 · Candidate plan"
-        title="Global constraint plan"
-        subtitle="Same openings, jointly evaluated"
+        step-label="Candidate plan"
+        :title="labelFor(candidatePlan.strategy)"
+        subtitle="Openings evaluated together"
         list-label="Candidate calendar"
-        footer="Both requests placed · zero automatic actions"
-        card-class="schedule-after"
-        pill-class="optimized"
-        appointment-class="appointment-optimized"
-        swatch-class="optimized"
-        :show-empty-slots="false"
       />
     </div>
     <div class="impact-row">
