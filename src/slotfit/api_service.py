@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from collections.abc import Callable, Mapping
+from types import MappingProxyType
+
 from slotfit.api_schemas import (
     AssignmentResponse,
     BookedAppointmentResponse,
@@ -147,38 +150,54 @@ def _demo_response(
     )
 
 
+def _single_opening_demo() -> DemoResponse:
+    scenario = demo_scenario(seed=1400)
+    return _demo_response(
+        scenario,
+        (fifo_plan(scenario), best_fit_plan(scenario)),
+        optimizer_result=None,
+        disclosure=(
+            "Synthetic local-choice demonstration only; every simulated decision remains "
+            "human-owned."
+        ),
+    )
+
+
+def _global_conflict_demo() -> DemoResponse:
+    scenario = multi_slot_counterexample(seed=1500)
+    optimizer_result = optimize_plan(scenario)
+    return _demo_response(
+        scenario,
+        (fifo_plan(scenario), best_fit_plan(scenario), optimizer_result.plan),
+        optimizer_result=optimizer_result,
+        disclosure=COUNTEREXAMPLE_DISCLOSURE,
+    )
+
+
+def _clinic_day_demo() -> DemoResponse:
+    scenario, context = clinic_day_story(seed=1600)
+    optimizer_result = optimize_plan(scenario)
+    return _demo_response(
+        scenario,
+        (fifo_plan(scenario), best_fit_plan(scenario), optimizer_result.plan),
+        optimizer_result=optimizer_result,
+        disclosure=COUNTEREXAMPLE_DISCLOSURE,
+        day_context=context,
+    )
+
+
+DEMO_BUILDERS: Mapping[str, Callable[[], DemoResponse]] = MappingProxyType(
+    {
+        "single-opening": _single_opening_demo,
+        "global-conflict": _global_conflict_demo,
+        "clinic-day": _clinic_day_demo,
+    }
+)
+
+
 def get_demo(demo_id: str) -> DemoResponse | None:
-    if demo_id == "single-opening":
-        scenario = demo_scenario(seed=1400)
-        return _demo_response(
-            scenario,
-            (fifo_plan(scenario), best_fit_plan(scenario)),
-            optimizer_result=None,
-            disclosure=(
-                "Synthetic local-choice demonstration only; every simulated decision remains "
-                "human-owned."
-            ),
-        )
-    if demo_id == "global-conflict":
-        scenario = multi_slot_counterexample(seed=1500)
-        optimizer_result = optimize_plan(scenario)
-        return _demo_response(
-            scenario,
-            (fifo_plan(scenario), best_fit_plan(scenario), optimizer_result.plan),
-            optimizer_result=optimizer_result,
-            disclosure=COUNTEREXAMPLE_DISCLOSURE,
-        )
-    if demo_id == "clinic-day":
-        scenario, context = clinic_day_story(seed=1600)
-        optimizer_result = optimize_plan(scenario)
-        return _demo_response(
-            scenario,
-            (fifo_plan(scenario), best_fit_plan(scenario), optimizer_result.plan),
-            optimizer_result=optimizer_result,
-            disclosure=COUNTEREXAMPLE_DISCLOSURE,
-            day_context=context,
-        )
-    return None
+    builder = DEMO_BUILDERS.get(demo_id)
+    return builder() if builder is not None else None
 
 
 def get_development_decision() -> DevelopmentDecisionResponse:

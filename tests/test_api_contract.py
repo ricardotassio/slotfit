@@ -6,6 +6,7 @@ from pathlib import Path
 from fastapi.testclient import TestClient
 
 from slotfit.api import app
+from slotfit.api_service import DEMO_BUILDERS
 
 
 class ApiContractTests(unittest.TestCase):
@@ -87,7 +88,16 @@ class ApiContractTests(unittest.TestCase):
                 payload = self.client.get(f"/api/v1/demos/{demo_id}").json()
                 self.assertIsNone(payload["day_context"])
 
+    def test_demo_catalogue_is_exactly_the_three_synthetic_demos(self) -> None:
+        self.assertEqual(
+            set(DEMO_BUILDERS),
+            {"single-opening", "global-conflict", "clinic-day"},
+        )
+        for demo_id in DEMO_BUILDERS:
+            self.assertEqual(self.client.get(f"/api/v1/demos/{demo_id}").status_code, 200)
+
     def test_unknown_demo_uses_stable_versioned_error(self) -> None:
+        self.assertNotIn("not-a-demo", DEMO_BUILDERS)
         response = self.client.get("/api/v1/demos/not-a-demo")
 
         self.assertEqual(response.status_code, 404)
