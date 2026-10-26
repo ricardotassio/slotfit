@@ -8,7 +8,7 @@ from slotfit.alternative_diagnostic import (
     enumerate_primary_optimal_plans,
 )
 from slotfit.domain.model import Scenario
-from slotfit.scenarios import multi_slot_counterexample
+from slotfit.application.scenarios import multi_slot_counterexample
 
 
 class AlternativeDiagnosticTests(unittest.TestCase):

@@ -25,7 +25,7 @@ from slotfit.optimizer import (
     OptimizationResult,
     optimize_plan_with_bounded_recovery,
 )
-from slotfit.strategies import best_fit_plan, fifo_plan
+from slotfit.application.strategies import best_fit_plan, fifo_plan
 from slotfit.thresholds import (
     SLICE_GAP_DEGRADATION_LIMIT,
     STARVATION_DEGRADATION_LIMIT,

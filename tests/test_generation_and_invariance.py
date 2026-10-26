@@ -6,7 +6,7 @@ from dataclasses import fields, replace
 from slotfit.domain.model import Scenario
 from slotfit.evaluation import evaluate_generated_plan
 from slotfit.generation import EvaluationSplit, SPLIT_SEEDS, generate_scenario
-from slotfit.strategies import best_fit_plan, fifo_plan
+from slotfit.application.strategies import best_fit_plan, fifo_plan
 
 
 def _selected_joined_order(scenario: Scenario, strategy: str) -> int:

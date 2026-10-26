@@ -3,8 +3,8 @@ from __future__ import annotations
 import unittest
 from dataclasses import replace
 
-from slotfit.scenarios import multi_slot_counterexample
-from slotfit.strategies import best_fit_plan, fifo_plan
+from slotfit.application.scenarios import multi_slot_counterexample
+from slotfit.application.strategies import best_fit_plan, fifo_plan
 
 
 class MultiSlotBaselineTests(unittest.TestCase):

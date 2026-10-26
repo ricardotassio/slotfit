@@ -11,7 +11,7 @@ from slotfit.optimizer import (
     optimize_plan_with_exposure_debt,
     optimize_plan_with_placement_scarcity,
 )
-from slotfit.scenarios import multi_slot_counterexample
+from slotfit.application.scenarios import multi_slot_counterexample
 
 
 def _assignment_positions(scenario, result) -> set[tuple[int, int]]:

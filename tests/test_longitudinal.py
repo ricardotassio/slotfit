@@ -9,7 +9,7 @@ from slotfit.longitudinal import (
     simulate_opportunity_rounds,
 )
 from slotfit.optimizer import optimize_plan_with_exposure_debt
-from slotfit.strategies import best_fit_plan, fifo_plan
+from slotfit.application.strategies import best_fit_plan, fifo_plan
 
 
 class LongitudinalSimulationTests(unittest.TestCase):

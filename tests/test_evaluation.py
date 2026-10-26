@@ -7,7 +7,7 @@ from slotfit.domain.model import Assignment
 from slotfit.domain.eligibility import scheduled_window
 from slotfit.evaluation import evaluate_generated_plan
 from slotfit.generation import generate_scenario
-from slotfit.strategies import best_fit_plan
+from slotfit.application.strategies import best_fit_plan
 
 
 class ScenarioEvaluationTests(unittest.TestCase):

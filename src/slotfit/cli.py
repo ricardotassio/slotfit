@@ -10,8 +10,8 @@ from slotfit.evaluation import evaluate_generated_plan
 from slotfit.generation import EvaluationSplit, generate_scenario
 from slotfit.longitudinal import simulate_opportunity_rounds
 from slotfit.optimizer import optimize_plan
-from slotfit.scenarios import demo_scenario, multi_slot_counterexample
-from slotfit.strategies import best_fit_plan, fifo_plan
+from slotfit.application.scenarios import demo_scenario, multi_slot_counterexample
+from slotfit.application.strategies import best_fit_plan, fifo_plan
 
 
 def _json_default(value: Any) -> str:

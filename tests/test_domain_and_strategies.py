@@ -3,8 +3,8 @@ from __future__ import annotations
 import unittest
 from dataclasses import replace
 
-from slotfit.scenarios import demo_scenario
-from slotfit.strategies import best_fit_plan, fifo_plan
+from slotfit.application.scenarios import demo_scenario
+from slotfit.application.strategies import best_fit_plan, fifo_plan
 
 
 class DemoScenarioTests(unittest.TestCase):
