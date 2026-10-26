@@ -1,6 +1,6 @@
 # SF-009 — Governance reconciliation before cycle 2
 
-- Status: In progress
+- Status: Done
 - AI-DLC mapping: Bolt S9 (first Bolt of cycle 2)
 - Depends on: SF-008 Done; cycle 2 proposal approved by Ricardo on 2026-10-26
   ([`../aidlc-docs/refinement-plan-2026-10.md`](../aidlc-docs/refinement-plan-2026-10.md))
@@ -47,18 +47,18 @@ Out of scope: any new feature, the story mode, new fixtures, new API fields.
 
 ## Acceptance criteria
 
-- [ ] `make test` passes with the committed video documents.
-- [ ] No reference to FullCalendar or `temporal-polyfill` remains outside
+- [x] `make test` passes with the committed video documents.
+- [x] No reference to FullCalendar or `temporal-polyfill` remains outside
       historical audit entries and this spec.
-- [ ] `web/src/App.vue` is under 120 lines and no source line in `web/src`
+- [x] `web/src/App.vue` is under 120 lines and no source line in `web/src`
       exceeds 160 characters.
-- [ ] The Evidence page gives every plan the same visual treatment and contains
+- [x] The Evidence page gives every plan the same visual treatment and contains
       none of: "recommended", "best plan", "AI choice", "AI optimized", "fair",
       "unbiased", "bias-free", "production ready", "revenue", "more patients".
-- [ ] Five existing Playwright tests still pass; one new forbidden-phrase test
+- [x] Five existing Playwright tests still pass; one new forbidden-phrase test
       passes; axe reports no serious or critical violation.
-- [ ] `make verify` passes and the worktree is clean.
-- [ ] S3 card, bolt catalog, audit, SF-006 addendum and traceability updated.
+- [x] `make verify` passes and the worktree is clean.
+- [x] S3 card, bolt catalog, audit, SF-006 addendum and traceability updated.
 
 ## Rejection conditions
 
@@ -68,4 +68,23 @@ Out of scope: any new feature, the story mode, new fixtures, new API fields.
 
 ## Observed evidence
 
-(filled when the gate closes)
+Closed 2026-10-26 at the commit that records this evidence.
+
+- `make verify`: 84 Python tests, in-process API smoke, typed production build
+  and six Playwright tests pass (five original, one new neutrality test).
+- `web/src/App.vue` is 114 lines; no line in `web/src` exceeds 160 characters;
+  the compressed stylesheet is one declaration per line.
+- `@fullcalendar/vue3` and `temporal-polyfill` removed from `package.json` and
+  the lockfile; README, SF-006, the S6 card and the execution plan updated; the
+  only remaining mentions are historical (audit, SF-006 addendum, this spec).
+- Evidence page: one card, pill, appointment and swatch style for every plan;
+  signed "difference in this fixture"; factual footers; descriptive headline;
+  forbidden-phrase test green.
+- Publication contract test accepts "limit of 10"; video scripts, storyboard and
+  production plan committed and linked from the README.
+- S3 card and bolt catalog say "closed, terminal no-go"; audit open decision on
+  the license marked resolved; SF-006 addendum written; traceability links
+  SF-009.
+
+Commits: `e8c4e17`, `b570904`, `0462075`, `0ae45a2`, `11a63fb`, `4b32c58`,
+`b778f22` and the documentation commit that closes this gate.

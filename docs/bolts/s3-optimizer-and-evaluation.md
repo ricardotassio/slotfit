@@ -1,6 +1,6 @@
 # Card S3 — Otimizador e avaliação controlada
 
-**Estado:** em andamento; candidatos V1–V4 rejeitados no desenvolvimento.
+**Estado:** encerrado com no-go terminal; candidatos V1–V4 rejeitados no desenvolvimento; calibração nunca aberta.
 **Spec:** [`SF-003`](../../specs/003-optimizer-and-evaluation.md).  
 **ADR:** [`ADR-0002`](../adr/0002-lexicographic-cp-sat.md).
 

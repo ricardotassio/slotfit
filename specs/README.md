@@ -24,7 +24,7 @@ Specifications are the implementation contract between product intent, code and 
 | [`SF-006`](006-comparison-ui.md) | Done | Present neutral plan comparisons and simulated review in an accessible local UI |
 | [`SF-007`](007-frozen-evaluation-gate.md) | Closed — not executed | Preserve the held-out set because no candidate earned final-evaluation eligibility |
 | [`SF-008`](008-hardening-and-communication.md) | Done | Harden reproducibility and prepare bilingual evidence-based video/post materials |
-| [`SF-009`](009-governance-reconciliation.md) | In progress | Reconcile docs, tests and the web component before cycle 2 features |
+| [`SF-009`](009-governance-reconciliation.md) | Done | Reconcile docs, tests and the web component before cycle 2 features |
 
 ## Working rule
 

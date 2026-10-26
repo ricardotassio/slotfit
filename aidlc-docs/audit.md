@@ -24,7 +24,7 @@
 
 ## Open decisions
 
-- Public repository license before publication.
+- Public repository license before publication — resolved in SF-008 (MIT, see `LICENSE`).
 
 ## 2026-10-25 — SF-003 design gate
 
@@ -253,3 +253,16 @@
   redesign, the orphaned FullCalendar dependency and stale status documents
   before any cycle 2 feature.
 - Gate label: `blocking-approval` given in chat; recorded here.
+
+## 2026-10-26 — SF-009 closed
+
+- Decision: FullCalendar and temporal-polyfill removed (D3); the hand-written
+  CSS time grid is the implemented evidence surface.
+- Decision: the SF-008-era UI redesign is re-evaluated under SF-006, not merely
+  recorded; asymmetric plan treatment is replaced by one shared style, a signed
+  difference and factual footers, enforced by a new browser test.
+- Decision: the publication contract accepts "limit of 10" wording; the
+  guided-story video documents are committed.
+- Verification: `make verify` passes (84 Python tests, API smoke, typed build,
+  six Playwright tests); no source line over 160 characters; worktree clean.
+- Next: SF-010 (clinic-day fixture and explanations) awaits explicit start.

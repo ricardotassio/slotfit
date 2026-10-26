@@ -1,6 +1,6 @@
 # Traceability
 
-Implementation contracts: SF-FR-001 through SF-FR-003 map to [`../specs/001-domain-and-baselines.md`](../specs/001-domain-and-baselines.md). Scenario provenance, invariance and slice requirements map to [`../specs/002-scenarios-and-fairness-controls.md`](../specs/002-scenarios-and-fairness-controls.md). Optimization and its terminal development decision map to [`../specs/003-optimizer-and-evaluation.md`](../specs/003-optimizer-and-evaluation.md). The read-only HTTP boundary maps to [`../specs/004-api-boundary.md`](../specs/004-api-boundary.md).
+Implementation contracts: SF-FR-001 through SF-FR-003 map to [`../specs/001-domain-and-baselines.md`](../specs/001-domain-and-baselines.md). Scenario provenance, invariance and slice requirements map to [`../specs/002-scenarios-and-fairness-controls.md`](../specs/002-scenarios-and-fairness-controls.md). Optimization and its terminal development decision map to [`../specs/003-optimizer-and-evaluation.md`](../specs/003-optimizer-and-evaluation.md). The read-only HTTP boundary maps to [`../specs/004-api-boundary.md`](../specs/004-api-boundary.md). Governance reconciliation of the UI, dependencies and publication test after the first cycle maps to [`../specs/009-governance-reconciliation.md`](../specs/009-governance-reconciliation.md).
 
 | Requirement | Component | Test/evidence | Status |
 |---|---|---|---|

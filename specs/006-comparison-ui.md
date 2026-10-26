@@ -96,3 +96,23 @@ repository/API tests provide the complementary duplicate/replay proof.
 - the calendar is the only representation of assignments;
 - double submit can create multiple events;
 - a control implies that a real appointment or message will be changed.
+
+## Addendum 2026-10-26 (SF-009)
+
+Commits `0826cdf` and `5fb9094` redesigned the page after this spec was marked
+Done. SF-009 re-evaluated the result against the rejection conditions above:
+
+- the reference and candidate cards used different pill, border and appointment
+  styles, the bridge computed a gain only in the candidate's favour, the footers
+  were asymmetric and the headline read as marketing. These violated "Cards use
+  the same size, typography and color treatment";
+- the FullCalendar time grid was replaced by a hand-written CSS grid; the table
+  fallback, baseline-first order, separate metrics and the no-go strip survived.
+
+Resolution: every plan now shares one card, pill, appointment and swatch style;
+the bridge shows a signed "difference in this fixture"; footers state
+"n of m openings assigned"; the headline is descriptive. A browser test asserts
+equal treatment and rejects the phrases "recommended", "best plan", "AI choice",
+"AI optimized", "fair", "unbiased", "bias-free", "production ready", "revenue"
+and "more patients" on the page. The replay animation is kept because it shows
+a fixture fact and uses the same assigned color in both lanes.
