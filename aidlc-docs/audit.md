@@ -266,3 +266,14 @@
 - Verification: `make verify` passes (84 Python tests, API smoke, typed build,
   six Playwright tests); no source line over 160 characters; worktree clean.
 - Next: SF-010 (clinic-day fixture and explanations) awaits explicit start.
+
+## 2026-10-26 — SF-010 start
+
+- Decision: Ricardo authorized SF-010 ("siga para 10").
+- Decision: the story fixture is a superset of `multi-slot-counterexample-1500`
+  (same openings and requests plus a Room B request), seed 1600, hand-built and
+  outside every evaluation registry.
+- Decision: display-only context (`DayContext`) lives in its own module and is
+  barred from decision modules by a source-scan test.
+- Decision: explanations are a closed map over the six reason codes; copy avoids
+  audit-band vocabulary; `SCHEMA_VERSION` 1.0 → 1.1 for the additive fields.

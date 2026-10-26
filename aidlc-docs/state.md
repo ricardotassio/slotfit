@@ -3,8 +3,8 @@
 - Project: SlotFit
 - Repository type: greenfield
 - Phase: Construction — cycle 2 (refinement)
-- Active Bolt: none (next: S10, after Ricardo authorizes SF-010)
-- Active spec: none
+- Active Bolt: S10
+- Active spec: SF-010 — clinic-day fixture and explanations
 - Last completed gate: SF-009 governance reconciliation (2026-10-26)
 - External integrations: none
 - Real data: prohibited
