@@ -107,6 +107,7 @@ decision taken at its gate and names the tests that pin its behaviour.
 | [SF-009](specs/009-governance-reconciliation.md) Governance reconciliation | Do docs, tests and UI agree before a second cycle? | Calendar library removed; one shared style for every plan | `make verify` |
 | [SF-010](specs/010-clinic-day-fixture-and-explanations.md) Clinic-day fixture and explanations | Can the story be told from the same engine, with a plain sentence for every reason code? | Display-only day context barred from decision modules by a source-scan test | `test_clinic_day_story`, `test_explanations` |
 | [SF-015](specs/015-code-organization-and-experiment-narrative.md) Code organization and narrative | Can the code and the README be read as a study? | Behaviour-preserving refactors; screenshots generated, never taken by hand | all of the above |
+| [SF-016](specs/016-layered-package-and-docker.md) Layered package and Docker | Can the architecture be seen in the folders and reproduced without a local toolchain? | Ports-and-adapters packages, a composition root, an architecture test, a lockfile-only Docker image | `test_architecture`, `make docker-test` |
 
 Stage SF-003 is the heart of the study and the only stage with a negative
 result. Its four candidates are described in
@@ -196,25 +197,25 @@ This is design rationale, not a measured result.
 
 ## 8. Layers
 
-```text
-Vue UI  ──HTTP──►  FastAPI routes + Pydantic schemas  ──►  api_service (mapping)
-                                                              │
-                 CLI and research scripts ────────────────────┤
-                                                              ▼
-                       strategies (FIFO, best fit)  ·  optimizer (CP-SAT adapter)
-                                                              │
-                                     eligibility (reason codes)  ·  explanations
-                                                              │
-                                   domain (frozen values)  ·  day_context (display only)
+The package is laid out as ports and adapters: each folder is a layer, and
+dependencies point inward.
 
-                 persistence (SQLite review log)  ◄──  FastAPI POST /reviews only
+```text
+src/slotfit/
+  domain/        frozen values, eligibility reason codes, plain-language explanations,
+                 display-only day context                      (standard library only)
+  application/   the two greedy strategies and the hand-built fixtures
+  solver/        the CP-SAT adapter                              (only importer of OR-Tools)
+  research/      generators, evaluation, longitudinal rounds, comparison, guardrail thresholds
+  adapters/      api/ (FastAPI router, Pydantic schemas, mapping) · persistence/ (SQLite log) · cli/
+  composition.py the only place that chooses concrete adapters and builds the app
 ```
 
-Dependencies point inward. The domain imports only the standard library;
-OR-Tools appears only in the optimizer adapter; FastAPI and Pydantic only at
-the boundary; SQLite only in persistence. The layer description and one
-decision traced end to end are in
-[`docs/architecture.md`](docs/architecture.md).
+`tests/test_architecture.py` fails on any import that points outward or any
+framework outside its adapter. The full description, one decision traced end
+to end and the decision record are in
+[`docs/architecture.md`](docs/architecture.md) and
+[`docs/adr/0004-layered-package-layout.md`](docs/adr/0004-layered-package-layout.md).
 
 ## 9. Run it
 
@@ -229,10 +230,22 @@ make longitudinal-demo   # three controlled rounds for both baselines
 make development-report  # the full 40-seed development comparison (JSON)
 ```
 
-To open the application: start the API with
-`uv run --python 3.12 uvicorn slotfit.api:app --app-dir src --port 8000`, then
-`npm --prefix web run dev`, and visit the Vite URL. The Playwright configuration
-starts both for the tests.
+To open the application locally: start the API with
+`uv run --python 3.12 uvicorn slotfit.composition:app --app-dir src --port 8000`,
+then `npm --prefix web run dev`, and visit the Vite URL. The Playwright
+configuration starts both for the tests.
+
+With Docker, nothing else is needed:
+
+```bash
+make docker-build   # web bundle + locked Python environment in one image
+make docker-run     # http://localhost:8000 serves the UI and the API
+make docker-test    # Python suite and API smoke inside the image
+```
+
+The image installs only from the lockfiles, contacts nothing at runtime and
+keeps the simulated review log in a named volume
+([`docs/adr/0005-docker-reproduction-image.md`](docs/adr/0005-docker-reproduction-image.md)).
 
 ## 10. Claim boundary
 
@@ -254,7 +267,9 @@ owns every simulated scheduling choice.
 - Architecture and decisions: [`docs/architecture.md`](docs/architecture.md),
   [`docs/adr/0001-modular-monolith-and-baselines.md`](docs/adr/0001-modular-monolith-and-baselines.md),
   [`docs/adr/0002-lexicographic-cp-sat.md`](docs/adr/0002-lexicographic-cp-sat.md),
-  [`docs/adr/0003-local-sqlite-review-log.md`](docs/adr/0003-local-sqlite-review-log.md)
+  [`docs/adr/0003-local-sqlite-review-log.md`](docs/adr/0003-local-sqlite-review-log.md),
+  [`docs/adr/0004-layered-package-layout.md`](docs/adr/0004-layered-package-layout.md),
+  [`docs/adr/0005-docker-reproduction-image.md`](docs/adr/0005-docker-reproduction-image.md)
 - Evidence: [`docs/development-evidence.md`](docs/development-evidence.md),
   [`docs/methodology-no-go-review.md`](docs/methodology-no-go-review.md),
   [`docs/alternative-plan-diagnostic.md`](docs/alternative-plan-diagnostic.md),

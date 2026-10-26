@@ -58,35 +58,48 @@ Vue calendar
 
 ## Layers
 
-Dependencies point inward. Nothing below a line imports anything above it.
+The package is laid out as ports and adapters (ADR-0004). Each folder is a
+layer; dependencies point inward and `tests/test_architecture.py` fails on any
+import that points outward or any framework outside its adapter.
+
+```text
+src/slotfit/
+  domain/        model, eligibility, explanations, day_context
+  application/   strategies, scenarios
+  solver/        optimizer
+  research/      generation, multi_generation, evaluation, longitudinal,
+                 comparison, alternative_diagnostic, exposure_frontier, thresholds
+  adapters/      api/ (routes, schemas, service) · persistence/ · cli/
+  composition.py create_app(): the only place that chooses concrete adapters
+```
 
 ```mermaid
 flowchart TB
   subgraph Inbound["Inbound adapters"]
-    CLI["cli.py · report_cli.py · diagnostic_cli.py · frontier_cli.py"]
+    CLI["adapters/cli: demo.py · report.py · diagnostic.py · frontier.py"]
     UI["Vue UI: web/src (App.vue, api.ts, components)"]
   end
   subgraph Boundary["API boundary"]
-    ROUTES["api.py (routes, error envelope, repository dependency)"]
-    SCHEMAS["api_schemas.py (versioned Pydantic DTOs)"]
-    SVC["api_service.py (fixture selection, domain → DTO mapping)"]
+    ROUTES["adapters/api/routes.py (router, error envelope, repository dependency)"]
+    SCHEMAS["adapters/api/schemas.py (versioned Pydantic DTOs)"]
+    SVC["adapters/api/service.py (fixture selection, domain → DTO mapping)"]
   end
   subgraph Application["Application and research"]
-    STRAT["strategies.py: fifo_plan, best_fit_plan"]
-    EXPL["explanations.py"]
-    FIX["scenarios.py (hand-built fixtures)"]
-    RESEARCH["generation.py · multi_generation.py · evaluation.py · longitudinal.py · comparison.py · alternative_diagnostic.py · exposure_frontier.py"]
+    STRAT["application/strategies.py: fifo_plan, best_fit_plan"]
+    EXPL["domain/explanations.py"]
+    FIX["application/scenarios.py (hand-built fixtures)"]
+    RESEARCH["research/: generation · multi_generation · evaluation · longitudinal · comparison · alternative_diagnostic · exposure_frontier · thresholds"]
   end
   subgraph Solver["Optimizer adapter"]
-    OPT["optimizer.py (the only module that imports ortools)"]
+    OPT["solver/optimizer.py (the only module that imports ortools)"]
   end
   subgraph Domain["Domain core (standard library only)"]
-    DOM["domain.py: TimeWindow, OpenInterval, WaitRequest, Scenario, CandidateEvaluation, Assignment, CandidatePlan"]
-    ELIG["eligibility.py: evaluate_request, scheduled_window"]
-    CTX["day_context.py (display only)"]
+    DOM["domain/model.py: TimeWindow, OpenInterval, WaitRequest, Scenario, CandidateEvaluation, Assignment, CandidatePlan"]
+    ELIG["domain/eligibility.py: evaluate_request, scheduled_window"]
+    CTX["domain/day_context.py (display only)"]
   end
   subgraph Outbound["Outbound adapter"]
-    PERS["persistence.py: SQLiteReviewRepository"]
+    PERS["adapters/persistence/sqlite_review_repository.py"]
   end
   UI -->|HTTP JSON| ROUTES
   ROUTES --> SCHEMAS
@@ -114,11 +127,11 @@ flowchart TB
 
 Immutable value objects and the eligibility rules. Every class is a frozen
 dataclass; `TimeWindow` rejects naive datetimes and inverted ranges, `Scenario`
-rejects duplicate identifiers and duplicate join orders. `eligibility.py` is the
+rejects duplicate identifiers and duplicate join orders. `domain/eligibility.py` is the
 only producer of reason codes (`NO_COMMUNICATION_CONSENT`,
 `PROVIDER_NOT_ELIGIBLE`, `REQUIRED_ROOM_UNAVAILABLE`, `DURATION_EXCEEDS_INTERVAL`,
 `INSUFFICIENT_NOTICE`, `REQUEST_NOT_AVAILABLE`); it returns an evaluation for
-every request/opening pair and never filters silently. `day_context.py` holds
+every request/opening pair and never filters silently. `domain/day_context.py` holds
 booked blocks, cancellations and closed rooms for display and is barred from
 the decision modules by a source-scan test. Imports: standard library and
 `slotfit.domain` only. Tests: `test_domain_and_strategies`,
@@ -126,11 +139,11 @@ the decision modules by a source-scan test. Imports: standard library and
 
 ### Application and research
 
-`strategies.py` implements both greedy baselines through one template: evaluate
+`application/strategies.py` implements both greedy baselines through one template: evaluate
 every pair, walk the openings in time order, assign each request at most once.
 FIFO orders candidates by join order; best fit by leftover minutes, then join
-order. `explanations.py` maps each reason code to one sentence a coordinator
-can read. `scenarios.py` builds the hand-made fixtures. The research modules
+order. `domain/explanations.py` maps each reason code to one sentence a coordinator
+can read. `application/scenarios.py` builds the hand-made fixtures. The research modules
 generate seeded days with audit-only slices, replay compatible-opportunity
 rounds, and compute the guardrails. They import the domain, the strategies and
 the optimizer, never the API or persistence. Tests: `test_multi_slot_baselines`,
@@ -140,7 +153,7 @@ the optimizer, never the API or persistence. Tests: `test_multi_slot_baselines`,
 
 ### Optimizer adapter
 
-`optimizer.py` wraps OR-Tools CP-SAT. It computes eligibility with the same
+`solver/optimizer.py` wraps OR-Tools CP-SAT. It computes eligibility with the same
 `evaluate_request` the baselines use, creates one boolean variable per eligible
 pair, constrains each request and each opening to at most one use, and solves
 the objectives in lexicographic order: recovered minutes, requests served,
@@ -152,24 +165,24 @@ when all phases are `OPTIMAL`. ADR: `adr/0002-lexicographic-cp-sat.md`. Tests:
 
 ### API boundary
 
-`api.py` holds the routes, the error envelope and the repository dependency.
-`api_schemas.py` holds the versioned DTOs with literal guards such as
+`adapters/api/routes.py` holds the router, the error envelope and the repository dependency.
+`adapters/api/schemas.py` holds the versioned DTOs with literal guards such as
 `synthetic: Literal[True]`, `automatic_action: Literal["none"]` and
-`candidate_accepted: Literal[False]`. `api_service.py` chooses the fixture and
+`candidate_accepted: Literal[False]`. `adapters/api/service.py` chooses the fixture and
 the strategies and maps domain values to DTOs, attaching the plain-language
 explanations. FastAPI and Pydantic are imported only here. Tests:
 `test_api_contract`, `test_review_api`, `make api-smoke`.
 
 ### Outbound adapter
 
-`persistence.py` writes immutable review events to SQLite inside a transaction
+`adapters/persistence/sqlite_review_repository.py` writes immutable review events to SQLite inside a transaction
 keyed by an idempotency key: replaying a key returns the stored event, reusing it
 for a different review raises a conflict. It imports only the standard library.
 ADR: `adr/0003-local-sqlite-review-log.md`. Tests: `test_review_persistence`.
 
 ### Inbound adapters
 
-`cli.py` prints the demos as JSON; the three research CLIs are thin wrappers
+`adapters/cli/demo.py` prints the demos as JSON; the three research CLIs are thin wrappers
 over `comparison`, `alternative_diagnostic` and `exposure_frontier`. The Vue UI
 talks only over HTTP (`web/src/api.ts`) and is covered by
 `web/tests/main-flow.spec.ts` and the screenshot script.
@@ -178,7 +191,7 @@ talks only over HTTP (`web/src/api.ts`) and is covered by
 
 `GET /api/v1/demos/clinic-day`:
 
-1. `api.demo` receives the identifier and calls `api_service.get_demo`.
+1. `adapters.api.routes.demo` receives the identifier and calls `adapters.api.service.get_demo`.
 2. `get_demo` calls `scenarios.clinic_day_story(seed=1600)`, which reuses the
    two openings and two requests of the 1500 counterexample, adds a request
    that needs the closed Room B, and builds a `Scenario` plus a display-only
@@ -196,7 +209,8 @@ talks only over HTTP (`web/src/api.ts`) and is covered by
 6. The response carries `research_candidate_accepted=False` and the
    counterexample disclosure; the full longitudinal verdict lives on its own
    route, `GET /api/v1/research/development-decision`.
-7. FastAPI validates the result against `DemoResponse` and serializes it.
+7. FastAPI validates the result against `DemoResponse` and serializes it. The
+   application itself is created by `slotfit.composition.create_app`.
    Unknown identifiers return a 404 envelope. Determinism across repeated calls
    is pinned by `test_api_contract`.
 
@@ -218,9 +232,9 @@ talks only over HTTP (`web/src/api.ts`) and is covered by
   the engine explorer (SF-013).
 - The longitudinal verdict served by the API is a literal in `api_service.py`,
   not read from the comparison output; a drift test is a candidate for SF-013.
-- The review repository is constructed at import time in `api.py` with a
-  working-directory-relative path; a composition root would make the wiring
-  explicit.
+- Fixed in SF-016: the review repository and the application are now built in
+  `slotfit.composition.create_app`, with the database path overridable through
+  `SLOTFIT_REVIEW_DATABASE`.
 
 ## Boundaries
 

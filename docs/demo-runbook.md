@@ -64,3 +64,15 @@ synthetic fixtures. A review click appends a local SQLite audit event under
   and rerun the full verification suite.
 - Stale local reviews: the database is ignored by Git. Preserve it if needed for a
   demo audit; otherwise use a fresh checkout. Never place real data in it.
+
+## Reproduce with Docker
+
+```bash
+make docker-build   # builds slotfit:local from uv.lock and web/package-lock.json
+make docker-run     # docker compose up: UI and API at http://localhost:8000
+make docker-test    # Python tests and API smoke inside the image
+```
+
+The container reads no real data and contacts nothing; the simulated review
+log lives in the `reviews` volume (`SLOTFIT_REVIEW_DATABASE=/data/slotfit.db`).
+Browser tests (`make web-test`) stay on the host.
