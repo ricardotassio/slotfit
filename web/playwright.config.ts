@@ -2,6 +2,8 @@ import { defineConfig } from '@playwright/test'
 
 export default defineConfig({
   testDir: './tests',
+  // The screenshot script regenerates docs/images and records a review event; run it on purpose.
+  testIgnore: process.env.SLOTFIT_SCREENSHOTS ? [] : ['**/screenshots.spec.ts'],
   fullyParallel: false,
   retries: 0,
   workers: 1,

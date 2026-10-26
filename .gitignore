@@ -20,3 +20,4 @@ artifacts/evaluation/*
 !artifacts/evaluation/.gitkeep
 artifacts/reviews/*
 !artifacts/reviews/.gitkeep
+.claude/worktrees/

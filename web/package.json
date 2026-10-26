@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "screenshots": "SLOTFIT_SCREENSHOTS=1 playwright test tests/screenshots.spec.ts"
   },
   "dependencies": {
     "vue": "3.5.44"

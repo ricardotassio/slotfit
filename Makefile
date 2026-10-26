@@ -1,6 +1,6 @@
 PYTHON := uv run --python 3.12 python
 
-.PHONY: test api-test review-test api-smoke web-build web-test verify demo multi-slot-demo generated-demo longitudinal-demo development-report alternative-diagnostic exposure-frontier
+.PHONY: test api-test review-test api-smoke web-build web-test screenshots verify demo multi-slot-demo generated-demo longitudinal-demo development-report alternative-diagnostic exposure-frontier
 
 test:
 	PYTHONPATH=src $(PYTHON) -m unittest discover -s tests -v
@@ -19,6 +19,9 @@ web-build:
 
 web-test:
 	npm --prefix web run test:e2e
+
+screenshots:
+	npm --prefix web run screenshots
 
 verify: test api-smoke web-build web-test
 
