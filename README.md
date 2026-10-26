@@ -34,7 +34,7 @@ The repository currently contains:
 - a bounded-recovery V4 that improves but still fails the unchanged guardrail;
 - a versioned FastAPI/Pydantic boundary for deterministic demos and research evidence;
 - an idempotent append-only SQLite review log with no external action;
-- a neutral Vue/FullCalendar comparison UI with Playwright and axe coverage;
+- a neutral Vue comparison UI with a hand-written time grid, Playwright and axe coverage;
 - an intentionally nonexistent final frozen set after the development no-go;
 - a locked runbook, least-privilege CI, risk review and bilingual video/post drafts;
 - executable unit tests;
@@ -95,7 +95,7 @@ V3 path and carries the same diagnostic-only boundary.
 - FastAPI and Pydantic v2 at the API boundary
 - OR-Tools CP-SAT for constraint optimization
 - SQLite for local append-only review events; PostgreSQL deferred until justified
-- Vue 3, TypeScript and FullCalendar for the visual workflow
+- Vue 3 and TypeScript for the visual workflow (CSS time grid, no calendar library)
 - standard-library unittest, Playwright and axe-core for verification
 - lockfile-based local setup without Docker or external services
 

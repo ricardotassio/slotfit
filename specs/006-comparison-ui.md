@@ -60,7 +60,8 @@ table fallback beside the calendar.
   was tested first and rejected because `vue-tsc 3.3.13` does not support its
   removed compiler subpath;
 - Vite `8.3.5` and `@vitejs/plugin-vue` `6.0.10` for local build/dev proxy;
-- FullCalendar Vue `7.1.3` plus `temporal-polyfill` for the visual time grid;
+- a hand-written CSS time grid for the visual schedule (FullCalendar Vue `7.1.3`
+  and `temporal-polyfill` were used until commit `0826cdf` and removed in SF-009);
 - Playwright `1.64.1` and axe-core `4.14.0` for browser behavior/accessibility;
 - Uvicorn `0.54.0` for the local API process used by the browser test.
 

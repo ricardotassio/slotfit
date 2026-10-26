@@ -12,7 +12,7 @@ guardrail foi acionado.
 
 ## ⚙️ Mecânica planejada
 
-Vue 3, TypeScript e FullCalendar apresentarão o calendário sintético e até três
+Vue 3 e TypeScript apresentarão o calendário sintético (grade CSS própria) e até três
 planos. Cada card de plano separará restrições, minutos recuperados, pessoas
 servidas, exposição/espera, pior slice e status do solver. O usuário poderá
 registrar aceitar, rejeitar ou pedir alternativa; nenhuma escolha altera agenda ou
@@ -23,8 +23,8 @@ motivos escondidos, score único que mistura dimensões e double-submit.
 
 ## ⚖️ Avaliação crítica
 
-**Veredito: UI pequena é suficiente.** FullCalendar é útil para tornar o conflito
-visual; um design system completo ou microfrontend seria excessivo. Uma tabela
+**Veredito: UI pequena é suficiente.** Uma grade de tempo em CSS torna o conflito
+visual sem biblioteca de calendário (FullCalendar foi removido no SF-009); um design system completo ou microfrontend seria excessivo. Uma tabela
 seria mais barata e deve permanecer como fallback acessível. A escala e requisitos
 de acessibilidade ainda precisam ser confirmados antes da implementação.
 

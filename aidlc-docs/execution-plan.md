@@ -44,7 +44,7 @@ Cards pedagógicos e operacionais de todos os Bolts:
 - S4: FastAPI and Pydantic boundary — complete.
 - S5: SQLite append-only idempotent review events — complete; PostgreSQL deferred
   by ADR-0003.
-- S6: Vue/FullCalendar UI — complete.
+- S6: Vue UI with a hand-written time grid — complete (FullCalendar removed in S9).
 - S7: frozen simulation gate closed without execution; no candidate was eligible.
 - S8: hardening, documentation, evidence-backed bilingual video and post —
   complete; not published.
